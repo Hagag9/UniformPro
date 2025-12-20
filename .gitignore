@@ -1,0 +1,46 @@
+## Visual Studio & .NET build files ##
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## NuGet Packages ##
+*.nupkg
+# The packages folder can generally be ignored because NuGet restores them
+packages/
+# However, if you are using 'package restore' with strict mode, you might want to keep specific files, 
+# but generally ignoring 'packages/' is best practice.
+!packages/build/
+
+## ASP.NET MVC specific ##
+# Ignore the App_Data folder usually used for local databases or logs
+App_Data/
+bower_components/
+node_modules/
+
+## Web specific ##
+*.log
+web.config.token
+web.*.config
+!web.config
+!web.release.config
+!web.debug.config
+
+## User-specific files (Secrets) ##
+# Never commit your development secrets
+appsettings.Development.json
+secrets.json
+
+## Visual Studio Code (if used) ##
+.vscode/
+
+## Operating System files ##
+.DS_Store
+Thumbs.db
+
+## Test Results ##
+TestResults/
+*.trdx

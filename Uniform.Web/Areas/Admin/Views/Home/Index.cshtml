@@ -1,0 +1,164 @@
+﻿@model UniformPro.Web.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "لوحة القيادة";
+}
+
+<div class="fade-in">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border @(Model.UnreadMessagesCount > 0 ? "border-red-200 bg-red-50/30" : "border-gray-200")">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium mb-1">رسائل غير مقروءة</p>
+                    <h3 class="text-3xl font-bold @(Model.UnreadMessagesCount > 0 ? "text-red-600" : "text-gray-800")">
+                        @Model.UnreadMessagesCount
+                    </h3>
+                </div>
+                <div class="p-2 @(Model.UnreadMessagesCount > 0 ? "bg-red-100 text-red-600" : "bg-green-50 text-primary") rounded-md">
+                    <i class="ph-fill ph-envelope-simple text-xl"></i>
+                </div>
+            </div>
+            <a asp-controller="ContactMessages" asp-action="Index" class="text-xs text-primary mt-3 block hover:underline font-bold">
+                الذهاب للوارد &larr;
+            </a>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium mb-1">إجمالي المنتجات</p>
+                    <h3 class="text-3xl font-bold text-gray-800">@Model.ProductsCount</h3>
+                </div>
+                <div class="p-2 bg-blue-50 rounded-md text-blue-600">
+                    <i class="ph-fill ph-t-shirt text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium mb-1">المشاريع المنجزة</p>
+                    <h3 class="text-3xl font-bold text-gray-800">@Model.ProjectsCount</h3>
+                </div>
+                <div class="p-2 bg-purple-50 rounded-md text-purple-600">
+                    <i class="ph-fill ph-briefcase text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium mb-1">القطاعات النشطة</p>
+                    <h3 class="text-3xl font-bold text-gray-800">@Model.CategoriesCount</h3>
+                </div>
+                <div class="p-2 bg-orange-50 rounded-md text-orange-600">
+                    <i class="ph-fill ph-squares-four text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="font-bold text-gray-800">📩 آخر الرسائل الواردة</h3>
+                <a asp-controller="ContactMessages" asp-action="Index" class="text-xs text-primary hover:underline">عرض الكل</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right text-sm">
+                    <tbody class="divide-y divide-gray-100">
+                        @foreach (var msg in Model.RecentMessages)
+                        {
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-3 font-medium text-gray-800">@msg.FullName</td>
+                                <td class="px-6 py-3 text-gray-500 truncate max-w-[150px]">@msg.Message</td>
+                                <td class="px-6 py-3 text-gray-400 text-xs">@msg.SentAt.ToString("dd/MM")</td>
+                                <td class="px-6 py-3">
+                                    @if (!msg.IsRead)
+                                    {
+                                        <span class="w-2 h-2 bg-red-500 rounded-full block" title="جديد"></span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.RecentMessages.Any())
+                        {
+                            <tr><td colspan="4" class="text-center py-6 text-gray-400">لا توجد رسائل حديثة</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="font-bold text-gray-800">👕 أحدث المنتجات</h3>
+                <a asp-controller="Products" asp-action="Index" class="text-xs text-primary hover:underline">عرض الكل</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right text-sm">
+                    <tbody class="divide-y divide-gray-100">
+                        @foreach (var prod in Model.RecentProducts)
+                        {
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-3">
+                                    <div class="flex items-center gap-3">
+                                        @if (!string.IsNullOrEmpty(prod.MainImagePath))
+                                        {
+                                            <img src="~/uploads/products/@prod.MainImagePath" class="w-8 h-8 rounded object-cover border">
+                                        }
+                                        else
+                                        {
+                                            <div class="w-8 h-8 bg-gray-100 rounded"></div>
+                                        }
+                                        <span class="font-medium text-gray-800">@prod.NameAr</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-3 text-gray-500 text-xs">@prod.Category.NameAr</td>
+                                <td class="px-6 py-3 text-primary font-bold">@(prod.StartPrice?.ToString("N0") ?? "-")</td>
+                            </tr>
+                        }
+                        @if (!Model.RecentProducts.Any())
+                        {
+                            <tr><td colspan="3" class="text-center py-6 text-gray-400">لا توجد منتجات مضافة</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+            <h3 class="font-bold text-gray-800">📌 إجراءات سريعة</h3>
+        </div>
+        <div class="p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a asp-controller="Products" asp-action="Create" class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-primary/30 transition group">
+                <div class="w-10 h-10 bg-green-50 text-primary rounded-full flex items-center justify-center mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+                    <i class="ph-bold ph-plus"></i>
+                </div>
+                <span class="text-sm font-bold text-gray-700">إضافة منتج</span>
+            </a>
+            <a asp-controller="Portfolios" asp-action="Create" class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-500/30 transition group">
+                <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-2 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <i class="ph-bold ph-briefcase"></i>
+                </div>
+                <span class="text-sm font-bold text-gray-700">إضافة مشروع</span>
+            </a>
+            <a asp-controller="HeroItems" asp-action="Index" class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-purple-500/30 transition group">
+                <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center mb-2 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                    <i class="ph-bold ph-monitor-play"></i>
+                </div>
+                <span class="text-sm font-bold text-gray-700">تحديث السلايدر</span>
+            </a>
+            <a asp-controller="Settings" asp-action="Index" class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-orange-500/30 transition group">
+                <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mb-2 group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                    <i class="ph-bold ph-gear"></i>
+                </div>
+                <span class="text-sm font-bold text-gray-700">الإعدادات العامة</span>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+﻿@model UniformPro.Core.Entities.ContactMessage
+@{ ViewData["Title"] = "تفاصيل الرسالة"; }
+
+<div class="max-w-3xl mx-auto">
+    <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <i class="ph-fill ph-envelope-open text-primary"></i>
+            تفاصيل الرسالة
+        </h2>
+        <a asp-action="Index" class="text-gray-500 hover:text-gray-700 flex items-center gap-1">
+            <i class="ph-bold ph-arrow-right"></i> عودة للصندوق
+        </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+        <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <div>
+                <h3 class="font-bold text-lg text-gray-900">@Model.FullName</h3>
+                <p class="text-sm text-gray-500">
+                    <span class="font-medium">الشركة:</span> @(Model.CompanyName ?? "غير محدد")
+                </p>
+            </div>
+            <div class="text-left text-sm text-gray-500">
+                <div>@Model.SentAt.ToString("dd MMMM yyyy")</div>
+                <div>@Model.SentAt.ToString("hh:mm tt")</div>
+            </div>
+        </div>
+
+        <div class="p-6 text-gray-700 leading-relaxed text-lg whitespace-pre-wrap">@Model.Message</div>
+
+        <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-green-100 p-2 rounded-full text-green-600"><i class="ph-fill ph-whatsapp-logo text-xl"></i></div>
+                <div>
+                    <span class="block text-xs text-gray-500">واتساب / هاتف</span>
+                    <a href="https://wa.me/2@(Model.Phone)" target="_blank" class="font-bold text-gray-800 hover:text-green-600 dir-ltr">@Model.Phone</a>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Email))
+            {
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-100 p-2 rounded-full text-blue-600"><i class="ph-fill ph-envelope text-xl"></i></div>
+                    <div>
+                        <span class="block text-xs text-gray-500">البريد الإلكتروني</span>
+                        <a href="mailto:@Model.Email" class="font-bold text-gray-800 hover:text-blue-600">@Model.Email</a>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="p-4 border-t border-gray-200 flex justify-end gap-3">
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                <button type="button" onclick="confirmDelete(@Model.Id, this)" class="px-4 py-2 bg-red-50 text-red-600 rounded-md hover:bg-red-100 font-medium transition-colors">
+                    حذف الرسالة
+                </button>
+            </form>
+            <a href="https://wa.me/2@(Model.Phone)" target="_blank" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium shadow-sm flex items-center gap-2">
+                <i class="ph-bold ph-whatsapp-logo"></i> رد عبر واتساب
+            </a>
+        </div>
+    </div>
+</div>

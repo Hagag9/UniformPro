@@ -1,0 +1,84 @@
+﻿@using UniformPro.Web.Helpers
+@model PaginatedList<UniformPro.Core.Entities.Portfolio>
+
+@{ ViewData["Title"] = "معرض الأعمال"; }
+
+<div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">سجل الأعمال والمشاريع</h2>
+        <p class="text-sm text-gray-500 mt-1">عرض سابقة الأعمال للعملاء</p>
+    </div>
+    
+    <div class="flex gap-3 w-full md:w-auto">
+        <a asp-action="Create" class="bg-primary hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium shadow-sm flex items-center gap-2 transition-colors whitespace-nowrap">
+            <i class="ph-bold ph-plus"></i> إضافة مشروع
+        </a>
+    </div>
+</div>
+
+<div class="mb-6 relative w-full md:w-96">
+    <i class="ph ph-magnifying-glass absolute top-2.5 right-3 text-gray-400 z-10"></i>
+    <input type="text" id="searchInput" 
+           value="@ViewData["CurrentFilter"]" 
+           placeholder="ابحث باسم العميل أو القطاع..." 
+           class="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm shadow-sm transition-all">
+    
+    <div id="searchSpinner" class="hidden absolute top-2.5 left-3">
+        <i class="ph ph-spinner animate-spin text-primary"></i>
+    </div>
+</div>
+
+<div id="portfolioListContainer">
+    <partial name="_PortfolioList" model="Model" />
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            let timer;
+            
+            // Live Search Logic
+            $('#searchInput').on('input', function() {
+                var query = $(this).val();
+                $('#searchSpinner').removeClass('hidden');
+                
+                clearTimeout(timer);
+                
+                timer = setTimeout(function() {
+                    $.ajax({
+                        url: '@Url.Action("Index")',
+                        type: 'GET',
+                        data: { searchString: query },
+                        success: function(result) {
+                            $('#portfolioListContainer').html(result);
+                            $('#searchSpinner').addClass('hidden');
+                        },
+                        error: function() {
+                            // alert('خطأ في البحث'); // ممكن تشيلها لو مش عايز تزعج المستخدم
+                            $('#searchSpinner').addClass('hidden');
+                        }
+                    });
+                }, 500);
+            });
+        });
+    
+        function loadPage(pageNumber) {
+            var query = $('#searchInput').val();
+            $('#searchSpinner').removeClass('hidden');
+
+            $.ajax({
+                url: '@Url.Action("Index")',
+                type: 'GET',
+                data: { searchString: query, pageNumber: pageNumber },
+                success: function(result) {
+                    $('#portfolioListContainer').html(result);
+                    $('#searchSpinner').addClass('hidden');
+                    // عمل Scroll لأعلى الجدول
+                    $('html, body').animate({
+                        scrollTop: $("#portfolioListContainer").offset().top - 100
+                    }, 500);
+                }
+            });
+        }
+    </script>
+}

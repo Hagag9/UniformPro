@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - لوحة تحكم يونيفورم برو</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // 👇 التعديل هنا: غيرنا Tajawal بـ Cairo
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
+                    colors: {
+                        primary: '#008060', // Shopify Green
+                        secondary: '#f6f6f7',
+                        dark: '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/@@phosphor-icons/web"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        /* إجبار المتصفح على استخدام Cairo في كل العناصر */
+        * {
+            font-family: 'Cairo', sans-serif !important;
+        }
+
+        /* جعل العناوين أسمك قليلاً */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700 !important;
+        }
+
+        body {
+            background-color: #f1f2f4;
+            color: #202223;
+        }
+
+        .nav-item.active {
+            background-color: #ebf0ee;
+            color: #008060;
+            font-weight: 700;
+            border-right: 3px solid #008060;
+        }
+
+        /* تنسيق Validation */
+        .field-validation-error {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .input-validation-error {
+            border-color: #dc2626 !important;
+        }
+
+        /* إصلاح Summernote */
+        .note-editor .dropdown-toggle::after {
+            all: unset;
+        }
+
+        .note-editor .note-dropdown-menu {
+            box-sizing: content-box;
+        }
+
+        .note-editor .note-modal-footer {
+            box-sizing: content-box;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden text-sm md:text-base font-sans">
+
+    <aside class="w-64 bg-white border-l border-gray-200 flex-col hidden md:flex z-20 shadow-sm overflow-y-auto">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100 shrink-0">
+            <div class="flex items-center gap-2 text-primary font-bold text-xl">
+                <i class="ph-fill ph-t-shirt text-2xl"></i>
+                <span>مانو يونيفورم</span>
+            </div>
+        </div>
+
+        @{
+            string currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+        }
+
+        <nav class="flex-1 py-4 px-3 space-y-1">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index"
+               class="nav-item flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 @(currentController == "Home" ? "active" : "")">
+                <i class="ph ph-house text-lg"></i>
+                <span>الرئيسية</span>
+            </a>
+
+            <a asp-area="Admin" asp-controller="ContactMessages" asp-action="Index"
+               class="nav-item flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 @(currentController == "ContactMessages" ? "active" : "")">
+                <i class="ph ph-envelope-simple text-lg"></i>
+                <span>صندوق الوارد</span>
+              
+            </a>
+
+            <div class="pt-4 pb-2 px-3 text-xs font-bold text-gray-400 uppercase tracking-wider">إدارة المتجر</div>
+
+            <a asp-area="Admin" asp-controller="Products" asp-action="Index"
+               class="nav-item flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 @(currentController == "Products" ? "active" : "")">
+                <i class="ph ph-tag text-lg"></i>
+                <span>المنتجات</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Categories" asp-action="Index"
+               class="nav-item flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 @(currentController == "Categories" ? "active" : "")">
+                <i class="ph ph-squares-four text-lg"></i>
+                <span>التصنيفات</span>
+            </a>
+
+            <div class="pt-4 pb-2 px-3 text-xs font-bold text-gray-400 uppercase tracking-wider">المحتوى</div>
+
+            <a asp-area="Admin" asp-controller="Portfolios" asp-action="Index"
+               class="nav-item flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 @(currentController == "Portfolios" ? "active" : "")">
+                <i class="ph ph-briefcase text-lg"></i>
+                <span>مشاريع سابقة</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Testimonials" asp-action="Index"
+               class="nav-item flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 @(currentController == "Testimonials" ? "active" : "")">
+                <i class="ph ph-quotes text-lg"></i> <span>آراء العملاء</span>
+            </a>
+            <a asp-area="Admin" asp-controller="HeroItems" asp-action="Index"
+               class="nav-item flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 @(currentController == "HeroItems" ? "active" : "")">
+                <i class="ph ph-image text-lg"></i>
+                <span>سلايدر الرئيسية</span>
+            </a>
+
+            <div class="pt-4 pb-2 px-3 text-xs font-bold text-gray-400 uppercase tracking-wider">النظام</div>
+
+            <a asp-area="Admin" asp-controller="Settings" asp-action="Index"
+               class="nav-item flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 @(currentController == "Settings" ? "active" : "")">
+                <i class="ph ph-gear text-lg"></i>
+                <span>الإعدادات</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100">
+            <div class="pt-4 pb-2 px-3 text-xs font-bold text-gray-400 uppercase tracking-wider">الأمان</div>
+
+            <a asp-area="Admin" asp-controller="Profile" asp-action="Index"
+               class="nav-item flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 @(currentController == "Profile" ? "active" : "")">
+                <i class="ph ph-user-gear text-lg"></i>
+                <span>حسابي والأمان</span>
+            </a>
+
+            <form class="form-inline mt-1" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="flex items-center gap-2 text-red-600 hover:text-red-700 w-full px-3 py-2 rounded transition-colors hover:bg-red-50">
+                    <i class="ph ph-sign-out text-lg"></i>
+                    <span>تسجيل الخروج</span>
+                </button>
+            </form>
+        </div>
+    </aside>
+    <div id="mobile-sidebar" class="fixed inset-y-0 right-0 w-64 bg-white shadow-xl z-50 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col">
+        <div class="h-16 flex items-center justify-between px-6 border-b">
+            <span class="font-bold text-xl text-primary">القائمة</span>
+            <button onclick="toggleMobileSidebar()"><i class="ph-bold ph-x text-xl"></i></button>
+        </div>
+        <nav class="p-4 space-y-2 overflow-y-auto">
+        </nav>
+    </div>
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
+    <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-8 z-10 shadow-sm">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-md" onclick="toggleMobileSidebar()">
+                    <i class="ph ph-list text-xl"></i>
+                </button>
+                <h2 class="text-lg font-bold text-gray-800">@ViewData["Title"]</h2>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="h-8 w-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                    A
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 relative scroll-smooth">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        // 1. إعدادات التنبيهات (Toast Configuration)
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',          // مكان الظهور: أعلى اليمين (أو اليسار حسب اللغة)
+            showConfirmButton: false,     // بدون زر موافق
+            timer: 3000,                  // يختفي بعد 3 ثواني
+            timerProgressBar: true,       // شريط تقدم للوقت
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        // 2. استقبال رسائل النجاح من السيرفر
+        @if (TempData["SuccessMessage"] != null)
+        {
+                <text>
+                Toast.fire({
+                    icon: 'success',
+                    title: '@TempData["SuccessMessage"]'
+                });
+                </text>
+        }
+
+        // 3. استقبال رسائل الخطأ من السيرفر (لو حبيت تستخدمها)
+        @if (TempData["ErrorMessage"] != null)
+        {
+                <text>
+                Toast.fire({
+                    icon: 'error',
+                    title: '@TempData["ErrorMessage"]'
+                });
+                </text>
+        }
+
+        // 4. تفعيل Summernote لأي حقل يحمل كلاس richtext
+        $(document).ready(function() {
+            $('.richtext').summernote({
+                placeholder: 'اكتب الوصف هنا...',
+                tabsize: 2,
+                height: 200,
+                toolbar: [
+                  ['style', ['style']],
+                  ['font', ['bold', 'underline', 'clear']],
+                  ['color', ['color']],
+                  ['para', ['ul', 'ol', 'paragraph']],
+                  ['table', ['table']],
+                  ['insert', ['link']],
+                  ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
+        });
+                // Global Image Lightbox
+        // أي صورة تاخد كلاس 'zoomable' هتفتح في نافذة منبثقة
+        $(document).on('click', 'img.zoomable', function() {
+            var src = $(this).attr('src');
+            Swal.fire({
+                imageUrl: src,
+                imageAlt: 'Image',
+                showConfirmButton: false, // إخفاء زر موافق
+                showCloseButton: true,    // إظهار زر إغلاق
+                background: 'transparent', // خلفية شفافة
+                backdrop: 'rgba(0,0,0,0.8)', // تعتيم الخلفية
+                customClass: {
+                    popup: 'bg-transparent shadow-none',
+                    image: 'max-h-[90vh] rounded-lg shadow-lg' // تنسيق الصورة بـ Tailwind
+                }
+            });
+        });
+        // 5. دالة الحذف العامة (Global Delete Confirmation)
+        function confirmDelete(id, btn) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لن تتمكن من التراجع عن الحذف!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، احذف!',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // البحث عن أقرب فورم للزر وتنفيذه
+                    $(btn).closest('form').submit();
+                }
+            })
+        }
+            // === إصلاح السايدبار للموبايل ===
+        function toggleMobileSidebar() {
+            // الإمساك بالعناصر
+            const sidebar = document.querySelector('aside');
+            const backdrop = document.getElementById('sidebar-backdrop');
+
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const mobileBackdrop = document.getElementById('sidebar-backdrop');
+
+            if (mobileSidebar.classList.contains('translate-x-full')) {
+                // فتح
+                mobileSidebar.classList.remove('translate-x-full');
+                mobileBackdrop.classList.remove('hidden');
+            } else {
+                // إغلاق
+                mobileSidebar.classList.add('translate-x-full');
+                mobileBackdrop.classList.add('hidden');
+            }
+        }
+
+        // نسخ الروابط تلقائياً من الـ Desktop Sidebar إلى الـ Mobile Sidebar عند التحميل
+        // عشان منكررش الكود مرتين
+        $(document).ready(function() {
+            if ($('#mobile-sidebar nav').children().length === 0) {
+                var links = $('aside nav').html();
+                $('#mobile-sidebar nav').html(links);
+
+                // إضافة زر الخروج كمان
+                var logoutBtn = $('aside .border-t').html();
+                $('#mobile-sidebar').append('<div class="p-4 border-t">' + logoutBtn + '</div>');
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

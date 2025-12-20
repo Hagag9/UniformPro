@@ -1,0 +1,87 @@
+﻿@using UniformPro.Web.Helpers
+@model PaginatedList<UniformPro.Core.Entities.ContactMessage>
+@{
+    ViewData["Title"] = "صندوق الوارد";
+}
+
+<div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">صندوق الوارد</h2>
+        <p class="text-sm text-gray-500 mt-1">إدارة رسائل واستفسارات العملاء</p>
+    </div>
+</div>
+
+<div class="flex flex-col md:flex-row justify-between gap-4 mb-6">
+    <div class="flex bg-white rounded-lg p-1 border border-gray-200 shadow-sm w-fit">
+        <button onclick="filterMessages('')" class="px-4 py-2 text-sm rounded-md font-medium transition-colors @(ViewData["CurrentFilterType"]?.ToString() == "" ? "bg-primary text-white shadow" : "text-gray-600 hover:bg-gray-50")" id="btn-all">
+            الكل
+        </button>
+        <button onclick="filterMessages('unread')" class="px-4 py-2 text-sm rounded-md font-medium transition-colors @(ViewData["CurrentFilterType"]?.ToString() == "unread" ? "bg-primary text-white shadow" : "text-gray-600 hover:bg-gray-50")" id="btn-unread">
+            غير مقروء
+        </button>
+        <button onclick="filterMessages('read')" class="px-4 py-2 text-sm rounded-md font-medium transition-colors @(ViewData["CurrentFilterType"]?.ToString() == "read" ? "bg-primary text-white shadow" : "text-gray-600 hover:bg-gray-50")" id="btn-read">
+            المقروء
+        </button>
+    </div>
+
+    <div class="relative w-full md:w-96">
+        <i class="ph ph-magnifying-glass absolute top-2.5 right-3 text-gray-400 z-10"></i>
+        <input type="text" id="searchInput"
+               value="@ViewData["CurrentFilter"]"
+               placeholder="بحث باسم العميل، الشركة، أو الهاتف..."
+               class="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm shadow-sm">
+        <div id="searchSpinner" class="hidden absolute top-2.5 left-3">
+            <i class="ph ph-spinner animate-spin text-primary"></i>
+        </div>
+    </div>
+</div>
+
+<div id="messagesListContainer">
+    <partial name="_MessageList" model="Model" />
+</div>
+
+@section Scripts {
+    <script>
+        let currentFilter = '@ViewData["CurrentFilterType"]';
+
+        // دالة الفلترة (بالضغط على الأزرار)
+        function filterMessages(type) {
+            currentFilter = type;
+
+            // تحديث ستايل الأزرار يدوياً (UX)
+            $('.bg-primary').removeClass('bg-primary text-white shadow').addClass('text-gray-600 hover:bg-gray-50');
+            let activeBtnId = type === '' ? '#btn-all' : '#btn-' + type;
+            $(activeBtnId).removeClass('text-gray-600 hover:bg-gray-50').addClass('bg-primary text-white shadow');
+
+            loadMessages(1);
+        }
+
+        // دالة البحث (Live Search)
+        let timer;
+        $('#searchInput').on('input', function() {
+            $('#searchSpinner').removeClass('hidden');
+            clearTimeout(timer);
+            timer = setTimeout(function() {
+                loadMessages(1);
+            }, 500);
+        });
+
+        // الدالة الرئيسية لجلب البيانات
+        function loadMessages(pageNumber) {
+            var query = $('#searchInput').val();
+
+            $.ajax({
+                url: '@Url.Action("Index")',
+                type: 'GET',
+                data: { searchString: query, filterType: currentFilter, pageNumber: pageNumber },
+                success: function(result) {
+                    $('#messagesListContainer').html(result);
+                    $('#searchSpinner').addClass('hidden');
+                },
+                error: function() {
+                    $('#searchSpinner').addClass('hidden');
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,78 @@
+﻿@model IEnumerable<UniformPro.Core.Entities.Testimonial>
+@{
+    ViewData["Title"] = "تقييمات العملاء";
+}
+
+<div class="flex justify-between items-center mb-6">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">آراء العملاء (Testimonials)</h2>
+        <p class="text-sm text-gray-500 mt-1">إدارة فيديوهات وآراء العملاء</p>
+    </div>
+    <a asp-action="Create" class="bg-primary hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium shadow-sm flex items-center gap-2 transition-colors">
+        <i class="ph-bold ph-plus"></i> إضافة تقييم
+    </a>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @foreach (var item in Model)
+    {
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group">
+            <div class="p-4 flex items-center gap-4 border-b border-gray-50">
+                <div class="w-12 h-12 rounded-full border p-0.5">
+                    @if (!string.IsNullOrEmpty(item.ImagePath))
+                    {
+                        <img src="~/uploads/testimonials/images/@item.ImagePath" class="w-full h-full rounded-full object-cover">
+                    }
+                    else
+                    {
+                        <div class="w-full h-full rounded-full bg-gray-100 flex items-center justify-center text-gray-400"><i class="ph-fill ph-user"></i></div>
+                    }
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 text-sm">@item.ClientName</h3>
+                    <p class="text-xs text-gray-500">@item.Position</p>
+                </div>
+                <div class="mr-auto">
+                    @if (item.IsActive)
+                    {
+                        <span class="w-2 h-2 bg-green-500 rounded-full block" title="نشط"></span>
+                    }
+                    else
+                    {
+
+                        <span class="w-2 h-2 bg-red-400 rounded-full block" title="غير نشط"></span>
+                    }
+                </div>
+            </div>
+
+            <div class="bg-black h-48 flex items-center justify-center relative group-hover:bg-gray-900 transition-colors">
+                @if (!string.IsNullOrEmpty(item.VideoPath))
+                {
+                    <video src="~/uploads/testimonials/videos/@item.VideoPath" controls class="w-full h-full object-cover"></video>
+                }
+                else if (!string.IsNullOrEmpty(item.YoutubeUrl))
+                {
+                    <div class="text-center text-white">
+                        <i class="ph-fill ph-youtube-logo text-4xl text-red-600 mb-2"></i>
+                        <p class="text-xs opacity-70">يوتيوب</p>
+                    </div>
+                }
+                else
+                {
+                    <span class="text-gray-500 text-xs">لا يوجد فيديو</span>
+                }
+            </div>
+
+            <div class="p-4">
+                <p class="text-gray-600 text-sm line-clamp-2 mb-4 italic">"@item.Feedback"</p>
+
+                <div class="flex justify-end gap-2 pt-2 border-t border-gray-50">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-gray-400 hover:text-blue-600 p-1"><i class="ph-bold ph-pencil-simple text-lg"></i></a>
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="inline">
+                        <button type="button" onclick="confirmDelete(@item.Id, this)" class="text-gray-400 hover:text-red-600 p-1"><i class="ph-bold ph-trash text-lg"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>

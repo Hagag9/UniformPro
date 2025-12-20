@@ -1,0 +1,73 @@
+﻿@using UniformPro.Web.Helpers
+@model PaginatedList<UniformPro.Core.Entities.Product>
+
+@{
+    ViewData["Title"] = "المنتجات";
+}
+
+<div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">إدارة المنتجات</h2>
+        <p class="text-sm text-gray-500 mt-1">عرض والتحكم في جميع المنتجات</p>
+    </div>
+    <div class="flex gap-3 w-full md:w-auto">
+        <a asp-action="Create" class="bg-primary hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium shadow-sm flex items-center gap-2 transition-colors whitespace-nowrap">
+            <i class="ph-bold ph-plus"></i> إضافة منتج
+        </a>
+    </div>
+</div>
+
+<div class="mb-6 relative w-full md:w-96">
+    <i class="ph ph-magnifying-glass absolute top-2.5 right-3 text-gray-400 z-10"></i>
+    <input type="text" id="searchInput"
+           value="@ViewData["CurrentFilter"]"
+           placeholder="ابحث فوراً (اسم المنتج، القسم)..."
+           class="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm shadow-sm transition-all">
+
+    <div id="searchSpinner" class="hidden absolute top-2.5 left-3">
+        <i class="ph ph-spinner animate-spin text-primary"></i>
+    </div>
+</div>
+
+<div id="productsTableContainer">
+    <partial name="_ProductTable" model="Model" />
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            let timer; // متغير لتخزين وقت الانتظار (Debounce)
+
+            // عند الكتابة في خانة البحث
+            $('#searchInput').on('input', function() {
+                var query = $(this).val();
+
+                // إظهار أيقونة التحميل
+                $('#searchSpinner').removeClass('hidden');
+
+                // 1. مسح المؤقت القديم (عشان منبعتش طلب مع كل حرف بسرعة)
+                clearTimeout(timer);
+
+                // 2. ضبط مؤقت جديد (ننتظر 500 مللي ثانية بعد ما المستخدم يبطل كتابة)
+                timer = setTimeout(function() {
+                    $.ajax({
+                        url: '@Url.Action("Index")',
+                        type: 'GET',
+                        data: { searchString: query },
+                        success: function(result) {
+                            // استبدال الجدول القديم بالجديد
+                            $('#productsTableContainer').html(result);
+
+                            // إخفاء أيقونة التحميل
+                            $('#searchSpinner').addClass('hidden');
+                        },
+                        error: function() {
+                            alert('حدث خطأ أثناء البحث');
+                            $('#searchSpinner').addClass('hidden');
+                        }
+                    });
+                }, 500); // انتظر نص ثانية
+            });
+        });
+    </script>
+}

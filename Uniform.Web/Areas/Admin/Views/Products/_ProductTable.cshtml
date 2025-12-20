@@ -1,0 +1,76 @@
+﻿@using UniformPro.Web.Helpers
+@model PaginatedList<UniformPro.Core.Entities.Product>
+
+<div id="tableContainer" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+    <div class="overflow-x-auto">
+        <table class="w-full text-right">
+            <thead class="bg-gray-50 text-gray-500 text-xs uppercase border-b border-gray-200">
+                <tr>
+                    <th class="px-6 py-3">الصورة</th>
+                    <th class="px-6 py-3">اسم المنتج</th>
+                    <th class="px-6 py-3">القطاع</th>
+                    <th class="px-6 py-3">السعر</th>
+                    <th class="px-6 py-3 text-left">إجراءات</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 relative">
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-gray-500">لا توجد نتائج تطابق بحثك 🔍</td>
+                    </tr>
+                }
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-gray-50 group">
+                        <td class="px-6 py-4">
+                            <div class="w-12 h-12 rounded border border-gray-200 p-1 bg-white">
+                                @if (!string.IsNullOrEmpty(item.MainImagePath))
+                                {
+                                    <img src="~/uploads/products/@item.MainImagePath" class="w-full h-full object-cover rounded-sm">
+                                }
+                                else
+                                {
+                                    <div class="w-full h-full bg-gray-100 flex items-center justify-center text-xs text-gray-400">No img</div>
+                                }
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 font-medium text-gray-800">
+                            @item.NameAr
+                            <div class="text-xs text-gray-400 font-normal">@item.NameEn</div>
+                        </td>
+                        <td class="px-6 py-4 text-gray-500">
+                            <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">@item.Category.NameAr</span>
+                        </td>
+                        <td class="px-6 py-4 font-bold text-primary">
+                            @(item.StartPrice?.ToString("N0") ?? "-") <span class="text-xs font-normal text-gray-500">ج.م</span>
+                        </td>
+                        <td class="px-6 py-4 text-left flex justify-end items-center gap-2">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="text-gray-400 hover:text-blue-600 p-2"><i class="ph-bold ph-pencil-simple text-lg"></i></a>
+                            <button type="button" onclick="confirmDelete(@item.Id, this)" class="text-gray-400 hover:text-red-600 p-2">
+                                <i class="ph-bold ph-trash text-lg"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="px-6 py-4 border-t border-gray-200 flex justify-between items-center bg-gray-50/50">
+        <span class="text-sm text-gray-500">
+            صفحة @Model.PageIndex من @Model.TotalPages
+        </span>
+        <div class="flex gap-2">
+            <a href="@Url.Action("Index", new { pageNumber = Model.PageIndex - 1, searchString = ViewData["CurrentFilter"] })"
+               class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white hover:bg-gray-50 text-gray-700 @(!Model.HasPreviousPage ? "pointer-events-none opacity-50" : "")">
+                السابق
+            </a>
+
+            <a href="@Url.Action("Index", new { pageNumber = Model.PageIndex + 1, searchString = ViewData["CurrentFilter"] })"
+               class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white hover:bg-gray-50 text-gray-700 @(!Model.HasNextPage ? "pointer-events-none opacity-50" : "")">
+                التالي
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,102 @@
+﻿@model IEnumerable<UniformPro.Core.Entities.HeroItem>
+@{ ViewData["Title"] = "سلايدر الرئيسية"; }
+
+<div class="flex justify-between items-center mb-6">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">سلايدر الصفحة الرئيسية</h2>
+        <p class="text-sm text-gray-500 mt-1">
+            <i class="ph-bold ph-hand-grabbing"></i> يمكنك سحب وإفلات الصفوف لترتيب الصور
+        </p>
+    </div>
+    <a asp-action="Create" class="bg-primary hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium shadow-sm flex items-center gap-2 transition-colors">
+        <i class="ph-bold ph-plus"></i> إضافة شريحة
+    </a>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <table class="w-full text-right">
+        <thead class="bg-gray-50 text-gray-500 text-xs uppercase border-b border-gray-200">
+            <tr>
+                <th class="w-10"></th> <th class="px-6 py-3">الصورة</th>
+                <th class="px-6 py-3">العنوان</th>
+                <th class="px-6 py-3">الترتيب الحالي</th>
+                <th class="px-6 py-3 text-left">إجراءات</th>
+            </tr>
+        </thead>
+        <tbody id="heroTableBody" class="divide-y divide-gray-100">
+            @foreach (var item in Model)
+            {
+                // بنحط الـ ID في الـ tr عشان نعرف مين اللي اتسحب
+                <tr data-id="@item.Id" class="hover:bg-gray-50 transition-colors bg-white">
+                    <td class="px-4 py-4 text-center cursor-move text-gray-400 hover:text-gray-600 handle">
+                        <i class="ph-bold ph-dots-six-vertical text-xl"></i>
+                    </td>
+                    <td class="px-6 py-4">
+                        <img src="~/uploads/hero/@item.ImagePath" class="h-16 w-32 object-cover rounded border border-gray-200 zoomable cursor-pointer">
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-gray-800">@item.TitleAr</div>
+                        <div class="text-xs text-gray-500">@item.TitleEn</div>
+                    </td>
+                    <td class="px-6 py-4 font-bold text-primary order-badge">
+                        @item.DisplayOrder
+                    </td>
+                    <td class="px-6 py-4 text-left">
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="inline">
+                            <button type="button" onclick="confirmDelete(@item.Id, this)" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded transition-colors">
+                                <i class="ph-bold ph-trash text-lg"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var el = document.getElementById('heroTableBody');
+            
+            var sortable = new Sortable(el, {
+                handle: '.handle', // السحب من الأيقونة فقط
+                animation: 150,    // انيميشن ناعم
+                ghostClass: 'bg-gray-100', // لون العنصر أثناء السحب
+                
+                // عند الانتهاء من السحب
+                onEnd: function (evt) {
+                    var itemEl = evt.item;
+                    
+                    // 1. تجميع الـ IDs بالترتيب الجديد
+                    var sortedIds = [];
+                    $('#heroTableBody tr').each(function(index) {
+                        sortedIds.push($(this).data('id'));
+                        // تحديث الرقم الظاهر في الجدول فوراً (Visual Feedback)
+                        $(this).find('.order-badge').text(index + 1);
+                    });
+
+                    // 2. إرسال الترتيب الجديد للسيرفر
+                    $.ajax({
+                        url: '/Admin/HeroItems/UpdateOrder',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(sortedIds),
+                        success: function() {
+                            // رسالة نجاح صغيرة (Toast)
+                            const Toast = Swal.mixin({
+                                toast: true, position: 'top-end', showConfirmButton: false, timer: 2000
+                            });
+                            Toast.fire({ icon: 'success', title: 'تم تحديث الترتيب' });
+                        },
+                        error: function() {
+                            Swal.fire('خطأ', 'حدث خطأ أثناء حفظ الترتيب', 'error');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

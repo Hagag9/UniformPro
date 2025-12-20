@@ -1,0 +1,199 @@
+﻿@model UniformPro.Web.ViewModels.ProductViewModel
+@{
+    ViewData["Title"] = "تعديل المنتج";
+}
+
+<div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold text-gray-800">تعديل: @Model.NameAr</h2>
+        <a asp-action="Index" class="text-gray-500 hover:text-gray-700">إلغاء وعودة</a>
+    </div>
+
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        
+       
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+            <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">📦 بيانات المنتج</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المنتج (عربي)</label>
+                    <input asp-for="NameAr" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Name (English)</label>
+                    <input asp-for="NameEn" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary dir-ltr" style="direction:ltr;">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">القطاع</label>
+                    <select asp-for="CategoryId" class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white" asp-items="ViewBag.CategoryId"></select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">السعر المبدئي</label>
+                    <input asp-for="StartPrice" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">أقل كمية</label>
+                    <input asp-for="MinQuantity" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">المقاسات المتاحة</label>
+                    <input asp-for="AvailableSizes" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">الخامة (عربي)</label>
+                    <input asp-for="MaterialDetailsAr" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Material (En)</label>
+                    <input asp-for="MaterialDetailsEn" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary dir-ltr" style="direction:ltr;">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">الوصف (عربي)</label>
+                    <textarea asp-for="DescriptionAr" class="richtext"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description (En)</label>
+                    <textarea asp-for="DescriptionEn" class="richtext" style="direction:ltr;"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+            <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">🖼️ إدارة الصور</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">الصورة الرئيسية الحالية</label>
+                    <div class="mb-4">
+                        @if (!string.IsNullOrEmpty(Model.CurrentMainImagePath))
+                        {
+                            <img src="~/uploads/products/@Model.CurrentMainImagePath" class="h-48 rounded border shadow-sm object-cover zoomable cursor-pointer">
+                        }
+                        else
+                        {
+                            <span class="text-gray-400 text-sm">لا توجد صورة رئيسية</span>
+                        }
+                    </div>
+
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تغيير الصورة الرئيسية</label>
+                    <div id="mainImagePreviewArea" class="hidden mb-2 relative w-32 h-32 border rounded overflow-hidden">
+                        <img id="mainImageImg" src="#" class="w-full h-full object-cover" />
+                        <button type="button" onclick="clearMainImage()" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5"><i class="ph-bold ph-x text-xs"></i></button>
+                    </div>
+                    <input type="file" name="mainImageFile" id="mainImageInput" accept="image/*" onchange="previewMainImage(this)"
+                           class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">الصور المحفوظة (المعرض)</label>
+                    <div class="grid grid-cols-4 gap-3 mb-4">
+                        @foreach (var img in Model.CurrentGalleryImages)
+                        {
+                            <div class="relative h-24 border rounded overflow-hidden group shadow-sm" id="img-container-@img.Id">
+                                <img src="~/uploads/products/gallery/@img.ImagePath" class="w-full h-full object-cover">
+                                <button type="button" onclick="deleteServerImage(@img.Id)"
+                                        class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-red-700 transition-colors" title="حذف نهائي">
+                                    <i class="ph-bold ph-trash text-xs"></i>
+                                </button>
+                            </div>
+                        }
+                        @if (!Model.CurrentGalleryImages.Any())
+                        {
+                            <p class="col-span-4 text-sm text-gray-400">لا توجد صور إضافية</p>
+                        }
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">إضافة صور جديدة للمعرض</label>
+                        <div id="galleryPreviewGrid" class="grid grid-cols-4 gap-3 mb-3"></div>
+
+                        <input type="file" name="galleryFiles" id="galleryInput" multiple accept="image/*"
+                               class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mt-6">
+            <h3 class="font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
+                <i class="ph-fill ph-google-logo text-blue-500"></i> إعدادات السيو (SEO)
+                <span class="text-xs font-normal text-gray-500 mr-2">(اختياري - يساعد في الظهور على جوجل)</span>
+            </h3>
+
+            <div class="grid grid-cols-1 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">وصف الصفحة (Meta Description)</label>
+                    <textarea asp-for="MetaDescription" rows="2" placeholder="اكتب وصفاً مختصراً وجذاباً يظهر في نتائج البحث..." class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary text-sm"></textarea>
+                    <p class="text-xs text-gray-400 mt-1">يفضل ألا يزيد عن 160 حرفاً.</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">الكلمات المفتاحية (Keywords)</label>
+                    <input asp-for="MetaKeywords" placeholder="مثال: يونيفورم مطاعم، ملابس طبية، زي موحد..." class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary text-sm">
+                    <p class="text-xs text-gray-400 mt-1">افصل بين الكلمات بفاصلة.</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-3 pt-4 border-t">
+            <button type="submit" class="px-8 py-2 bg-primary text-white rounded-md hover:bg-green-700 font-medium shadow-sm">حفظ التعديلات</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // === نفس دوال الـ Create (Main + Gallery Preview) ===
+        // يمكنك وضعها في ملف JS مشترك، أو نسخها هنا
+        function previewMainImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) { $('#mainImageImg').attr('src', e.target.result); $('#mainImagePreviewArea').removeClass('hidden'); }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function clearMainImage() { $('#mainImageInput').val(''); $('#mainImagePreviewArea').addClass('hidden'); }
+
+        let galleryFilesDT = new DataTransfer();
+        $('#galleryInput').on('change', function(e) {
+            for (let i = 0; i < this.files.length; i++) galleryFilesDT.items.add(this.files[i]);
+            this.files = galleryFilesDT.files;
+            renderGalleryPreview();
+        });
+        function renderGalleryPreview() {
+            const container = $('#galleryPreviewGrid'); container.empty();
+            Array.from(galleryFilesDT.files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    container.append(`<div class="relative h-24 border rounded overflow-hidden group shadow-sm bg-gray-100"><img src="${e.target.result}" class="w-full h-full object-cover"><button type="button" onclick="removeGalleryFile(${index})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="ph-bold ph-x text-xs"></i></button></div>`);
+                }
+                reader.readAsDataURL(file);
+            });
+        }
+        function removeGalleryFile(index) {
+            const dt = new DataTransfer();
+            const { files } = galleryFilesDT;
+            for (let i = 0; i < files.length; i++) if (i !== index) dt.items.add(files[i]);
+            galleryFilesDT = dt;
+            document.getElementById('galleryInput').files = dt.files;
+            renderGalleryPreview();
+        }
+
+        // === دالة حذف الصور القديمة (AJAX) ===
+        function deleteServerImage(imageId) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟', text: "سيتم حذف الصورة نهائياً!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'حذف', cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/Admin/Products/DeleteImage', { id: imageId }, function() {
+                        $('#img-container-' + imageId).fadeOut();
+                        Swal.fire('تم!', 'تم حذف الصورة.', 'success');
+                    }).fail(function() { Swal.fire('خطأ', 'فشل الحذف', 'error'); });
+                }
+            })
+        }
+    </script>
+}

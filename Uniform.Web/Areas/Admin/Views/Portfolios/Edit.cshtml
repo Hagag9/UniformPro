@@ -1,0 +1,159 @@
+﻿@model UniformPro.Web.ViewModels.PortfolioViewModel
+@{
+    ViewData["Title"] = "تعديل المشروع";
+}
+
+<div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold text-gray-800">تعديل: @Model.ClientNameAr</h2>
+        <a asp-action="Index" class="text-gray-500 hover:text-gray-700">عودة</a>
+    </div>
+
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        
+   
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+            <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">💼 بيانات المشروع</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم العميل (عربي)</label>
+                    <input asp-for="ClientNameAr" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Client Name (En)</label>
+                    <input asp-for="ClientNameEn" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary dir-ltr" style="direction:ltr;">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">القطاع</label>
+                    <select asp-for="CategoryId" class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white" asp-items="ViewBag.CategoryId"></select>
+                </div>
+                <div class="flex items-center pt-6">
+                    <input asp-for="ShowOnHome" type="checkbox" class="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary">
+                    <label asp-for="ShowOnHome" class="mr-2 text-sm font-medium text-gray-700">عرض في الصفحة الرئيسية</label>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">وصف المشروع</label>
+                    <textarea asp-for="DescriptionAr" class="richtext"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description (En)</label>
+                    <textarea asp-for="DescriptionEn" class="richtext" style="direction:ltr;"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+            <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">🎥 إدارة الوسائط</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">الغلاف الحالي</label>
+                    <div class="mb-4">
+                        @if (!string.IsNullOrEmpty(Model.CurrentCoverImagePath))
+                        {
+                            <img src="~/uploads/portfolios/covers/@Model.CurrentCoverImagePath" class="h-48 w-full object-cover rounded border">
+                        }
+                        else
+                        {
+
+                            <span class="text-gray-400">لا يوجد غلاف</span>
+                        }
+                    </div>
+
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تغيير الغلاف</label>
+                    <div id="coverPreviewArea" class="hidden mb-2 relative w-32 h-32 border rounded overflow-hidden">
+                        <img id="coverImg" src="#" class="w-full h-full object-cover">
+                        <button type="button" onclick="clearCover()" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5"><i class="ph-bold ph-x text-xs"></i></button>
+                    </div>
+                    <input type="file" name="coverImageFile" id="coverInput" accept="image/*" onchange="previewCover(this)"
+                           class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-600 hover:file:bg-purple-100" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">الميديا المحفوظة</label>
+                    <div class="grid grid-cols-4 gap-3 mb-4">
+                        @foreach (var media in Model.CurrentMedia)
+                        {
+                            <div class="relative h-24 border rounded overflow-hidden group bg-gray-100" id="media-@media.Id">
+                                @if (media.Type == UniformPro.Core.Entities.MediaType.Image)
+                                {
+                                    <img src="~/uploads/portfolios/media/@media.MediaUrl" class="w-full h-full object-cover">
+                                }
+                                else
+                                {
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-900 text-white">
+                                        <i class="ph-fill @(media.MediaUrl.StartsWith("http") ? "ph-youtube-logo text-red-500" : "ph-video-camera") text-3xl"></i>
+                                    </div>
+                                }
+                                <button type="button" onclick="deleteMedia(@media.Id)" class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-red-700" title="حذف">
+                                    <i class="ph-bold ph-trash text-xs"></i>
+                                </button>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">إضافة ميديا جديدة</label>
+                        <div id="mediaPreviewGrid" class="grid grid-cols-4 gap-3 mb-3"></div>
+
+                        <input type="file" name="mediaFiles" id="mediaInput" multiple accept="image/*,video/*"
+                               class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-600 hover:file:bg-purple-100 mb-4" />
+
+                        <div id="youtube-container" class="space-y-2 mb-2"></div>
+                        <button type="button" onclick="addYoutubeInput()" class="text-xs text-primary hover:underline flex items-center gap-1"><i class="ph-bold ph-plus"></i> رابط يوتيوب آخر</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mt-6">
+            <h3 class="font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
+                <i class="ph-fill ph-google-logo text-blue-500"></i> إعدادات السيو (SEO)
+                <span class="text-xs font-normal text-gray-500 mr-2">(اختياري - يساعد في الظهور على جوجل)</span>
+            </h3>
+
+            <div class="grid grid-cols-1 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">وصف الصفحة (Meta Description)</label>
+                    <textarea asp-for="MetaDescription" rows="2" placeholder="اكتب وصفاً مختصراً وجذاباً يظهر في نتائج البحث..." class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary text-sm"></textarea>
+                    <p class="text-xs text-gray-400 mt-1">يفضل ألا يزيد عن 160 حرفاً.</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">الكلمات المفتاحية (Keywords)</label>
+                    <input asp-for="MetaKeywords" placeholder="مثال: يونيفورم مطاعم، ملابس طبية، زي موحد..." class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary text-sm">
+                    <p class="text-xs text-gray-400 mt-1">افصل بين الكلمات بفاصلة.</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-3 pt-4 border-t">
+            <button type="submit" class="px-8 py-2 bg-primary text-white rounded-md hover:bg-green-700 font-medium shadow-sm">حفظ التعديلات</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // === نفس دوال Create بالضبط (انسخها من Create أو ضعها هنا) ===
+        function previewCover(input) { if (input.files && input.files[0]) { var reader = new FileReader(); reader.onload = function(e) { $('#coverImg').attr('src', e.target.result); $('#coverPreviewArea').removeClass('hidden'); }; reader.readAsDataURL(input.files[0]); } }
+        function clearCover() { $('#coverInput').val(''); $('#coverPreviewArea').addClass('hidden'); }
+
+        let mediaFilesDT = new DataTransfer();
+        $('#mediaInput').on('change', function(e) { for (let i = 0; i < this.files.length; i++) mediaFilesDT.items.add(this.files[i]); this.files = mediaFilesDT.files; renderMediaPreview(); });
+        function renderMediaPreview() { const container = $('#mediaPreviewGrid'); container.empty(); Array.from(mediaFilesDT.files).forEach((file, index) => { const isVideo = file.type.startsWith('video'); const reader = new FileReader(); reader.onload = function(e) { let content = isVideo ? `<video src="${e.target.result}" class="w-full h-full object-cover bg-black"></video>` : `<img src="${e.target.result}" class="w-full h-full object-cover">`; container.append(`<div class="relative h-24 border rounded overflow-hidden group shadow-sm bg-gray-100">${content}<button type="button" onclick="removeMediaFile(${index})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="ph-bold ph-x text-xs"></i></button></div>`); }; reader.readAsDataURL(file); }); }
+        function removeMediaFile(index) { const dt = new DataTransfer(); const { files } = mediaFilesDT; for (let i = 0; i < files.length; i++) if (i !== index) dt.items.add(files[i]); mediaFilesDT = dt; document.getElementById('mediaInput').files = dt.files; renderMediaPreview(); }
+        function addYoutubeInput() { var html = `<div class="relative"><input type="text" name="youtubeUrls" placeholder="Link..." class="w-full border border-gray-300 rounded-md px-3 py-2 text-xs dir-ltr" style="direction:ltr;"><button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-500 hover:text-red-700"><i class="ph-bold ph-x"></i></button></div>`; $('#youtube-container').append(html); }
+
+        // === AJAX Delete Existing Media ===
+        function deleteMedia(id) {
+            Swal.fire({ title: 'هل أنت متأكد؟', text: "حذف نهائي!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'حذف' }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/Admin/Portfolios/DeleteMedia', { id: id }, function() { $('#media-' + id).fadeOut(); Swal.fire('تم!', 'تم الحذف.', 'success'); }).fail(function() { Swal.fire('خطأ', 'فشل الحذف', 'error'); });
+                }
+            })
+        }
+    </script>
+}

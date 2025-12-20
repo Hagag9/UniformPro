@@ -1,0 +1,75 @@
+﻿@model UniformPro.Web.ViewModels.ChangePasswordViewModel
+@{
+    ViewData["Title"] = "الملف الشخصي";
+}
+
+<div class="max-w-4xl mx-auto">
+    <div class="mb-6">
+        <h2 class="text-xl font-bold text-gray-800">الملف الشخصي والأمان</h2>
+        <p class="text-sm text-gray-500 mt-1">إدارة حساب الأدمن وتأمين الدخول</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div class="md:col-span-1">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 text-center">
+                <div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
+                    <i class="ph-fill ph-user text-5xl"></i>
+                </div>
+                <h3 class="font-bold text-gray-800 text-lg">@ViewBag.Username</h3>
+                <p class="text-gray-500 text-sm mb-4">مدير النظام (Admin)</p>
+
+                <div class="border-t border-gray-100 pt-4 text-left">
+                    <label class="text-xs text-gray-400 block mb-1">البريد الإلكتروني</label>
+                    <div class="flex items-center gap-2 text-gray-700 font-medium">
+                        <i class="ph ph-envelope"></i> @ViewBag.Email
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:col-span-2">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h3 class="font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
+                    <i class="ph-fill ph-lock-key text-primary"></i> تغيير كلمة المرور
+                </h3>
+
+                <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm mb-4 bg-red-50 p-2 rounded"></div>
+
+                <form asp-action="ChangePassword" method="post">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور الحالية</label>
+                            <div class="relative">
+                                <input asp-for="CurrentPassword" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary dir-ltr" style="direction:ltr;">
+                                <i class="ph ph-lock absolute top-2.5 right-3 text-gray-400"></i>
+                            </div>
+                            <span asp-validation-for="CurrentPassword" class="text-red-500 text-xs"></span>
+                        </div>
+
+                        <hr class="border-gray-100" />
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور الجديدة</label>
+                                <input asp-for="NewPassword" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary dir-ltr" style="direction:ltr;">
+                                <span asp-validation-for="NewPassword" class="text-red-500 text-xs"></span>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">تأكيد كلمة المرور</label>
+                                <input asp-for="ConfirmPassword" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary dir-ltr" style="direction:ltr;">
+                                <span asp-validation-for="ConfirmPassword" class="text-red-500 text-xs"></span>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 flex justify-end">
+                            <button type="submit" class="bg-gray-800 hover:bg-black text-white px-6 py-2 rounded-md font-medium shadow-sm transition-colors">
+                                تحديث كلمة المرور
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

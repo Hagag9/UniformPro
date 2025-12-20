@@ -1,0 +1,51 @@
+﻿@model IEnumerable<UniformPro.Core.Entities.Category>
+@{
+    ViewData["Title"] = "إدارة القطاعات";
+}
+
+<div class="flex justify-between items-center mb-6">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">القطاعات والتصنيفات</h2>
+        <p class="text-sm text-gray-500 mt-1">إدارة الأقسام الرئيسية (مطاعم، مدارس...)</p>
+    </div>
+    <a asp-action="Create" class="bg-primary hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium shadow-sm flex items-center gap-2 transition-colors">
+        <i class="ph-bold ph-plus"></i>
+        <span>إضافة قطاع</span>
+    </a>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm border border-gray-200">
+    <table class="w-full text-right">
+        <thead class="bg-gray-50 text-gray-500 text-xs uppercase border-b border-gray-200">
+            <tr>
+                <th class="px-6 py-3">الاسم بالعربية</th>
+                <th class="px-6 py-3">Name (English)</th>
+                <th class="px-6 py-3 text-left">إجراءات</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+            @foreach (var item in Model)
+            {
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 font-bold text-gray-800">
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded bg-green-50 text-primary flex items-center justify-center">
+                                <i class="ph-fill ph-tag"></i>
+                            </span>
+                            @item.NameAr
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600 font-medium">@item.NameEn</td>
+                    <td class="px-6 py-4 text-left flex justify-end gap-2">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="text-gray-400 hover:text-blue-600 p-2 transition-colors"><i class="ph-bold ph-pencil-simple text-lg"></i></a>
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="inline">
+                            <button type="button" onclick="confirmDelete(@item.Id, this)" class="text-gray-400 hover:text-red-600 p-2 transition-colors">
+                                <i class="ph-bold ph-trash text-lg"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,84 @@
+﻿@using UniformPro.Web.Helpers
+@model PaginatedList<UniformPro.Core.Entities.ContactMessage>
+
+<div id="messagesTableContainer" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-right">
+            <thead class="bg-gray-50 text-gray-500 text-xs uppercase border-b border-gray-200">
+                <tr>
+                    <th class="px-6 py-3">المرسل</th>
+                    <th class="px-6 py-3">الموضوع</th>
+                    <th class="px-6 py-3">التوقيت</th>
+                    <th class="px-6 py-3">الحالة</th>
+                    <th class="px-6 py-3 text-left">إجراءات</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @if (Model.Count == 0)
+                {
+                    <tr><td colspan="5" class="text-center py-8 text-gray-500">لا توجد رسائل مطابقة 📭</td></tr>
+                }
+                @foreach (var item in Model)
+                {
+                    // تلوين الخلفية لو الرسالة جديدة
+                    <tr class="hover:bg-gray-50 transition-colors @(!item.IsRead ? "bg-green-50/60" : "")">
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-gray-800">@item.FullName</div>
+                            <div class="text-xs text-gray-500">@item.Phone</div>
+                        </td>
+                        <td class="px-6 py-4 text-gray-600">
+                            @if (!string.IsNullOrEmpty(item.CompanyName))
+                            {
+                                <span class="block text-xs font-bold text-primary mb-1">@item.CompanyName</span>
+                            }
+                            <span class="text-sm truncate block max-w-xs">@item.Message</span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">
+                            <span class="block">@item.SentAt.ToString("yyyy-MM-dd")</span>
+                            <span class="text-xs text-gray-400">@item.SentAt.ToString("hh:mm tt")</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            @if (!item.IsRead)
+                            {
+                                <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1 w-fit">
+                                    <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> جديد
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="bg-gray-100 text-gray-500 px-2 py-1 rounded-full text-xs border border-gray-200">مقروء</span>
+                            }
+                        </td>
+                        <td class="px-6 py-4 text-left flex justify-end gap-2">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="text-blue-600 hover:text-blue-800 p-2 bg-blue-50 rounded-md transition-colors" title="قراءة">
+                                <i class="ph-bold ph-eye"></i>
+                            </a>
+                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="inline">
+                                <button type="button" onclick="confirmDelete(@item.Id, this)" class="text-red-600 hover:text-red-800 p-2 bg-red-50 rounded-md transition-colors" title="حذف">
+                                    <i class="ph-bold ph-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+        <div class="px-6 py-4 border-t border-gray-200 flex justify-between items-center bg-gray-50/50">
+            <span class="text-sm text-gray-500">
+                صفحة @Model.PageIndex من @Model.TotalPages
+            </span>
+            <div class="flex gap-2">
+                <a href="javascript:void(0)" onclick="loadMessages(@(Model.PageIndex - 1))"
+                   class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white hover:bg-gray-50 text-gray-700 @(!Model.HasPreviousPage ? "pointer-events-none opacity-50" : "")">
+                    السابق
+                </a>
+                <a href="javascript:void(0)" onclick="loadMessages(@(Model.PageIndex + 1))"
+                   class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white hover:bg-gray-50 text-gray-700 @(!Model.HasNextPage ? "pointer-events-none opacity-50" : "")">
+                    التالي
+                </a>
+            </div>
+        </div>
+   
+</div>
