@@ -11,7 +11,7 @@ namespace UniformPro.Web.ViewModels
         public string NameAr { get; set; }
         public string NameEn { get; set; }
 
-        [Required(ErrorMessage = "السعر المبدئي مطلوب")]
+        [Range(0, double.MaxValue, ErrorMessage = "السعر يجب أن يكون قيمة موجبة")]
         public decimal? StartPrice { get; set; }
         public string DescriptionAr { get; set; }
         public string DescriptionEn { get; set; }

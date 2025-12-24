@@ -1,0 +1,194 @@
+@model UniformPro.Core.Entities.Product
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
+@{
+    var relatedProducts = ViewBag.RelatedProducts as IEnumerable<UniformPro.Core.Entities.Product>;
+    var whatsappNumber = ViewData["WhatsApp"]?.ToString();
+    var phoneNumber = ViewData["Phone"]?.ToString();
+    var isArabic = ViewData["IsArabic"] as bool? ?? true;
+
+    var productName = isArabic ? Model.NameAr : Model.NameEn;
+    var categoryName = isArabic ? Model.Category?.NameAr : Model.Category?.NameEn;
+    var description = isArabic ? Model.DescriptionAr : Model.DescriptionEn;
+    var materialDetails = isArabic ? Model.MaterialDetailsAr : Model.MaterialDetailsEn;
+
+    // Build WhatsApp message
+    var whatsappMessage = System.Net.WebUtility.UrlEncode(isArabic 
+        ? $"مرحباً، أريد الاستفسار عن المنتج: {productName}" 
+        : $"Hello, I want to inquire about the product: {productName}");
+}
+
+<!-- Breadcrumb -->
+<section class="bg-gray-50 py-4 border-b">
+    <div class="container mx-auto px-4">
+        <nav class="flex items-center gap-2 text-sm text-gray-500">
+            <a href="/" class="hover:text-gray-800">@L["Home"]</a>
+            <i class="ph ph-caret-@(isArabic ? "left" : "right") text-xs"></i>
+            <a href="/Products" class="hover:text-gray-800">@L["Products"]</a>
+            <i class="ph ph-caret-@(isArabic ? "left" : "right") text-xs"></i>
+            <a href="/Products?category=@Model.CategoryId" class="hover:text-gray-800">@categoryName</a>
+            <i class="ph ph-caret-@(isArabic ? "left" : "right") text-xs"></i>
+            <span class="text-gray-800 font-medium">@productName</span>
+        </nav>
+    </div>
+</section>
+
+<section class="py-8 md:py-12">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+
+            <!-- Image Gallery -->
+            <div class="space-y-4" data-aos="fade-left">
+                <!-- Main Image -->
+                <div id="main-image-container" class="aspect-square bg-gray-100 rounded-2xl overflow-hidden border border-gray-200">
+                    @if (!string.IsNullOrEmpty(Model.MainImagePath))
+                    {
+                        <img id="main-image" src="~/uploads/products/@Model.MainImagePath"
+                             alt="@productName"
+                             class="w-full h-full object-cover cursor-zoom-in zoomable" />
+                    }
+                    else
+                    {
+                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                            <i class="ph ph-image text-6xl"></i>
+                        </div>
+                    }
+                </div>
+
+                <!-- Thumbnails -->
+                @if (Model.ProductImages.Any())
+                {
+                    <div class="flex gap-3 overflow-x-auto pb-2">
+                        <!-- Main image thumbnail -->
+                        @if (!string.IsNullOrEmpty(Model.MainImagePath))
+                        {
+                            <button onclick="changeMainImage('/uploads/products/@Model.MainImagePath')"
+                                    class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 border-gray-800 bg-gray-100">
+                                <img src="~/uploads/products/@Model.MainImagePath" alt="" class="w-full h-full object-cover" />
+                            </button>
+                        }
+                        @foreach (var img in Model.ProductImages)
+                        {
+                            <button onclick="changeMainImage('/uploads/products/gallery/@img.ImagePath')"
+                                    class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 border-gray-200 hover:border-gray-800 bg-gray-100 transition-colors">
+                                <img src="~/uploads/products/gallery/@img.ImagePath" alt="" class="w-full h-full object-cover" />
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Product Info -->
+            <div data-aos="fade-right">
+                <!-- Category -->
+                <a href="/Products?category=@Model.CategoryId" class="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium mb-3 hover:bg-gray-200 transition-colors">
+                    @categoryName
+                </a>
+
+                <!-- Name -->
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">@productName</h1>
+
+                <!-- Price -->
+                @if (Model.StartPrice.HasValue)
+                {
+                    <div class="bg-gray-50 rounded-xl p-4 mb-6 inline-block">
+                        <span class="text-gray-500 text-sm">@L["StartingFrom"]</span>
+                        <p class="text-3xl font-bold text-gray-800">@Model.StartPrice?.ToString("N0") <span class="text-base font-normal text-gray-500">@L["EGP"]</span></p>
+                    </div>
+                }
+
+                <!-- Specs -->
+                <div class="space-y-4 mb-8">
+                    @if (Model.MinQuantity > 1)
+                    {
+                        <div class="flex items-center gap-3 text-gray-700">
+                            <i class="ph ph-package text-xl text-gray-500"></i>
+                            <span>@L["MinQuantity"]: <strong>@Model.MinQuantity @L["Pieces"]</strong></span>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.AvailableSizes))
+                    {
+                        <div class="flex items-center gap-3 text-gray-700">
+                            <i class="ph ph-ruler text-xl text-gray-500"></i>
+                            <span>@L["Sizes"]: <strong>@Model.AvailableSizes</strong></span>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(materialDetails))
+                    {
+                        <div class="flex items-start gap-3 text-gray-700">
+                            <i class="ph ph-t-shirt text-xl text-gray-500 mt-1"></i>
+                            <span>@L["Material"]: <strong>@materialDetails</strong></span>
+                        </div>
+                    }
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3 mb-8">
+                    <a href="https://wa.me/@whatsappNumber?text=@whatsappMessage" target="_blank"
+                       class="flex-1 bg-green-500 hover:bg-green-600 text-white py-4 px-6 rounded-xl font-bold text-center flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
+                        <i class="ph-bold ph-whatsapp-logo text-2xl"></i>
+                        <span>@L["WhatsAppContact"]</span>
+                    </a>
+                    <a href="tel:@phoneNumber"
+                       class="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-4 px-6 rounded-xl font-bold text-center flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
+                        <i class="ph-bold ph-phone text-2xl"></i>
+                        <span>@L["CallNow"]</span>
+                    </a>
+                </div>
+
+                <!-- Description -->
+                @if (!string.IsNullOrEmpty(description))
+                {
+                    <div class="border-t pt-6">
+                        <h3 class="font-bold text-gray-800 mb-3">@L["Description"]</h3>
+                        <div class="prose prose-sm max-w-none text-gray-600">
+                            @Html.Raw(description)
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Products -->
+@if (relatedProducts != null && relatedProducts.Any())
+{
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold text-gray-900 mb-8">@L["RelatedProducts"]</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                @foreach (var product in relatedProducts)
+                {
+                    <a href="/Products/Details/@product.Id" class="group block">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 group-hover:shadow-lg">
+                            <div class="aspect-square bg-gray-100 relative overflow-hidden">
+                                @if (!string.IsNullOrEmpty(product.MainImagePath))
+                                {
+                                    <img src="~/uploads/products/@product.MainImagePath"
+                                         alt="@(isArabic ? product.NameAr : product.NameEn)"
+                                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                                }
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-gray-800 line-clamp-2 group-hover:text-gray-600 transition-colors">@(isArabic ? product.NameAr : product.NameEn)</h3>
+                                @if (product.StartPrice.HasValue)
+                                {
+                                    <p class="text-gray-800 font-bold mt-2 text-sm">@L["StartingFrom"] @product.StartPrice?.ToString("N0") @L["EGP"]</p>
+                                }
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@section Scripts {
+    <script>
+        function changeMainImage(src) {
+            document.getElementById('main-image').src = src;
+        }
+    </script>
+}

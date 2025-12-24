@@ -64,7 +64,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
             if (image != null)
             {
                 // حذف الملف من السيرفر
-                _fileService.DeleteFile(image.ImagePath, "products/gallery");
+                _fileService.DeleteFile(image.ImagePath, Constants.Folders.ProductsGallery);
 
                 // حذف من الداتابيز
                 _context.ProductImages.Remove(image);
@@ -109,7 +109,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 // حفظ الصورة الرئيسية
                 if (model.MainImageFile != null)
                 {
-                    product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, "products");
+                    product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
                 }
 
                 _context.Add(product);
@@ -120,7 +120,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 {
                     foreach (var file in model.GalleryFiles)
                     {
-                        var path = await _fileService.SaveFileAsync(file, "products/gallery");
+                        var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
                         _context.ProductImages.Add(new ProductImage
                         {
                             ProductId = product.Id,
@@ -199,10 +199,9 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 // تحديث الصورة الرئيسية (إذا تم رفع جديد)
                 if (model.MainImageFile != null)
                 {
-                    if (!string.IsNullOrEmpty(product.MainImagePath))
-                        _fileService.DeleteFile(product.MainImagePath, "products");
-
-                    product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, "products");
+                    // الحذف يتم التعامل معه داخل السرفيس إذا مررنا الاسم
+                    _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
+                    product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
                 }
 
                 // إضافة صور معرض جديدة
@@ -210,7 +209,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 {
                     foreach (var file in model.GalleryFiles)
                     {
-                        var path = await _fileService.SaveFileAsync(file, "products/gallery");
+                        var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
                         _context.ProductImages.Add(new ProductImage { ProductId = product.Id, ImagePath = path });
                     }
                 }
@@ -234,6 +233,8 @@ namespace UniformPro.Web.Areas.Admin.Controllers
             return View(model);
         }
         // ================== DELETE PRODUCT ==================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var product = await _context.Products
@@ -243,13 +244,12 @@ namespace UniformPro.Web.Areas.Admin.Controllers
             if (product != null)
             {
                 // حذف الصورة الرئيسية
-                if (!string.IsNullOrEmpty(product.MainImagePath))
-                    _fileService.DeleteFile(product.MainImagePath, "products");
+                _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
 
                 // حذف صور المعرض
                 foreach (var img in product.ProductImages)
                 {
-                    _fileService.DeleteFile(img.ImagePath, "products/gallery");
+                    _fileService.DeleteFile(img.ImagePath, Constants.Folders.ProductsGallery);
                 }
 
                 _context.Products.Remove(product);

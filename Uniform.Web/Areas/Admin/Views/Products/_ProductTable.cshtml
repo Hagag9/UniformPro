@@ -27,7 +27,7 @@
                             <div class="w-12 h-12 rounded border border-gray-200 p-1 bg-white">
                                 @if (!string.IsNullOrEmpty(item.MainImagePath))
                                 {
-                                    <img src="~/uploads/products/@item.MainImagePath" class="w-full h-full object-cover rounded-sm">
+                                    <img src="~/uploads/products/@item.MainImagePath" class="w-full h-full object-cover rounded-sm zoomable cursor-pointer" alt="@item.NameAr">
                                 }
                                 else
                                 {
@@ -47,9 +47,11 @@
                         </td>
                         <td class="px-6 py-4 text-left flex justify-end items-center gap-2">
                             <a asp-action="Edit" asp-route-id="@item.Id" class="text-gray-400 hover:text-blue-600 p-2"><i class="ph-bold ph-pencil-simple text-lg"></i></a>
-                            <button type="button" onclick="confirmDelete(@item.Id, this)" class="text-gray-400 hover:text-red-600 p-2">
-                                <i class="ph-bold ph-trash text-lg"></i>
-                            </button>
+                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="inline-block">
+                                <button type="button" onclick="confirmDelete(@item.Id, this)" class="text-gray-400 hover:text-red-600 p-2">
+                                    <i class="ph-bold ph-trash text-lg"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 }

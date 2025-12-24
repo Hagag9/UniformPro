@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using UniformPro.Core.Entities;
 using UniformPro.Infrastructure.Data;
 
@@ -20,7 +22,22 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 
 // تسجيل خدمة الملفات
 builder.Services.AddScoped<UniformPro.Web.Services.IFileService, UniformPro.Web.Services.FileService>();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix);
+
+// 4. إعداد تعدد اللغات (Localization)
+//builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddLocalization();
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] { new CultureInfo("ar"), new CultureInfo("en") };
+    options.DefaultRequestCulture = new RequestCulture("ar");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+    
+    // Use Cookie to persist language choice
+    options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
+});
 
 
 var app = builder.Build();
@@ -45,6 +62,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles(); // للسماح بملفات wwwroot
 
 app.UseRouting();
+
+// 5. تفعيل تعدد اللغات
+app.UseRequestLocalization();
 
 app.UseAuthorization();
 

@@ -34,10 +34,14 @@
             <h3 class="font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
                 <i class="ph-fill ph-phone text-primary"></i> التواصل والعنوان
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">رقم الهاتف</label>
                     <input asp-for="PhoneNumber" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary dir-ltr">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم الهاتف الثاني <span class="text-xs text-gray-400">(اختياري)</span></label>
+                    <input asp-for="Phone2Number" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary dir-ltr">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">رقم الواتساب</label>

@@ -1,8 +1,29 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "الرئيسية";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="py-20 bg-gradient-to-br from-primary/5 to-white">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6" data-aos="fade-up">
+            مرحباً بك في <span class="text-primary">مانو يونيفورم</span>
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="100">
+            متخصصون في تصنيع وتوريد اليونيفورم للشركات والمؤسسات بأعلى جودة وأفضل الأسعار.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
+            <a href="/Products" class="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-all">
+                تصفح المنتجات
+            </a>
+            <a href="https://wa.me/@ViewData["WhatsApp"]" target="_blank" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                <i class="ph-bold ph-whatsapp-logo"></i>
+                تواصل واتساب
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4 text-center">
+        <p class="text-gray-500">🚧 هذه صفحة مؤقتة - سيتم بناء المحتوى الكامل لاحقاً 🚧</p>
+    </div>
+</section>

@@ -14,6 +14,9 @@ namespace UniformPro.Core.Entities
         [Display(Name = "رقم الهاتف")]
         public string PhoneNumber { get; set; } = string.Empty;
 
+        [Display(Name = "رقم الهاتف الثاني")]
+        public string? Phone2Number { get; set; }
+
         [Display(Name = "رقم الواتساب")]
         public string WhatsAppNumber { get; set; } = string.Empty; // بدون +
 
