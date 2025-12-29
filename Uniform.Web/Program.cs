@@ -17,13 +17,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 // 3. تسجيل خدمات الهوية (Identity) للمستخدمين
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 // تسجيل خدمة الملفات
 builder.Services.AddScoped<UniformPro.Web.Services.IFileService, UniformPro.Web.Services.FileService>();
+builder.Services.AddSingleton<UniformPro.Web.Services.IHtmlSanitizerService, UniformPro.Web.Services.HtmlSanitizerService>();
 builder.Services.AddControllersWithViews()
     .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix);
+builder.Services.AddRazorPages();
 
 // 4. إعداد تعدد اللغات (Localization)
 //builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -45,18 +48,35 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    // app.UseDeveloperExceptionPage(); // Keep commented or remove based on preference, using middleware below
+    app.UseMiddleware<UniformPro.Web.Middleware.GlobalExceptionMiddleware>();
 }
 else
 {
-    // في بيئة التشغيل الفعلي، وجه المستخدم لصفحة خطأ عامة
-    app.UseExceptionHandler("/Admin/Error/General");
+    app.UseMiddleware<UniformPro.Web.Middleware.GlobalExceptionMiddleware>();
     app.UseHsts();
 }
 
-// السطر السحري: بيعالج أخطاء 404 (الصفحات غير الموجودة)
-// بيحتفظ بالرابط زي ما هو بس بيعرض تصميم صفحة الخطأ
-app.UseStatusCodePagesWithReExecute("/Admin/Error/NotFound", "?code={0}");
+// معالجة صفحات 404 (الصفحات غير الموجودة)
+// توجيه بناءً على المنطقة (Admin vs Public)
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+    var path = context.HttpContext.Request.Path.Value ?? "";
+    
+    if (response.StatusCode == 404)
+    {
+        var isAdmin = path.StartsWith("/Admin", StringComparison.OrdinalIgnoreCase);
+        if (isAdmin)
+        {
+            response.Redirect("/Admin/Error/NotFound");
+        }
+        else
+        {
+            response.Redirect("/Error/NotFound");
+        }
+    }
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles(); // للسماح بملفات wwwroot
@@ -65,7 +85,7 @@ app.UseRouting();
 
 // 5. تفعيل تعدد اللغات
 app.UseRequestLocalization();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 // توجيه لوحة التحكم

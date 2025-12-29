@@ -81,12 +81,21 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         // الحذف
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
+            try
             {
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
+                var category = await _context.Categories.FindAsync(id);
+                if (category != null)
+                {
+                    _context.Categories.Remove(category);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "تم حذف القسم بنجاح";
+                }
             }
+            catch (DbUpdateException)
+            {
+                TempData["ErrorMessage"] = "لا يمكن حذف هذا القسم لأنه مرتبط بمنتجات. احذف المنتجات أولاً.";
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

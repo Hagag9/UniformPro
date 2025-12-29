@@ -32,36 +32,139 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(HeroItem heroItem, IFormFile imageFile)
+        public async Task<IActionResult> Create(HeroItem heroItem, IFormFile? desktopImage, IFormFile? mobileImage)
         {
             ModelState.Remove("ImagePath");
-            if (imageFile == null)
+            if (desktopImage == null)
             {
-                ModelState.AddModelError("ImagePath", "يرجى رفع صورة للسلايدر");
+                ModelState.AddModelError("ImagePath", "يرجى رفع صورة الديسكتوب");
             }
 
-            if (ModelState.IsValid && imageFile != null)
+            if (ModelState.IsValid && desktopImage != null)
             {
-                heroItem.ImagePath = await _fileService.SaveFileAsync(imageFile, "hero");
-                _context.Add(heroItem);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    // 1. Save Desktop
+                    heroItem.ImagePath = await _fileService.SaveHeroDesktopImageAsync(desktopImage);
+                
+                    // 2. Save Mobile (or generate from desktop if missing)
+                    if (mobileImage != null)
+                    {
+                        heroItem.MobileImagePath = await _fileService.SaveHeroMobileImageAsync(mobileImage);
+                    }
+                    else
+                    {
+                        // Fallback: Generate mobile version from desktop file
+                        heroItem.MobileImagePath = await _fileService.SaveHeroMobileImageAsync(desktopImage);
+                    }
+
+                    _context.Add(heroItem);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (ArgumentException ex)
+                {
+                    ModelState.AddModelError("ImagePath", ex.Message);
+                    return View(heroItem);
+                }
             }
             return View(heroItem);
         }
 
         // الحذف
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _context.HeroItems.FindAsync(id);
             if (item != null)
             {
+                // حذف الصورتين (Desktop + Mobile)
                 _fileService.DeleteFile(item.ImagePath, "hero");
+                if (!string.IsNullOrEmpty(item.MobileImagePath))
+                {
+                    _fileService.DeleteFile(item.MobileImagePath, "hero");
+                }
+                
                 _context.HeroItems.Remove(item);
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
         }
+
+        // التعديل
+        public async Task<IActionResult> Edit(int id)
+        {
+            var item = await _context.HeroItems.FindAsync(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return View(item);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, HeroItem heroItem, IFormFile? desktopImage, IFormFile? mobileImage)
+        {
+            if (id != heroItem.Id)
+            {
+                return NotFound();
+            }
+
+            ModelState.Remove("ImagePath");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // 1. Handle Desktop Image Update
+                    if (desktopImage != null)
+                    {
+                        // Delete old desktop
+                        _fileService.DeleteFile(heroItem.ImagePath, "hero");
+                        // Save new desktop
+                        heroItem.ImagePath = await _fileService.SaveHeroDesktopImageAsync(desktopImage);
+
+                        // If mobile NOT provided, regenerate mobile from new desktop (standard behavior)
+                        if (mobileImage == null)
+                        {
+                            if (!string.IsNullOrEmpty(heroItem.MobileImagePath)) _fileService.DeleteFile(heroItem.MobileImagePath, "hero");
+                            heroItem.MobileImagePath = await _fileService.SaveHeroMobileImageAsync(desktopImage);
+                        }
+                    }
+
+                    // 2. Handle Mobile Image Update (Explicitly provided)
+                    if (mobileImage != null)
+                    {
+                        // Delete old mobile
+                        if (!string.IsNullOrEmpty(heroItem.MobileImagePath)) _fileService.DeleteFile(heroItem.MobileImagePath, "hero");
+                        // Save new mobile
+                        heroItem.MobileImagePath = await _fileService.SaveHeroMobileImageAsync(mobileImage);
+                    }
+
+                    _context.Update(heroItem);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "تم تحديث الشريحة بنجاح";
+                }
+                catch (ArgumentException ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                    return View(heroItem);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await _context.HeroItems.AnyAsync(e => e.Id == id))
+                    {
+                        return NotFound();
+                    }
+                    throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(heroItem);
+        }
+
         [HttpPost]
         public async Task<IActionResult> UpdateOrder([FromBody] List<int> sortedIds)
         {

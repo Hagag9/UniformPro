@@ -16,6 +16,12 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         [Route("Admin/Error/General")]
         public IActionResult General()
         {
+            // لو الطلب AJAX رجع JSON
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = false, message = "حدث خطأ غير متوقع في النظام." });
+            }
+
             return View();
         }
     }

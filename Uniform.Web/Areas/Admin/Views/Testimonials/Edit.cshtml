@@ -24,50 +24,169 @@
                     <input asp-for="Position" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
                 </div>
                 <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">المشروع المرتبط</label>
+                    <select asp-for="PortfolioId" asp-items="ViewBag.Portfolios" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                        <option value="">-- اختر مشروع --</option>
+                    </select>
+                </div>
+                <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">رأي العميل</label>
                     <textarea asp-for="Feedback" rows="4" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary"></textarea>
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center mt-3">
+                    <input asp-for="ShowOnHome" type="checkbox" class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary">
+                    <label asp-for="ShowOnHome" class="mr-2 text-sm text-gray-700">عرض في الصفحة الرئيسية (Show On Home)</label>
+                </div>
+
+                <div class="flex items-center mt-3">
                     <input asp-for="IsActive" type="checkbox" class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary">
                     <label asp-for="IsActive" class="mr-2 text-sm text-gray-700">تفعيل</label>
                 </div>
             </div>
 
             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 h-fit">
-                <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">الميديا</h3>
+                <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">🎥 الميديا</h3>
 
+                <!-- Client Image -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">صورة العميل</label>
-                    @if (!string.IsNullOrEmpty(Model.CurrentImagePath))
-                    {
-                        <img src="~/uploads/testimonials/images/@Model.CurrentImagePath" class="w-16 h-16 rounded-full border mb-2 object-cover">
-                    }
-                    <input type="file" name="ImageFile" accept="image/*" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100" />
+                    <div class="flex items-start gap-3">
+                        @if (!string.IsNullOrEmpty(Model.CurrentImagePath))
+                        {
+                            <div id="currentImageContainer" class="relative w-24 h-24 rounded-full border-2 border-primary/20 p-1 group">
+                                <img src="~/uploads/testimonials/images/@Model.CurrentImagePath" class="w-full h-full rounded-full object-cover">
+                                <button type="button" onclick="deleteMedia(@Model.Id, 'image')" 
+                                        class="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg transform hover:scale-110"
+                                        title="حذف الصورة">
+                                    <i class="ph-bold ph-trash text-xs"></i>
+                                </button>
+                            </div>
+                        }
+                        
+                        <div class="flex-1">
+                            <div id="imgPreviewArea" class="hidden mb-3 relative w-20 h-20 rounded-full overflow-hidden border border-dashed border-gray-300">
+                                 <img id="imgPreview" src="#" class="w-full h-full object-cover">
+                                 <button type="button" onclick="clearFileInput('ImageFile', 'imgPreviewArea')" class="absolute inset-0 bg-black/40 text-white flex items-center justify-center hover:bg-black/60 transition-colors"><i class="ph-bold ph-x text-2xl"></i></button>
+                            </div>
+                            <input type="file" id="ImageFile" name="ImageFile" accept="image/*" onchange="if(validateFileInput(this, ['image'], 5)) previewImage(this)"
+                                   class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                            <p class="text-xs text-gray-400 mt-1">يفضل أن تكون الصورة مربعة.</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="border-t my-4"></div>
+                <div class="border-t my-6 border-dashed"></div>
 
+                <!-- Video Section -->
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">تغيير الفيديو</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">فيديو العميل (ملف)</label>
+                    
                     @if (!string.IsNullOrEmpty(Model.CurrentVideoPath))
                     {
-                        <div class="text-xs text-green-600 mb-2 flex items-center gap-1"><i class="ph-bold ph-check"></i> يوجد فيديو مرفوع حالياً</div>
+                        <div id="currentVideoContainer" class="mb-4 relative w-40 aspect-video rounded-lg overflow-hidden border border-gray-200 group bg-black">
+                            <video src="~/uploads/testimonials/videos/@Model.CurrentVideoPath" class="w-full h-full object-cover opacity-80"></video>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="ph-fill ph-play-circle text-white text-3xl opacity-80"></i>
+                            </div>
+                            <button type="button" onclick="deleteMedia(@Model.Id, 'video')" 
+                                    class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md hover:scale-110"
+                                    title="حذف الفيديو">
+                                <i class="ph-bold ph-trash text-xs"></i>
+                            </button>
+                            <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[10px] px-2 py-1 truncate">
+                                فيديو محفوظ
+                            </div>
+                        </div>
                     }
-                    <input type="file" name="VideoFile" accept="video/*" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-600 hover:file:bg-purple-100" />
+
+                    <div class="flex items-center gap-2">
+                        <div class="flex-1">
+                             <input type="file" id="VideoFile" name="VideoFile" accept="video/*" onchange="validateFileInput(this, ['video'], 20)" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-600 hover:file:bg-purple-100" />
+                        </div>
+                        <button type="button" onclick="clearFileInput('VideoFile', null)" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded-full" title="إلغاء اختيار الفيديو"><i class="ph-bold ph-x"></i></button>
+                    </div>
+                </div>
+
+                <div class="relative py-4">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">أو</span>
+                    </div>
                 </div>
 
                 <div class="mb-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1">YouTube URL</label>
                     <div class="relative">
-                        <i class="ph-fill ph-youtube-logo absolute top-2.5 left-3 text-red-500"></i>
-                        <input asp-for="YoutubeUrl" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md outline-none focus:border-primary text-sm dir-ltr" style="direction:ltr;">
+                        <i class="ph-fill ph-youtube-logo absolute top-2.5 left-3 text-red-500 text-lg"></i>
+                        <input asp-for="YoutubeUrl" placeholder="https://www.youtube.com/watch?v=..." class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md outline-none focus:border-primary text-sm dir-ltr text-left" style="direction:ltr;">
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="mt-6 flex justify-end gap-3 border-t pt-4">
-            <button type="submit" class="px-8 py-2 bg-primary text-white rounded-md hover:bg-green-700 font-medium shadow-sm">حفظ التعديلات</button>
+            <button type="submit" class="px-8 py-2 bg-primary text-white rounded-md hover:bg-green-700 font-medium shadow-sm flex items-center gap-2">
+                <i class="ph-bold ph-check"></i> حفظ التعديلات
+            </button>
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <!-- SweetAlert2 Plugin if not in layout (Assume it is or use CDN) -->
+    <!-- Adding script check in case it's missing -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function deleteMedia(id, type) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لن تتمكن من استرجاع هذا الملف!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، احذفه!',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/Admin/Testimonials/DeleteMedia', { id: id, type: type }, function() {
+                        if(type === 'image') $('#currentImageContainer').fadeOut();
+                        if(type === 'video') $('#currentVideoContainer').fadeOut();
+                        Swal.fire(
+                            'تم الحذف!',
+                            'تم حذف الملف بنجاح.',
+                            'success'
+                        )
+                    }).fail(function() {
+                        Swal.fire(
+                            'خطأ!',
+                            'حدث خطأ أثناء الحذف.',
+                            'error'
+                        )
+                    });
+                }
+            })
+        }
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imgPreview').attr('src', e.target.result);
+                    $('#imgPreviewArea').removeClass('hidden');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function clearFileInput(inputId, previewAreaId) {
+            $('#' + inputId).val(''); 
+            if(previewAreaId) {
+                $('#' + previewAreaId).addClass('hidden');
+            }
+        }
+    </script>
+}

@@ -1,0 +1,106 @@
+@model IEnumerable<UniformPro.Core.Entities.DiscountTier>
+@{
+    ViewData["Title"] = "شرائح الخصومات";
+}
+
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">شرائح الخصومات</h2>
+        <p class="text-sm text-gray-500 mt-1">إدارة شرائح الخصم حسب كمية الطلب</p>
+    </div>
+    <a asp-action="Create" class="bg-primary hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium shadow-sm flex items-center gap-2 transition-colors">
+        <i class="ph-bold ph-plus"></i>
+        <span>إضافة شريحة</span>
+    </a>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto">
+    <table class="w-full text-right min-w-[800px]">
+        <thead class="bg-gray-50 text-gray-500 text-xs uppercase border-b border-gray-200">
+            <tr>
+                <th class="px-4 py-3">الشريحة</th>
+                <th class="px-4 py-3">نسبة الخصم</th>
+                <th class="px-4 py-3">نطاق الكميات</th>
+                <th class="px-4 py-3">الترتيب</th>
+                <th class="px-4 py-3">الحالة</th>
+                <th class="px-4 py-3 text-left">إجراءات</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="6" class="px-6 py-12 text-center text-gray-400">
+                        <i class="ph ph-percent text-4xl mb-2"></i>
+                        <p>لا توجد شرائح خصم حالياً</p>
+                        <a asp-action="Create" class="text-primary hover:underline mt-2 inline-block">إضافة أول شريحة</a>
+                    </td>
+                </tr>
+            }
+            @foreach (var item in Model)
+            {
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-4 py-4">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded flex items-center justify-center text-white text-sm font-bold" style="background-color: @item.ColorCode;">
+                                <i class="ph-fill ph-percent"></i>
+                            </span>
+                            <div>
+                                <div class="font-bold text-gray-800">@item.NameAr</div>
+                                <div class="text-xs text-gray-400">@item.NameEn</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-4 py-4">
+                        <span class="text-lg font-bold text-primary">@item.DiscountPercentage%</span>
+                    </td>
+                    <td class="px-4 py-4 text-gray-600">
+                        <span class="bg-gray-100 px-2 py-1 rounded text-sm">
+                            @item.MinQuantity
+                            @if (item.MaxQuantity.HasValue)
+                            {
+                                <span>- @item.MaxQuantity</span>
+                            }
+                            else
+                            {
+                                <span>+</span>
+                            }
+                            قطعة
+                        </span>
+                    </td>
+                    <td class="px-4 py-4 text-gray-600">
+                        <span class="bg-gray-100 px-2 py-1 rounded text-sm">@item.DisplayOrder</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        @if (item.IsActive)
+                        {
+                            <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                <i class="ph-fill ph-circle text-[8px]"></i>
+                                مفعّلة
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                                <i class="ph-fill ph-circle text-[8px]"></i>
+                                متوقفة
+                            </span>
+                        }
+                    </td>
+                    <td class="px-4 py-4 text-left">
+                        <div class="flex justify-end gap-1">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="text-gray-400 hover:text-blue-600 p-2 transition-colors" title="تعديل">
+                                <i class="ph-bold ph-pencil-simple text-lg"></i>
+                            </a>
+                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="inline">
+                                <button type="button" onclick="confirmDelete(@item.Id, this)" class="text-gray-400 hover:text-red-600 p-2 transition-colors" title="حذف">
+                                    <i class="ph-bold ph-trash text-lg"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

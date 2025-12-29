@@ -22,6 +22,7 @@ namespace UniformPro.Infrastructure.Data
         public DbSet<SiteSettings> SiteSettings { get; set; }
         public DbSet<HeroItem> HeroItems { get; set; }
         public DbSet<Testimonial> Testimonials { get; set; }
+        public DbSet<DiscountTier> DiscountTiers { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -30,6 +31,11 @@ namespace UniformPro.Infrastructure.Data
             builder.Entity<Product>()
                 .Property(p => p.StartPrice)
                 .HasPrecision(18, 2);
+
+            // تخصيص دقة نسبة الخصم
+            builder.Entity<DiscountTier>()
+                .Property(d => d.DiscountPercentage)
+                .HasPrecision(5, 2);
         }
     }
 }

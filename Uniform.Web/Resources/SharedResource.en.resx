@@ -261,4 +261,34 @@
   <data name="DesignedBy" xml:space="preserve">
     <value>Designed by</value>
   </data>
+  <data name="DiscountPageTitle" xml:space="preserve">
+    <value>The more you buy,</value>
+  </data>
+  <data name="DiscountPageTitle2" xml:space="preserve">
+    <value>the more you save!</value>
+  </data>
+  <data name="DiscountPageDesc" xml:space="preserve">
+    <value>We believe in rewarding our valued customers. Check out our tiered discount structure below and discover how you can get the best prices for wholesale and retail orders.</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
+  <data name="ForOrdersBetween" xml:space="preserve">
+    <value>For orders between:</value>
+  </data>
+  <data name="NoDiscountTiers" xml:space="preserve">
+    <value>No discount tiers available at the moment</value>
+  </data>
+  <data name="ReadyToOrder" xml:space="preserve">
+    <value>Ready to Order?</value>
+  </data>
+  <data name="ContactUsForOrder" xml:space="preserve">
+    <value>Contact us now and take advantage of our special discounts on bulk orders</value>
+  </data>
+  <data name="PricingSystem" xml:space="preserve">
+    <value>Pricing System</value>
+  </data>
+  <data name="CheckDiscountPolicy" xml:space="preserve">
+    <value>Check Discount Policy</value>
+  </data>
 </root>

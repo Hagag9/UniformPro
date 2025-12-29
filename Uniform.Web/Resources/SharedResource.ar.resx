@@ -261,4 +261,43 @@
   <data name="DesignedBy" xml:space="preserve">
     <value>تصميم</value>
   </data>
+  <data name="CustomDesign" xml:space="preserve">
+    <value>ننفذ طلبك بشعار شركتك</value>
+  </data>
+  <data name="PremiumMaterials" xml:space="preserve">
+    <value>خامات قطنية عالية الجودة</value>
+  </data>
+  <data name="FastShipping" xml:space="preserve">
+    <value>شحن سريع وآمن</value>
+  </data>
+  <data name="DiscountPageTitle" xml:space="preserve">
+    <value>كلما زادت مشترياتك،</value>
+  </data>
+  <data name="DiscountPageTitle2" xml:space="preserve">
+    <value>زاد توفيرك معنا!</value>
+  </data>
+  <data name="DiscountPageDesc" xml:space="preserve">
+    <value>نحن نؤمن بمكافأة عملائنا المميزين. اطلع على هيكل الخصومات المتدرج أدناه واكتشف كيف يمكنك الحصول على أفضل الأسعار لطلبات الجملة والتجزئة.</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>خصم</value>
+  </data>
+  <data name="ForOrdersBetween" xml:space="preserve">
+    <value>للطلبات التي تتراوح بين:</value>
+  </data>
+  <data name="NoDiscountTiers" xml:space="preserve">
+    <value>لا توجد شرائح خصم متاحة حالياً</value>
+  </data>
+  <data name="ReadyToOrder" xml:space="preserve">
+    <value>جاهز للطلب؟</value>
+  </data>
+  <data name="ContactUsForOrder" xml:space="preserve">
+    <value>تواصل معنا الآن واستفد من خصوماتنا المميزة على طلبات الجملة</value>
+  </data>
+  <data name="PricingSystem" xml:space="preserve">
+    <value>نظام التسعير</value>
+  </data>
+  <data name="CheckDiscountPolicy" xml:space="preserve">
+    <value>تعرف على سياسة الخصومات</value>
+  </data>
 </root>

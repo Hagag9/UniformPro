@@ -167,12 +167,10 @@ namespace UniformPro.Infrastructure.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -209,12 +207,10 @@ namespace UniformPro.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -293,6 +289,69 @@ namespace UniformPro.Infrastructure.Migrations
                     b.ToTable("ContactMessages");
                 });
 
+            modelBuilder.Entity("UniformPro.Core.Entities.DiscountTier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BenefitsAr")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("BenefitsEn")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("ColorCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("DiscountPercentage")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MaxQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PromoTextAr")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("PromoTextEn")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DiscountTiers");
+                });
+
             modelBuilder.Entity("UniformPro.Core.Entities.HeroItem", b =>
                 {
                     b.Property<int>("Id")
@@ -317,6 +376,9 @@ namespace UniformPro.Infrastructure.Migrations
                     b.Property<string>("LinkUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MobileImagePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SubtitleAr")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -326,12 +388,10 @@ namespace UniformPro.Infrastructure.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("TitleAr")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("TitleEn")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -479,6 +539,9 @@ namespace UniformPro.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("ShowOnHome")
+                        .HasColumnType("bit");
+
                     b.Property<decimal?>("StartPrice")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -520,6 +583,12 @@ namespace UniformPro.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AboutUsAr")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AboutUsEn")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("AddressAr")
                         .HasColumnType("nvarchar(max)");
 
@@ -536,6 +605,9 @@ namespace UniformPro.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MapLocationUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerImage")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone2Number")
@@ -594,10 +666,15 @@ namespace UniformPro.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("PortfolioId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Position")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("ShowOnHome")
+                        .HasColumnType("bit");
 
                     b.Property<string>("VideoPath")
                         .HasColumnType("nvarchar(max)");
@@ -606,6 +683,8 @@ namespace UniformPro.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PortfolioId");
 
                     b.ToTable("Testimonials");
                 });
@@ -705,6 +784,15 @@ namespace UniformPro.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("UniformPro.Core.Entities.Testimonial", b =>
+                {
+                    b.HasOne("UniformPro.Core.Entities.Portfolio", "Portfolio")
+                        .WithMany("Testimonials")
+                        .HasForeignKey("PortfolioId");
+
+                    b.Navigation("Portfolio");
+                });
+
             modelBuilder.Entity("UniformPro.Core.Entities.Category", b =>
                 {
                     b.Navigation("Portfolios");
@@ -715,6 +803,8 @@ namespace UniformPro.Infrastructure.Migrations
             modelBuilder.Entity("UniformPro.Core.Entities.Portfolio", b =>
                 {
                     b.Navigation("PortfolioMedias");
+
+                    b.Navigation("Testimonials");
                 });
 
             modelBuilder.Entity("UniformPro.Core.Entities.Product", b =>

@@ -213,7 +213,7 @@
                     </div>
                 </div>
 
-                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/portfolio")">
+                <a href="/Portfolio" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/portfolio")">
                     <i class="ph ph-briefcase text-xl @GetIconClass("/portfolio")"></i>
                     @L["Portfolio"]
                 </a>
@@ -233,8 +233,8 @@
                     @L["Contact"]
                 </a>
 
-                <a href="/#about" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/#about")">
-                     <i class="ph ph-info text-xl @GetIconClass("/#about")"></i>
+                <a href="/Home/About" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/home/about")">
+                     <i class="ph ph-info text-xl @GetIconClass("/home/about")"></i>
                     @L["AboutUs"]
                 </a>
             </div>
@@ -259,7 +259,7 @@
         @RenderBody()
     </main>
 
-    <footer class="bg-gray-800 text-gray-300 pt-10 pb-6 border-t border-gray-700">
+    <footer class="bg-neutral-900 text-gray-300 pt-10 pb-6 border-t border-neutral-800">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 

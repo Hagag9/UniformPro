@@ -1,29 +1,297 @@
-﻿@{
+﻿@using UniformPro.Core.Entities
+@{
+    Layout = "_FrontLayout";
     ViewData["Title"] = "الرئيسية";
+    var isArabic = ViewData["IsArabic"] as bool? ?? true;
+    var heroItems = ViewBag.HeroItems as List<HeroItem> ?? new List<HeroItem>();
+    var hasHero = heroItems.Any();
+    var isCarousel = heroItems.Count > 1;
 }
 
-<section class="py-20 bg-gradient-to-br from-primary/5 to-white">
-    <div class="container mx-auto px-4 text-center">
-        <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6" data-aos="fade-up">
-            مرحباً بك في <span class="text-primary">مانو يونيفورم</span>
-        </h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="100">
-            متخصصون في تصنيع وتوريد اليونيفورم للشركات والمؤسسات بأعلى جودة وأفضل الأسعار.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
-            <a href="/Products" class="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-all">
-                تصفح المنتجات
-            </a>
-            <a href="https://wa.me/@ViewData["WhatsApp"]" target="_blank" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
-                <i class="ph-bold ph-whatsapp-logo"></i>
-                تواصل واتساب
-            </a>
-        </div>
-    </div>
-</section>
+@section Styles {
+    <style>
+        /* Hero Section Styles */
+        .hero-section {
+            height: 70vh;
+            min-height: 500px;
+            max-height: 800px;
+        }
+        @@media (min-width: 768px) {
+            .hero-section {
+                height: 85vh;
+                max-height: 900px;
+            }
+        }
 
-<section class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4 text-center">
-        <p class="text-gray-500">🚧 هذه صفحة مؤقتة - سيتم بناء المحتوى الكامل لاحقاً 🚧</p>
-    </div>
-</section>
+        /* Carousel Styles */
+        .hero-carousel {
+            display: flex;
+            transition: transform 0.6s ease-in-out;
+        }
+        .hero-slide {
+            min-width: 100%;
+            position: relative;
+        }
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Dots Navigation */
+        .hero-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            display: flex;
+            gap: 8px;
+        }
+        .hero-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .hero-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* Content Animation */
+        .hero-content {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+}
+
+@if (hasHero)
+{
+    <!-- ========== HERO SECTION ========== -->
+    <section class="hero-section relative overflow-hidden">
+
+        @if (!isCarousel)
+        {
+            <!-- ===== STATIC MODE (1 صورة) ===== -->
+            var item = heroItems.First();
+            <picture class="absolute inset-0 z-0">
+                @if (!string.IsNullOrEmpty(item.MobileImagePath))
+                {
+                    <source media="(max-width: 768px)" srcset="~/uploads/hero/@item.MobileImagePath">
+                }
+                <img src="~/uploads/hero/@item.ImagePath" 
+                     alt="@(isArabic ? item.TitleAr : item.TitleEn)" 
+                     class="w-full h-full object-cover">
+            </picture>
+
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-black/50 z-10"></div>
+
+            <!-- Content -->
+            <div class="hero-content absolute inset-0 z-20 flex items-center justify-center">
+                <div class="container mx-auto px-4 text-center">
+                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+                        @(isArabic ? item.TitleAr : item.TitleEn)
+                    </h1>
+                    @if (!string.IsNullOrEmpty(isArabic ? item.SubtitleAr : item.SubtitleEn))
+                    {
+                        <p class="text-lg md:text-xl text-white/80 mb-6 max-w-2xl mx-auto">
+                            @(isArabic ? item.SubtitleAr : item.SubtitleEn)
+                        </p>
+                    }
+                    @if (!string.IsNullOrEmpty(item.LinkUrl))
+                    {
+                        <a href="@item.LinkUrl" 
+                           class="inline-flex items-center gap-2 px-8 py-3 bg-white text-gray-900 font-bold rounded-full hover:bg-gray-100 transition-all hover:scale-105 shadow-lg">
+                            <span>@(isArabic ? "اطلب الآن" : "Order Now")</span>
+                            <i class="ph-bold ph-arrow-right @(isArabic ? "rotate-180" : "")"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- ===== CAROUSEL MODE (2+ صور) ===== -->
+            <div id="heroCarouselWrapper" class="absolute inset-0 z-0 overflow-hidden">
+                <div id="heroCarousel" class="hero-carousel h-full">
+                    @foreach (var item in heroItems)
+                    {
+                        <div class="hero-slide">
+                            <picture>
+                                @if (!string.IsNullOrEmpty(item.MobileImagePath))
+                                {
+                                    <source media="(max-width: 768px)" srcset="~/uploads/hero/@item.MobileImagePath">
+                                }
+                                <img src="~/uploads/hero/@item.ImagePath" 
+                                     alt="@(isArabic ? item.TitleAr : item.TitleEn)">
+                            </picture>
+
+                            <!-- Per-slide Overlay -->
+                            <div class="absolute inset-0 bg-black/50"></div>
+
+                            <!-- Per-slide Content -->
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="container mx-auto px-4 text-center">
+                                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+                                        @(isArabic ? item.TitleAr : item.TitleEn)
+                                    </h2>
+                                    @if (!string.IsNullOrEmpty(isArabic ? item.SubtitleAr : item.SubtitleEn))
+                                    {
+                                        <p class="text-lg md:text-xl text-white/80 mb-6 max-w-2xl mx-auto">
+                                            @(isArabic ? item.SubtitleAr : item.SubtitleEn)
+                                        </p>
+                                    }
+                                    @if (!string.IsNullOrEmpty(item.LinkUrl))
+                                    {
+                                        <a href="@item.LinkUrl" 
+                                           class="inline-flex items-center gap-2 px-8 py-3 bg-white text-gray-900 font-bold rounded-full hover:bg-gray-100 transition-all hover:scale-105 shadow-lg">
+                                            <span>@(isArabic ? "اطلب الآن" : "Order Now")</span>
+                                            <i class="ph-bold ph-arrow-right @(isArabic ? "rotate-180" : "")"></i>
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Dots Navigation -->
+            <div class="hero-dots">
+                @for (int i = 0; i < heroItems.Count; i++)
+                {
+                    <button class="hero-dot @(i == 0 ? "active" : "")" 
+                            onclick="goToSlide(@i)" 
+                            aria-label="Slide @(i + 1)"></button>
+                }
+            </div>
+        }
+
+    </section>
+}
+else
+{
+    <!-- ===== NO HERO - FALLBACK ===== -->
+    <section class="hero-section relative bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+        <div class="text-center text-white px-4">
+            <i class="ph ph-image text-6xl mb-4 opacity-50"></i>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">@(isArabic ? "مرحباً بكم" : "Welcome")</h1>
+            <p class="text-white/70">@(isArabic ? "لم يتم إضافة صور للسلايدر بعد" : "No hero images added yet")</p>
+        </div>
+    </section>
+}
+
+@{
+    var latestProducts = ViewBag.LatestProducts as List<UniformPro.Core.Entities.Product> ?? new List<UniformPro.Core.Entities.Product>();
+}
+
+@if (latestProducts.Any())
+{
+    <!-- ========== LATEST PRODUCTS SECTION ========== -->
+    <section class="py-14 bg-white">
+        <div class="container mx-auto px-6 md:px-12 lg:px-20">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-6 md:mb-10">
+                <h2 class="text-lg md:text-3xl font-bold text-gray-900 uppercase tracking-wide">
+                    @(isArabic ? "أحدث المنتجات" : "Latest Products")
+                </h2>
+                <a href="/Products" class="inline-flex items-center gap-2 text-gray-700 hover:text-primary font-medium transition-colors text-sm md:text-base">
+                    <span>@(isArabic ? "عرض الكل" : "View All")</span>
+                    <i class="ph-bold ph-arrow-right @(isArabic ? "rotate-180" : "")"></i>
+                </a>
+            </div>
+
+            <!-- Products Grid - Clean Minimal Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                @foreach (var product in latestProducts)
+                {
+                    <a href="/Products/Details/@product.Id" class="group">
+                        <!-- Image -->
+                        <div class="aspect-[4/5] overflow-hidden rounded-lg mb-2">
+                            <img src="~/uploads/products/@product.MainImagePath" 
+                                 alt="@(isArabic ? product.NameAr : product.NameEn)"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        
+                        <!-- Title with Arrow -->
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-sm md:text-base font-medium text-gray-900 group-hover:text-primary transition-colors line-clamp-2">
+                                @(isArabic ? product.NameAr : product.NameEn)
+                            </h3>
+                            <i class="ph-bold ph-arrow-right text-gray-400 group-hover:text-primary group-hover:translate-x-1 transition-all @(isArabic ? "rotate-180" : "")"></i>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@if (isCarousel)
+{
+    @section Scripts {
+        <script>
+            // Simple Carousel Logic
+            (function() {
+                const carousel = document.getElementById('heroCarousel');
+                const dots = document.querySelectorAll('.hero-dot');
+                const slideCount = @heroItems.Count;
+                let currentSlide = 0;
+                let autoPlayInterval;
+
+                function goToSlide(index) {
+                    currentSlide = index;
+                    carousel.style.transform = `translateX(-${index * 100}%)`;
+                    
+                    // Update dots
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+                }
+
+                function nextSlide() {
+                    currentSlide = (currentSlide + 1) % slideCount;
+                    goToSlide(currentSlide);
+                }
+
+                // Auto-play every 5 seconds
+                function startAutoPlay() {
+                    autoPlayInterval = setInterval(nextSlide, 5000);
+                }
+
+                function stopAutoPlay() {
+                    clearInterval(autoPlayInterval);
+                }
+
+                // Expose goToSlide globally
+                window.goToSlide = function(index) {
+                    stopAutoPlay();
+                    goToSlide(index);
+                    startAutoPlay();
+                };
+
+                // Start auto-play on load
+                startAutoPlay();
+
+                // Pause on hover (optional UX improvement)
+                const wrapper = document.getElementById('heroCarouselWrapper');
+                wrapper.addEventListener('mouseenter', stopAutoPlay);
+                wrapper.addEventListener('mouseleave', startAutoPlay);
+            })();
+        </script>
+    }
+}

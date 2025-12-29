@@ -1,4 +1,5 @@
-﻿@model IEnumerable<UniformPro.Core.Entities.Testimonial>
+﻿@using UniformPro.Core.Helpers
+@model IEnumerable<UniformPro.Core.Entities.Testimonial>
 @{
     ViewData["Title"] = "تقييمات العملاء";
 }
@@ -13,12 +14,14 @@
     </a>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
     @foreach (var item in Model)
     {
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group">
-            <div class="p-4 flex items-center gap-4 border-b border-gray-50">
-                <div class="w-12 h-12 rounded-full border p-0.5">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group flex flex-col h-full hover:shadow-md transition-shadow">
+            
+            <!-- Header: Image & Name -->
+            <div class="p-3 flex items-center gap-3 border-b border-gray-50">
+                <div class="w-10 h-10 rounded-full border p-0.5 flex-shrink-0">
                     @if (!string.IsNullOrEmpty(item.ImagePath))
                     {
                         <img src="~/uploads/testimonials/images/@item.ImagePath" class="w-full h-full rounded-full object-cover">
@@ -28,51 +31,89 @@
                         <div class="w-full h-full rounded-full bg-gray-100 flex items-center justify-center text-gray-400"><i class="ph-fill ph-user"></i></div>
                     }
                 </div>
-                <div>
-                    <h3 class="font-bold text-gray-800 text-sm">@item.ClientName</h3>
-                    <p class="text-xs text-gray-500">@item.Position</p>
-                </div>
-                <div class="mr-auto">
-                    @if (item.IsActive)
-                    {
-                        <span class="w-2 h-2 bg-green-500 rounded-full block" title="نشط"></span>
-                    }
-                    else
-                    {
-
-                        <span class="w-2 h-2 bg-red-400 rounded-full block" title="غير نشط"></span>
-                    }
+                <div class="min-w-0">
+                    <h3 class="font-bold text-gray-800 text-xs truncate" title="@item.ClientName">@item.ClientName</h3>
+                    <p class="text-[10px] text-gray-500 truncate">@item.Position</p>
                 </div>
             </div>
 
-            <div class="bg-black h-48 flex items-center justify-center relative group-hover:bg-gray-900 transition-colors">
+            <!-- Media Section (Inline) -->
+            <div class="bg-black h-32 relative">
                 @if (!string.IsNullOrEmpty(item.VideoPath))
                 {
-                    <video src="~/uploads/testimonials/videos/@item.VideoPath" controls class="w-full h-full object-cover"></video>
+                    <video src="~/uploads/testimonials/videos/@item.VideoPath" controls class="w-full h-full object-contain"></video>
                 }
                 else if (!string.IsNullOrEmpty(item.YoutubeUrl))
                 {
-                    <div class="text-center text-white">
-                        <i class="ph-fill ph-youtube-logo text-4xl text-red-600 mb-2"></i>
-                        <p class="text-xs opacity-70">يوتيوب</p>
+                    <div class="youtube-container w-full h-full relative group/yt cursor-pointer" onclick="playYoutube(this, '@YoutubeHelper.GetEmbedUrl(item.YoutubeUrl)')">
+                        <img src="@YoutubeHelper.GetThumbnailUrl(item.YoutubeUrl)" class="w-full h-full object-cover opacity-90 group-hover/yt:opacity-100 transition-opacity">
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <i class="ph-fill ph-youtube-logo text-red-600 text-5xl bg-white rounded-full shadow-xl"></i>
+                        </div>
                     </div>
                 }
                 else
                 {
-                    <span class="text-gray-500 text-xs">لا يوجد فيديو</span>
+                    <div class="w-full h-full bg-gray-100 flex flex-col items-center justify-center text-gray-400">
+                        <i class="ph-duotone ph-video-camera-slash text-2xl mb-1"></i>
+                        <span class="text-[10px]">لا يوجد فيديو</span>
+                    </div>
+                }
+                
+                <!-- Status & Home Badges -->
+                <div class="absolute top-2 left-2 z-10 pointer-events-none">
+                     @if (item.IsActive) { <span class="w-2.5 h-2.5 bg-green-500 rounded-full block shadow-sm border border-white" title="نشط"></span> }
+                     else { <span class="w-2.5 h-2.5 bg-red-400 rounded-full block shadow-sm border border-white" title="غير نشط"></span> }
+                </div>
+                 
+                @if(item.ShowOnHome) {
+                     <div class="absolute top-2 right-2 z-10 pointer-events-none">
+                         <span class="text-[9px] bg-blue-500 text-white px-1.5 py-0.5 rounded shadow-sm opacity-90">Home</span>
+                     </div>
                 }
             </div>
 
-            <div class="p-4">
-                <p class="text-gray-600 text-sm line-clamp-2 mb-4 italic">"@item.Feedback"</p>
+            <!-- Content & Actions -->
+            <div class="p-3 flex flex-col flex-grow">
+                <p class="text-gray-600 text-xs line-clamp-2 mb-3 italic flex-grow">"@item.Feedback"</p>
 
-                <div class="flex justify-end gap-2 pt-2 border-t border-gray-50">
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-gray-400 hover:text-blue-600 p-1"><i class="ph-bold ph-pencil-simple text-lg"></i></a>
-                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="inline">
-                        <button type="button" onclick="confirmDelete(@item.Id, this)" class="text-gray-400 hover:text-red-600 p-1"><i class="ph-bold ph-trash text-lg"></i></button>
+                <div class="flex gap-2 pt-2 border-t border-gray-50 mt-auto">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="flex-1 bg-blue-50 text-blue-600 py-1.5 rounded text-center hover:bg-blue-100 transition-colors" title="تعديل">
+                        <i class="ph-bold ph-pencil-simple text-sm"></i>
+                    </a>
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="flex-1 hidden-form">
+                        <button type="button" onclick="confirmDelete(@item.Id, this)" class="w-full bg-red-50 text-red-600 py-1.5 rounded text-center hover:bg-red-100 transition-colors" title="حذف">
+                            <i class="ph-bold ph-trash text-sm"></i>
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     }
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(id, btn) {
+            Swal.fire({
+                title: 'حذف التقييم؟',
+                text: "لن يمكنك استرجاع هذا العنصر!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(btn).closest('form').submit();
+                }
+            })
+        }
+
+        function playYoutube(element, embedUrl) {
+            $(element).html(`<iframe src="${embedUrl}?autoplay=1" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`);
+        }
+    </script>
+}

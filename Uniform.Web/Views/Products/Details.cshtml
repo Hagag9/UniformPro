@@ -1,4 +1,4 @@
-@model UniformPro.Core.Entities.Product
+@model UniformPro.Web.ViewModels.ProductDetailsViewModel
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
 @{
@@ -8,7 +8,7 @@
     var isArabic = ViewData["IsArabic"] as bool? ?? true;
 
     var productName = isArabic ? Model.NameAr : Model.NameEn;
-    var categoryName = isArabic ? Model.Category?.NameAr : Model.Category?.NameEn;
+    var categoryName = isArabic ? Model.CategoryNameAr : Model.CategoryNameEn;
     var description = isArabic ? Model.DescriptionAr : Model.DescriptionEn;
     var materialDetails = isArabic ? Model.MaterialDetailsAr : Model.MaterialDetailsEn;
 
@@ -40,12 +40,12 @@
             <!-- Image Gallery -->
             <div class="space-y-4" data-aos="fade-left">
                 <!-- Main Image -->
-                <div id="main-image-container" class="aspect-square bg-gray-100 rounded-2xl overflow-hidden border border-gray-200">
+                <div id="main-image-container" class="aspect-[3/4] bg-white rounded-2xl overflow-hidden border border-gray-200">
                     @if (!string.IsNullOrEmpty(Model.MainImagePath))
                     {
                         <img id="main-image" src="~/uploads/products/@Model.MainImagePath"
                              alt="@productName"
-                             class="w-full h-full object-cover cursor-zoom-in zoomable" />
+                             class="w-full h-full object-contain cursor-zoom-in zoomable" />
                     }
                     else
                     {
@@ -62,15 +62,15 @@
                         <!-- Main image thumbnail -->
                         @if (!string.IsNullOrEmpty(Model.MainImagePath))
                         {
-                            <button onclick="changeMainImage('/uploads/products/@Model.MainImagePath')"
-                                    class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 border-gray-800 bg-gray-100">
+                            <button onclick="changeMainImage('/uploads/products/@Model.MainImagePath', this)"
+                                    class="thumbnail-btn w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 border-gray-800 bg-gray-100 transition-all">
                                 <img src="~/uploads/products/@Model.MainImagePath" alt="" class="w-full h-full object-cover" />
                             </button>
                         }
                         @foreach (var img in Model.ProductImages)
                         {
-                            <button onclick="changeMainImage('/uploads/products/gallery/@img.ImagePath')"
-                                    class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 border-gray-200 hover:border-gray-800 bg-gray-100 transition-colors">
+                            <button onclick="changeMainImage('/uploads/products/gallery/@img.ImagePath', this)"
+                                    class="thumbnail-btn w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 border-gray-200 hover:border-gray-800 bg-gray-100 transition-all">
                                 <img src="~/uploads/products/gallery/@img.ImagePath" alt="" class="w-full h-full object-cover" />
                             </button>
                         }
@@ -89,13 +89,19 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">@productName</h1>
 
                 <!-- Price -->
-                @if (Model.StartPrice.HasValue)
-                {
-                    <div class="bg-gray-50 rounded-xl p-4 mb-6 inline-block">
-                        <span class="text-gray-500 text-sm">@L["StartingFrom"]</span>
-                        <p class="text-3xl font-bold text-gray-800">@Model.StartPrice?.ToString("N0") <span class="text-base font-normal text-gray-500">@L["EGP"]</span></p>
-                    </div>
-                }
+                <!-- Discount Policy Link -->
+                <div class="mb-6 inline-block">
+                    <a href="/DiscountPolicy" class="group flex items-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                            <i class="ph-bold ph-percent text-xl"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-gray-500 font-medium">@L["PricingSystem"]</span>
+                            <span class="text-sm font-bold text-gray-800 group-hover:text-primary transition-colors">@L["CheckDiscountPolicy"]</span>
+                        </div>
+                        <i class="ph-bold ph-arrow-@(isArabic ? "left" : "right") text-gray-400 group-hover:text-primary transition-colors mx-1"></i>
+                    </a>
+                </div>
 
                 <!-- Specs -->
                 <div class="space-y-4 mb-8">
@@ -108,10 +114,31 @@
                     }
                     @if (!string.IsNullOrEmpty(Model.AvailableSizes))
                     {
-                        <div class="flex items-center gap-3 text-gray-700">
-                            <i class="ph ph-ruler text-xl text-gray-500"></i>
-                            <span>@L["Sizes"]: <strong>@Model.AvailableSizes</strong></span>
-                        </div>
+                        var sizes = Model.AvailableSizes.Split(new[] { ',', '،' }, StringSplitOptions.RemoveEmptyEntries)
+                                           .Select(s => s.Trim())
+                                           .Where(s => !string.IsNullOrEmpty(s))
+                                           .ToList();
+                        
+                        if (sizes.Any())
+                        {
+                            <div class="mb-4">
+                                <div class="flex items-center gap-2 text-gray-700 mb-2">
+                                    <i class="ph ph-ruler text-xl text-gray-500"></i>
+                                    <span class="font-bold">@L["Sizes"]:</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    @foreach (var size in sizes)
+                                    {
+                                        <button type="button" 
+                                                class="size-chip w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-sm font-bold text-gray-600 transition-all hover:border-black hover:text-black"
+                                                onclick="selectSize(this, '@size')">
+                                            @size
+                                        </button>
+                                    }
+                                </div>
+                                <input type="hidden" id="selectedSize" name="selectedSize" />
+                            </div>
+                        }
                     }
                     @if (!string.IsNullOrEmpty(materialDetails))
                     {
@@ -123,29 +150,72 @@
                 </div>
 
                 <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row gap-3 mb-8">
-                    <a href="https://wa.me/@whatsappNumber?text=@whatsappMessage" target="_blank"
-                       class="flex-1 bg-green-500 hover:bg-green-600 text-white py-4 px-6 rounded-xl font-bold text-center flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
-                        <i class="ph-bold ph-whatsapp-logo text-2xl"></i>
-                        <span>@L["WhatsAppContact"]</span>
-                    </a>
-                    <a href="tel:@phoneNumber"
-                       class="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-4 px-6 rounded-xl font-bold text-center flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
-                        <i class="ph-bold ph-phone text-2xl"></i>
-                        <span>@L["CallNow"]</span>
-                    </a>
+                <div class="flex flex-col gap-3 mb-8">
+                    <!-- Add to Cart (Primary) -->
+                    <button onclick="addToCart(@Model.Id, '@(isArabic ? Model.NameAr.Replace("'", "\\'") : Model.NameEn.Replace("'", "\\'"))', '@(Model.MainImagePath ?? "")')"
+                            class="w-full bg-black hover:bg-gray-900 text-white py-4 px-6 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all shine-effect">
+                        <i class="ph-bold ph-shopping-bag text-2xl"></i>
+                        <span class="text-lg">@L["AddToCart"]</span>
+                    </button>
+
+                    <!-- Contact Buttons (Secondary) -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="https://wa.me/@whatsappNumber?text=@whatsappMessage" target="_blank"
+                           class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-xl font-bold text-center flex items-center justify-center gap-2 shadow hover:shadow-lg transition-all">
+                            <i class="ph-bold ph-whatsapp-logo text-xl"></i>
+                            <span>@L["WhatsAppContact"]</span>
+                        </a>
+                        <a href="tel:@phoneNumber"
+                           class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 px-6 rounded-xl font-bold text-center flex items-center justify-center gap-2 shadow hover:shadow-lg transition-all border border-gray-200">
+                            <i class="ph-bold ph-phone text-xl"></i>
+                            <span>@L["CallNow"]</span>
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Description -->
-                @if (!string.IsNullOrEmpty(description))
-                {
-                    <div class="border-t pt-6">
-                        <h3 class="font-bold text-gray-800 mb-3">@L["Description"]</h3>
-                        <div class="prose prose-sm max-w-none text-gray-600">
-                            @Html.Raw(description)
-                        </div>
+            <!-- Description -->
+            @if (!string.IsNullOrEmpty(description))
+            {
+                <div class="border-t pt-6 mt-6">
+                    <h3 class="font-bold text-gray-800 mb-3">@L["Description"]</h3>
+                    <div class="prose prose-sm max-w-none text-gray-600">
+                        @Html.Raw(description)
                     </div>
-                }
+                </div>
+            }
+
+            <!-- Trust Badges (Vertical List) -->
+            <div class="mt-8 space-y-3 pt-6 border-t border-gray-100">
+                <!-- Custom Design -->
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center shrink-0 text-black shadow-sm">
+                        <i class="ph ph-stamp text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">@L["CustomDesign"]</p>
+                    </div>
+                </div>
+                
+                <!-- Premium Materials -->
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center shrink-0 text-black shadow-sm">
+                        <i class="ph ph-star text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">@L["PremiumMaterials"]</p>
+                    </div>
+                </div>
+                
+                <!-- Fast Shipping -->
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center shrink-0 text-black shadow-sm">
+                        <i class="ph ph-truck text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">@L["FastShipping"]</p>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
     </div>
@@ -185,10 +255,162 @@
     </section>
 }
 
+<!-- Lightbox Modal -->
+<div id="lightboxModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-sm transition-opacity duration-300 opacity-0" onclick="closeLightbox()">
+    
+    <!-- Close Button -->
+    <div class="absolute top-4 right-4 z-50">
+        <button onclick="closeLightbox()" class="text-white hover:text-gray-300 transition-colors p-2">
+            <i class="ph ph-x text-3xl"></i>
+        </button>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <button onclick="event.stopPropagation(); prevImage()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-4 z-50">
+        <i class="ph ph-caret-@(isArabic ? "right" : "left") text-4xl"></i>
+    </button>
+    
+    <button onclick="event.stopPropagation(); nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-4 z-50">
+        <i class="ph ph-caret-@(isArabic ? "left" : "right") text-4xl"></i>
+    </button>
+
+    <!-- Image Container -->
+    <div class="flex items-center justify-center h-full p-4 md:p-12">
+        <img id="lightboxImage" src="" alt="Full view" class="max-w-full max-h-full object-contain rounded shadow-2xl transition-transform duration-300" onclick="event.stopPropagation()" />
+        
+        <!-- Counter -->
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 font-medium bg-black/50 px-3 py-1 rounded-full text-sm">
+            <span id="currentIndex">1</span> / <span id="totalImages">1</span>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
-        function changeMainImage(src) {
-            document.getElementById('main-image').src = src;
+        // Collect all images (Main + Gallery)
+        const galleryImages = [];
+        @if (!string.IsNullOrEmpty(Model.MainImagePath))
+        {
+            @:galleryImages.push('/uploads/products/@Model.MainImagePath');
         }
+        @foreach (var img in Model.ProductImages)
+        {
+            @:galleryImages.push('/uploads/products/gallery/@img.ImagePath');
+        }
+
+        let currentLightboxIndex = 0;
+
+        function changeMainImage(src, btn) {
+            document.getElementById('main-image').src = src;
+            
+            // Handle Active State
+            document.querySelectorAll('.thumbnail-btn').forEach(b => {
+                b.classList.remove('border-gray-800');
+                b.classList.add('border-gray-200');
+            });
+            
+            if(btn) {
+                btn.classList.remove('border-gray-200');
+                btn.classList.add('border-gray-800');
+            }
+        }
+        
+        function openLightbox() {
+            if (galleryImages.length === 0) return;
+
+            const modal = document.getElementById('lightboxModal');
+            const lightboxImg = document.getElementById('lightboxImage');
+            
+            // Find index of currently displayed main image
+            const currentSrc = document.getElementById('main-image').getAttribute('src');
+            // We need to match relative path mainly
+            let index = galleryImages.findIndex(img => currentSrc.endsWith(img) || img.endsWith(currentSrc));
+            if (index === -1) index = 0;
+            
+            updateLightboxImage(index);
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+            
+            document.body.style.overflow = 'hidden'; 
+        }
+        
+        function closeLightbox() {
+            const modal = document.getElementById('lightboxModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        function updateLightboxImage(index) {
+            if (index < 0) index = galleryImages.length - 1;
+            if (index >= galleryImages.length) index = 0;
+            
+            currentLightboxIndex = index;
+            
+            const img = document.getElementById('lightboxImage');
+            
+            // Fade out slightly
+            img.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                img.src = galleryImages[index];
+                document.getElementById('currentIndex').textContent = index + 1;
+                document.getElementById('totalImages').textContent = galleryImages.length;
+                img.style.opacity = '1';
+            }, 150);
+        }
+
+        function nextImage() {
+            updateLightboxImage(currentLightboxIndex + 1);
+        }
+
+        function prevImage() {
+            updateLightboxImage(currentLightboxIndex - 1);
+        }
+        
+        // Add click event to main image
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainImg = document.getElementById('main-image');
+            if(mainImg) {
+                mainImg.addEventListener('click', openLightbox);
+                mainImg.style.cursor = 'zoom-in';
+            }
+        });
+        
+        // Size Selection
+        function selectSize(btn, size) {
+            // Reset all
+            document.querySelectorAll('.size-chip').forEach(c => {
+                c.classList.remove('bg-black', 'text-white', 'border-black');
+                c.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
+            });
+            
+            // Activate clicked
+            btn.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
+            btn.classList.add('bg-black', 'text-white', 'border-black');
+            
+            // Set value
+            var input = document.getElementById('selectedSize');
+            if(input) input.value = size;
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', function(e) {
+            if (!document.getElementById('lightboxModal').classList.contains('hidden')) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                    // Check direction based on language? Usually Right is Next regardless, but for UX:
+                    // RTL: Right Arrow -> Next? Or Left Arrow -> Next?
+                    // Standard web gallery: Right Key = Next Image sequence.
+                    if (e.key === 'ArrowRight') @(isArabic ? "prevImage()" : "nextImage()"); 
+                    if (e.key === 'ArrowLeft') @(isArabic ? "nextImage()" : "prevImage()");
+                }
+            }
+        });
     </script>
 }

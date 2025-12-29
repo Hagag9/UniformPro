@@ -1,0 +1,178 @@
+@model UniformPro.Web.ViewModels.ContactViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
+@{
+    Layout = "_FrontLayout";
+    ViewData["Title"] = L["ContactUs"];
+    var isArabic = ViewData["IsArabic"] as bool? ?? true;
+    
+    var address = isArabic ? ViewData["AddressAr"] : ViewData["AddressEn"];
+    var phone = ViewData["Phone"];
+    var email = ViewData["Email"];
+    var facebook = ViewData["Facebook"];
+    var instagram = ViewData["Instagram"];
+    var youtube = ViewData["Youtube"];
+    var tiktok = ViewData["TikTok"];
+    var whatsapp = ViewData["WhatsApp"];
+}
+
+<!-- Success Toast Logic Removed as per request -->
+
+<div class="py-8 md:py-12 bg-gray-50 flex items-center min-h-[calc(100vh-80px)]">
+    <div class="container mx-auto px-4 md:px-8">
+        <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+            
+            <!-- Left Side: Contact Info -->
+            <div class="w-full md:w-5/12 bg-gray-900 text-white p-8 md:p-10 flex flex-col justify-between relative overflow-hidden">
+                <!-- Background Decoration -->
+                <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                    <i class="ph-fill ph-envelope-open text-[15rem] absolute -bottom-10 -right-10 transform rotate-12"></i>
+                </div>
+
+                <div class="relative z-10">
+                    <h1 class="text-3xl md:text-4xl font-bold mb-4 font-serif">
+                        @if (isArabic)
+                        {
+                            <span>تواصل معنا</span>
+                        }
+                        else
+                        {
+                            <span>Contact Us</span>
+                        }
+                    </h1>
+                    <p class="text-gray-400 text-base mb-8 leading-relaxed">
+                        @(isArabic ? "يسعدنا تواصلكم معنا. نحن هنا للإجابة على جميع استفساراتكم." : "Great vision without great people is irrelevant. Let's work together.")
+                    </p>
+
+                    <div class="space-y-5">
+                        @if (address != null)
+                        {
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center shrink-0 text-gray-300">
+                                    <i class="ph-fill ph-map-pin text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-200 mb-0.5 text-sm">@L["Address"]</h3>
+                                    <p class="text-gray-400 text-xs leading-relaxed">@address</p>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center shrink-0 text-gray-300">
+                                <i class="ph-fill ph-phone text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-200 mb-0.5 text-sm">@L["Phone"]</h3>
+                                <p class="text-gray-400 text-xs dir-ltr text-start">
+                                    <a href="tel:@phone" class="hover:text-white transition-colors">@phone</a>
+                                </p>
+                            </div>
+                        </div>
+
+                        @if (email != null)
+                        {
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center shrink-0 text-gray-300">
+                                    <i class="ph-fill ph-envelope text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-200 mb-0.5 text-sm">@L["Email"]</h3>
+                                    <p class="text-gray-400 text-xs">
+                                        <a href="mailto:@email" class="hover:text-white transition-colors">@email</a>
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Social Media -->
+                <div class="relative z-10 mt-8">
+                    <div class="flex gap-3">
+                        @if (facebook != null) { <a href="@facebook" target="_blank" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-[#1877F2] flex items-center justify-center transition-all text-white"><i class="ph-fill ph-facebook-logo text-lg"></i></a> }
+                        @if (instagram != null) { <a href="@instagram" target="_blank" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-[#E4405F] flex items-center justify-center transition-all text-white"><i class="ph-fill ph-instagram-logo text-lg"></i></a> }
+                        @if (youtube != null) { <a href="@youtube" target="_blank" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-[#FF0000] flex items-center justify-center transition-all text-white"><i class="ph-fill ph-youtube-logo text-lg"></i></a> }
+                        @if (tiktok != null) { <a href="@tiktok" target="_blank" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-black flex items-center justify-center transition-all text-white"><i class="ph-fill ph-tiktok-logo text-lg"></i></a> }
+                        @if (whatsapp != null) { <a href="https://wa.me/@whatsapp" target="_blank" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-green-600 flex items-center justify-center transition-all text-white"><i class="ph-fill ph-whatsapp-logo text-lg"></i></a> }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Form or Success Message -->
+            <div class="w-full md:w-7/12 p-8 md:p-10 bg-white relative">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-green-50/50">
+                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6 text-green-600 animate-bounce-slow">
+                            <i class="ph-fill ph-check-circle text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">
+                            @(isArabic ? "تم استلام رسالتك بنجاح!" : "Message Sent Successfully!")
+                        </h3>
+                        <p class="text-gray-600 mb-6 max-w-sm mx-auto text-sm">
+                            @(isArabic ? "شكراً لتواصلك معنا. سيقوم فريقنا بمراجعة رسالتك والرد عليك في أقرب وقت ممكن." : "Thank you for contacting us. Our team will review your message and get back to you as soon as possible.")
+                        </p>
+                        <a href="/" class="px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-bold text-sm">
+                            @(isArabic ? "العودة للرئيسية" : "Back to Home")
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <form asp-action="Index" method="post" class="space-y-4">
+                        @Html.AntiForgeryToken()
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Name -->
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1.5">@L["YourName"] <span class="text-red-500">*</span></label>
+                                <input asp-for="FullName" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none text-sm" placeholder="@(isArabic ? "ادخل اسمك بالكامل" : "Enter your Full Name")" />
+                                <span asp-validation-for="FullName" class="text-red-500 text-xs mt-0.5 block"></span>
+                            </div>
+
+                            <!-- Phone -->
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1.5">@L["Phone"] <span class="text-red-500">*</span></label>
+                                <input asp-for="Phone" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none dir-ltr text-sm" placeholder="010xxxxxxxxx" style="direction:ltr;" />
+                                <span asp-validation-for="Phone" class="text-red-500 text-xs mt-0.5 block"></span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Email -->
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1.5">@L["Email"]</label>
+                                <input asp-for="Email" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none dir-ltr text-sm" placeholder="john@example.com" style="direction:ltr;" />
+                                <span asp-validation-for="Email" class="text-red-500 text-xs mt-0.5 block"></span>
+                            </div>
+
+                            <!-- Company -->
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1.5">@L["Company"] <span class="text-xs text-gray-400 font-normal">(@L["Optional"])</span></label>
+                                <input asp-for="CompanyName" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none text-sm" placeholder="@(isArabic ? "اسم الشركة (اختياري)" : "Company Name (Optional)")" />
+                                <span asp-validation-for="CompanyName" class="text-red-500 text-xs mt-0.5 block"></span>
+                            </div>
+                        </div>
+
+                        <!-- Message -->
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5">@L["Message"] <span class="text-red-500">*</span></label>
+                            <textarea asp-for="Message" rows="4" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none resize-none text-sm" placeholder="@(isArabic ? "اكتب رسالتك هنا..." : "Enter your message here...")"></textarea>
+                            <span asp-validation-for="Message" class="text-red-500 text-xs mt-0.5 block"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="pt-2">
+                            <button type="submit" class="w-full md:w-auto px-8 py-3 bg-[#D4B483] hover:bg-[#c4a473] text-gray-900 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm">
+                               <i class="ph-bold ph-paper-plane-right text-lg"></i>
+                               <span>@(isArabic ? "إرسال الرسالة" : "Submit Message")</span>
+                            </button>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

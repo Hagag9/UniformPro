@@ -28,6 +28,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
+            ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr");
             return View(new TestimonialViewModel());
         }
 
@@ -41,6 +42,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 if (model.VideoFile == null && string.IsNullOrEmpty(model.YoutubeUrl))
                 {
                     ModelState.AddModelError("", "يجب إضافة فيديو (رفع ملف) أو رابط يوتيوب");
+                    ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", model.PortfolioId);
                     return View(model);
                 }
 
@@ -51,19 +53,39 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                     Feedback = model.Feedback,
                     YoutubeUrl = model.YoutubeUrl,
                     IsActive = model.IsActive,
-                    CreatedAt = DateTime.Now
+                    ShowOnHome = model.ShowOnHome, // ✅ اضافة
+                    CreatedAt = DateTime.Now,
+                    PortfolioId = model.PortfolioId
                 };
 
                 // حفظ الصورة
                 if (model.ImageFile != null)
                 {
-                    testimonial.ImagePath = await _fileService.SaveFileAsync(model.ImageFile, "testimonials/images");
+                    try
+                    {
+                        testimonial.ImagePath = await _fileService.SaveFileAsync(model.ImageFile, "testimonials/images");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("ImageFile", ex.Message);
+                        ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", model.PortfolioId);
+                        return View(model);
+                    }
                 }
 
                 // حفظ الفيديو
                 if (model.VideoFile != null)
                 {
-                    testimonial.VideoPath = await _fileService.SaveFileAsync(model.VideoFile, "testimonials/videos");
+                    try
+                    {
+                        testimonial.VideoPath = await _fileService.SaveFileAsync(model.VideoFile, "testimonials/videos");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("VideoFile", ex.Message);
+                        ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", model.PortfolioId);
+                        return View(model);
+                    }
                 }
 
                 _context.Add(testimonial);
@@ -71,6 +93,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 TempData["SuccessMessage"] = "تم إضافة التقييم بنجاح";
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", model.PortfolioId);
             return View(model);
         }
 
@@ -89,10 +112,13 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 Feedback = item.Feedback,
                 YoutubeUrl = item.YoutubeUrl,
                 IsActive = item.IsActive,
+                ShowOnHome = item.ShowOnHome, // ✅ اضافة
                 CurrentImagePath = item.ImagePath,
-                CurrentVideoPath = item.VideoPath
+                CurrentVideoPath = item.VideoPath,
+                PortfolioId = item.PortfolioId
             };
 
+            ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", item.PortfolioId);
             return View(model);
         }
 
@@ -112,17 +138,39 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 item.Feedback = model.Feedback;
                 item.YoutubeUrl = model.YoutubeUrl;
                 item.IsActive = model.IsActive;
+                item.ShowOnHome = model.ShowOnHome; // ✅ اضافة
+                item.PortfolioId = model.PortfolioId;
 
+                // حفظ الصورة (مع حذف القديمة)
                 if (model.ImageFile != null)
                 {
-                    if (!string.IsNullOrEmpty(item.ImagePath)) _fileService.DeleteFile(item.ImagePath, "testimonials/images");
-                    item.ImagePath = await _fileService.SaveFileAsync(model.ImageFile, "testimonials/images");
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(item.ImagePath)) _fileService.DeleteFile(item.ImagePath, "testimonials/images");
+                        item.ImagePath = await _fileService.SaveFileAsync(model.ImageFile, "testimonials/images");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("ImageFile", ex.Message);
+                        ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", model.PortfolioId);
+                        return View(model);
+                    }
                 }
 
+                // حفظ الفيديو (مع حذف القديم)
                 if (model.VideoFile != null)
                 {
-                    if (!string.IsNullOrEmpty(item.VideoPath)) _fileService.DeleteFile(item.VideoPath, "testimonials/videos");
-                    item.VideoPath = await _fileService.SaveFileAsync(model.VideoFile, "testimonials/videos");
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(item.VideoPath)) _fileService.DeleteFile(item.VideoPath, "testimonials/videos");
+                        item.VideoPath = await _fileService.SaveFileAsync(model.VideoFile, "testimonials/videos");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("VideoFile", ex.Message);
+                        ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", model.PortfolioId);
+                        return View(model);
+                    }
                 }
 
                 _context.Update(item);
@@ -130,7 +178,31 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 TempData["SuccessMessage"] = "تم التحديث بنجاح";
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", model.PortfolioId);
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteMedia(int id, string type)
+        {
+            var item = await _context.Testimonials.FindAsync(id);
+            if (item != null)
+            {
+                if (type == "image" && !string.IsNullOrEmpty(item.ImagePath))
+                {
+                    _fileService.DeleteFile(item.ImagePath, "testimonials/images");
+                    item.ImagePath = null;
+                }
+                else if (type == "video" && !string.IsNullOrEmpty(item.VideoPath))
+                {
+                    _fileService.DeleteFile(item.VideoPath, "testimonials/videos");
+                    item.VideoPath = null;
+                }
+                
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            return NotFound();
         }
 
         [HttpPost]

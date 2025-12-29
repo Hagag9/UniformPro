@@ -19,6 +19,8 @@ namespace UniformPro.Core.Entities
         // ✅ 2. إضافة أقل كمية للطلب (MOQ)
         public int MinQuantity { get; set; } = 1; // القيمة الافتراضية 1
 
+        public bool ShowOnHome { get; set; } = false; // عرض في الرئيسية
+
         // ✅ 3. المقاسات المتاحة (نص حر يكتبه الأدمن: S, M, L, XL)
         [MaxLength(100)]
         public string? AvailableSizes { get; set; }

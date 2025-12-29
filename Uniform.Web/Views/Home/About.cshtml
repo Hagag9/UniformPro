@@ -1,0 +1,100 @@
+@model UniformPro.Core.Entities.SiteSettings
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
+@{
+    Layout = "_FrontLayout";
+    ViewData["Title"] = "About Us";
+    var isArabic = ViewData["IsArabic"] as bool? ?? true;
+}
+
+@section Styles {
+    <style>
+        .about-content {
+            line-height: 1.9;
+        }
+        .about-content p {
+            margin-bottom: 1rem;
+        }
+        .about-content ul, .about-content ol {
+            margin: 1rem 0;
+            padding-inline-start: 1.5rem;
+        }
+        .about-content li {
+            margin-bottom: 0.5rem;
+        }
+        .founder-image {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+}
+
+<!-- Page Header -->
+<section class="py-10 md:py-16 bg-gray-50 border-b">
+    <div class="container mx-auto px-4">
+        <h1 class="dutch-title text-center text-xl md:text-3xl lg:text-4xl">
+            @(isArabic ? "عن مانو يونيفورم" : "About Mano Uniform")
+        </h1>
+    </div>
+</section>
+
+<!-- About Content Section -->
+<section class="py-8 md:py-12">
+    <div class="container mx-auto px-4 md:px-12 lg:px-24 xl:px-32">
+        <div class="about-content text-gray-700 text-base md:text-lg max-w-4xl mx-auto">
+            @if (isArabic && !string.IsNullOrEmpty(Model.AboutUsAr))
+            {
+                @Html.Raw(Model.AboutUsAr)
+            }
+            else if (!isArabic && !string.IsNullOrEmpty(Model.AboutUsEn))
+            {
+                @Html.Raw(Model.AboutUsEn)
+            }
+            else
+            {
+                <p class="text-center text-gray-400">@(isArabic ? "لم يتم إضافة محتوى بعد" : "No content added yet")</p>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Meet Our Founder Section -->
+@if (!string.IsNullOrEmpty(Model.OwnerImage))
+{
+    <section class="py-12 md:py-16 bg-white" dir="ltr">
+        <div class="container mx-auto px-4">
+            <!-- Section Header -->
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="text-2xl md:text-4xl font-bold text-gray-900 mb-3" style="font-family: 'Libre Franklin', sans-serif !important; font-style: italic;">
+                    Meet Our Founder
+                </h2>
+                <p class="text-gray-500 text-base md:text-lg">
+                    The visionary behind our brand
+                </p>
+            </div>
+
+            <!-- Founder Card -->
+            <div class="flex flex-col items-center">
+                <!-- Founder Image -->
+                <div class="mb-5">
+                    <img src="~/uploads/sitesettings/@Model.OwnerImage" 
+                         alt="Ahmed Mano" 
+                         class="founder-image w-32 h-32 md:w-44 md:h-44 rounded-full object-cover border-4 border-white" />
+                </div>
+
+                <!-- Founder Info -->
+                <div class="text-center">
+                    <p class="text-gray-400 text-sm mb-2">
+                        @@ahmed.mano
+                    </p>
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
+                        Ahmed Mano
+                    </h3>
+                    <p class="text-gray-500 text-base md:text-lg">
+                        Co-Founder & CEO
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+}

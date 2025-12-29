@@ -16,12 +16,16 @@ namespace UniformPro.Core.Entities
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null!;
 
-        // ✅  هل يظهر في سلايدر الصفحة الرئيسية؟
+        // ✅ هل يظهر في سلايدر الصفحة الرئيسية؟
         public bool ShowOnHome { get; set; } = false;
 
-        // ✅  ترتيب الظهور
+        // ✅ ترتيب الظهور
         public int DisplayOrder { get; set; } = 0;
+
         public ICollection<PortfolioMedia> PortfolioMedias { get; set; } = new List<PortfolioMedia>();
+        
+        // ✅ ربط مع التقييمات
+        public virtual ICollection<Testimonial> Testimonials { get; set; } = new List<Testimonial>();
 
         [MaxLength(300)]
         public string? MetaDescription { get; set; } // وصف يظهر تحت الرابط في جوجل

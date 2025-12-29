@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniformPro.Infrastructure.Data;
 using UniformPro.Web.ViewModels;
-
+using Microsoft.AspNetCore.Identity;
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -11,10 +11,12 @@ namespace UniformPro.Web.Areas.Admin.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context,SignInManager<IdentityUser> signInManager)
         {
             _context = context;
+            _signInManager = signInManager;
         }
 
         public async Task<IActionResult> Index()
@@ -44,6 +46,14 @@ namespace UniformPro.Web.Areas.Admin.Controllers
             };
 
             return View(model);
+        }
+        //   دالة تسجيل الخروج
+        [HttpGet] // تعمل عند الضغط على الرابط مباشرة
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            // توجيه المستخدم لصفحة الدخول بعد الخروج
+            return Redirect("/Identity/Account/Login");
         }
     }
 }

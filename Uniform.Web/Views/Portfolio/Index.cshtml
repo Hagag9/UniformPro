@@ -1,0 +1,73 @@
+@model IEnumerable<UniformPro.Web.ViewModels.PortfolioListViewModel>
+@{
+    var isArabic = ViewData["IsArabic"] as bool? ?? false;
+    ViewData["Title"] = isArabic ? "معرض أعمالنا" : "Our Projects";
+}
+
+<div class="bg-gray-50 py-16 min-h-screen">
+    <div class="container mx-auto px-4">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-outfit">
+                @(isArabic ? "معرض أعمالنا" : "Our Portfolio")
+            </h1>
+            <p class="text-gray-600 max-w-2xl mx-auto text-lg">
+                @(isArabic ? "نفتخر بتقديم أفضل حلول الزي الموحد لشركاء النجاح في مختلف القطاعات." : "We are proud to provide the best uniform solutions for our success partners in various sectors.")
+            </p>
+        </div>
+
+        <!-- Grid -->
+        @if (Model == null || !Model.Any())
+        {
+            <div class="text-center py-20 bg-white rounded-xl shadow-sm">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4 text-gray-400">
+                    <i class="ph-duotone ph-folder-open text-3xl"></i>
+                </div>
+                <p class="text-gray-500 text-xl font-medium">@(isArabic ? "لا توجد مشاريع مضافة حالياً." : "No projects added yet.")</p>
+            </div>
+        }
+        else
+        {
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                @foreach (var item in Model)
+                {
+                    <div class="group relative aspect-[4/5] overflow-hidden rounded-2xl shadow-lg cursor-pointer bg-white">
+                        <!-- Image -->
+                        @if (!string.IsNullOrEmpty(item.CoverImagePath))
+                        {
+                            <img src="~/uploads/portfolios/covers/@item.CoverImagePath" 
+                                 alt="@item.ClientName" 
+                                 loading="lazy"
+                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        }
+                        else
+                        {
+                            <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                                <i class="ph-duotone ph-image text-4xl"></i>
+                            </div>
+                        }
+                        
+                        <!-- Overlay & Content -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 transition-opacity duration-300 flex flex-col justify-end p-6">
+                             
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <span class="inline-block px-3 py-1 bg-primary/90 backdrop-blur-sm border border-primary/30 text-white text-xs rounded-full mb-3 shadow-sm">
+                                    @item.CategoryName
+                                </span>
+                                <h3 class="text-white text-2xl font-bold mb-2">@item.ClientName</h3>
+                                
+                                <span class="inline-flex items-center gap-2 text-white/90 hover:text-white mt-2 group/btn text-sm font-medium">
+                                    @(isArabic ? "شاهد التفاصيل" : "View Details")
+                                    <i class="ph-bold @(isArabic ? "ph-arrow-left" : "ph-arrow-right") transform group-hover/btn:translate-x-1 transition-transform"></i>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Full Link -->
+                        <a asp-action="Details" asp-route-id="@item.Id" class="absolute inset-0 z-10" aria-label="@(isArabic ? "مشاهدة المشروع" : "View Project")"></a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

@@ -16,11 +16,13 @@ namespace UniformPro.Web.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
+        private readonly IHtmlSanitizerService _sanitizer;
 
-        public ProductsController(ApplicationDbContext context, IFileService fileService)
+        public ProductsController(ApplicationDbContext context, IFileService fileService, IHtmlSanitizerService sanitizer)
         {
             _context = context;
             _fileService = fileService;
+            _sanitizer = sanitizer;
         }
 
         // عرض المنتجات
@@ -93,13 +95,14 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                     NameAr = model.NameAr,
                     NameEn = model.NameEn,
                     StartPrice = model.StartPrice,
-                    DescriptionAr = model.DescriptionAr,
-                    DescriptionEn = model.DescriptionEn,
+                    DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr),
+                    DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn),
                     CategoryId = model.CategoryId,
-                    MaterialDetailsAr = model.MaterialDetailsAr,
-                    MaterialDetailsEn = model.MaterialDetailsEn,
+                    MaterialDetailsAr = _sanitizer.Sanitize(model.MaterialDetailsAr),
+                    MaterialDetailsEn = _sanitizer.Sanitize(model.MaterialDetailsEn),
                     AvailableSizes = model.AvailableSizes,
                     MinQuantity = model.MinQuantity,
+                    ShowOnHome = model.ShowOnHome,
                     MetaDescription = model.MetaDescription,
                     MetaKeywords = model.MetaKeywords,
                     CreatedAt = DateTime.Now
@@ -109,7 +112,16 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 // حفظ الصورة الرئيسية
                 if (model.MainImageFile != null)
                 {
-                    product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
+                    try
+                    {
+                        product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("MainImageFile", ex.Message);
+                        ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
+                        return View(model);
+                    }
                 }
 
                 _context.Add(product);
@@ -118,16 +130,24 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 // حفظ صور المعرض
                 if (model.GalleryFiles != null && model.GalleryFiles.Count > 0)
                 {
-                    foreach (var file in model.GalleryFiles)
+                    try
                     {
-                        var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
-                        _context.ProductImages.Add(new ProductImage
+                        foreach (var file in model.GalleryFiles)
                         {
-                            ProductId = product.Id,
-                            ImagePath = path
-                        });
+                            var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
+                            _context.ProductImages.Add(new ProductImage
+                            {
+                                ProductId = product.Id,
+                                ImagePath = path
+                            });
+                        }
+                        await _context.SaveChangesAsync();
                     }
-                    await _context.SaveChangesAsync();
+                    catch (ArgumentException ex)
+                    {
+                         // لو حصل خطأ في الصور الإضافية، بنكمل عادي بس بنبلغ المستخدم
+                         TempData["ErrorMessage"] = $"تم حفظ المنتج ولكن فشل رفع بعض الصور: {ex.Message}";
+                    }
                 }
 
                 TempData["SuccessMessage"] = "تم إضافة المنتج بنجاح";
@@ -160,6 +180,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 MaterialDetailsEn = product.MaterialDetailsEn,
                 AvailableSizes = product.AvailableSizes,
                 MinQuantity = product.MinQuantity,
+                ShowOnHome = product.ShowOnHome,
                 CurrentMainImagePath = product.MainImagePath,
                 CurrentGalleryImages = product.ProductImages.ToList(),
                 MetaDescription = product.MetaDescription,
@@ -185,13 +206,14 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 product.NameAr = model.NameAr;
                 product.NameEn = model.NameEn;
                 product.StartPrice = model.StartPrice;
-                product.DescriptionAr = model.DescriptionAr;
-                product.DescriptionEn = model.DescriptionEn;
+                product.DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr);
+                product.DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn);
                 product.CategoryId = model.CategoryId;
-                product.MaterialDetailsAr = model.MaterialDetailsAr;
-                product.MaterialDetailsEn = model.MaterialDetailsEn;
+                product.MaterialDetailsAr = _sanitizer.Sanitize(model.MaterialDetailsAr);
+                product.MaterialDetailsEn = _sanitizer.Sanitize(model.MaterialDetailsEn);
                 product.AvailableSizes = model.AvailableSizes;
                 product.MinQuantity = model.MinQuantity;
+                product.ShowOnHome = model.ShowOnHome;
                 product.MetaDescription = model.MetaDescription;
                 product.MetaKeywords = model.MetaKeywords;
 
@@ -199,18 +221,41 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 // تحديث الصورة الرئيسية (إذا تم رفع جديد)
                 if (model.MainImageFile != null)
                 {
-                    // الحذف يتم التعامل معه داخل السرفيس إذا مررنا الاسم
-                    _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
-                    product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
+                    try
+                    {
+                        // الحذف يتم التعامل معه داخل السرفيس إذا مررنا الاسم
+                        _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
+                        product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("MainImageFile", ex.Message);
+                        // Reload data for view
+                        var existingP = await _context.Products.Include(p => p.ProductImages).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+                        if (existingP != null)
+                        {
+                            model.CurrentMainImagePath = existingP.MainImagePath;
+                            model.CurrentGalleryImages = existingP.ProductImages.ToList();
+                        }
+                        ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
+                        return View(model);
+                    }
                 }
 
                 // إضافة صور معرض جديدة
                 if (model.GalleryFiles != null && model.GalleryFiles.Count > 0)
                 {
-                    foreach (var file in model.GalleryFiles)
+                    try
                     {
-                        var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
-                        _context.ProductImages.Add(new ProductImage { ProductId = product.Id, ImagePath = path });
+                        foreach (var file in model.GalleryFiles)
+                        {
+                            var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
+                            _context.ProductImages.Add(new ProductImage { ProductId = product.Id, ImagePath = path });
+                        }
+                    }
+                    catch (ArgumentException ex)
+                    {
+                         TempData["ErrorMessage"] = $"تم تحديث المنتج ولكن فشل رفع بعض الصور: {ex.Message}";
                     }
                 }
 

@@ -1,4 +1,4 @@
-@model IEnumerable<UniformPro.Core.Entities.Product>
+@model IEnumerable<UniformPro.Web.ViewModels.ProductListViewModel>
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
 @{
@@ -11,90 +11,82 @@
     var sortOrder = ViewBag.SortOrder;
 }
 
-@if (!Model.Any())
-{
-    <div class="text-center py-5">
-        <i class="ph ph-package display-1 text-muted mb-3"></i>
-        <p class="text-muted">@L["NoProducts"]</p>
-    </div>
-}
-else
-{
-    <div class="row g-4 cols-4" id="productsGrid">
-        @foreach (var product in Model)
-        {
-            <div class="col-6 col-md-4 col-lg-3">
-                <div class="product-card" onclick="toggleMobileOverlay(this)">
-                    <!-- Image -->
-                    <div class="product-image-container">
-                        @if (!string.IsNullOrEmpty(product.MainImagePath))
-                        {
-                            <img src="~/uploads/products/@product.MainImagePath" 
-                                 alt="@(isArabic ? product.NameAr : product.NameEn)"
-                                 class="product-image">
-                        }
-                        else
-                        {
-                            <div class="d-flex align-items-center justify-content-center h-100 text-muted">
-                                <i class="ph ph-image display-4"></i>
-                            </div>
-                        }
-                        
-                        <!-- Card Hover Overlay -->
-                        <div class="card-overlay">
-                            <a href="/Products/Details/@product.Id" class="btn-overlay">
-                                <i class="ph ph-eye me-1"></i> @L["ViewDetails"]
-                            </a>
-                            <button type="button" class="btn-overlay btn-add-cart" 
-                                    onclick="event.stopPropagation(); addToCart(@product.Id, '@(isArabic ? product.NameAr.Replace("'", "\\'") : product.NameEn.Replace("'", "\\'"))', '@(product.MainImagePath ?? "")')">
-                                <i class="ph ph-shopping-cart-simple me-1"></i> @L["AddToCart"]
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Info -->
-                    <div class="product-info">
-                        <a href="/Products/Details/@product.Id" class="text-decoration-none">
-                            <h3 class="product-name hover:text-primary transition-colors">@(isArabic ? product.NameAr : product.NameEn)</h3>
-                        </a>
-                        @{
-                            var material = isArabic ? product.MaterialDetailsAr : product.MaterialDetailsEn;
-                        }
-                        @if (!string.IsNullOrEmpty(material))
-                        {
-                            <p class="text-muted mb-1" style="font-size: 12px;">@material</p>
-                        }
-                        @if (product.StartPrice.HasValue)
-                        {
-                            <p class="product-price mb-0">
-                                @L["StartingFrom"] @product.StartPrice?.ToString("N0") @L["EGP"]
-                            </p>
-                        }
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-    
-    <!-- Pagination -->
-    @if (totalPages > 1)
+<div class="container">
+    @if (!Model.Any())
     {
-        <div class="pagination-minimal" id="paginationContainer">
-            @if (currentPage > 1)
-            {
-                <a href="javascript:void(0)" onclick="loadProducts(@selectedCategory, '@sortOrder', @(currentPage - 1))">
-                    <i class="ph ph-arrow-@(isArabic ? "right" : "left") me-1"></i> @L["Previous"]
-                </a>
-            }
-            
-            <span>@L["Page"] @currentPage @L["Of"] @totalPages</span>
-            
-            @if (currentPage < totalPages)
-            {
-                <a href="javascript:void(0)" onclick="loadProducts(@selectedCategory, '@sortOrder', @(currentPage + 1))">
-                    @L["Next"] <i class="ph ph-arrow-@(isArabic ? "left" : "right") ms-1"></i>
-                </a>
-            }
+        <div class="text-center py-5">
+            <i class="ph ph-package display-1 text-muted mb-3"></i>
+            <p class="text-muted">@L["NoProducts"]</p>
         </div>
     }
-}
+    else
+    {
+        <div id="productsGrid" class="cols-4">
+            @foreach (var product in Model)
+            {
+                <div>
+                    <div class="product-card" onclick="location.href='/Products/Details/@product.Id'">
+                        <!-- Image -->
+                        <div class="product-image-container">
+                            @if (!string.IsNullOrEmpty(product.MainImagePath))
+                            {
+                                <img src="~/uploads/products/@product.MainImagePath" 
+                                     alt="@(isArabic ? product.NameAr : product.NameEn)"
+                                     class="product-image">
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                                    <i class="ph ph-image display-4"></i>
+                                </div>
+                            }
+                            
+                            <!-- Floating Add to Cart Button -->
+                            <button type="button" class="btn-add-cart-fab" 
+                                    onclick="event.stopPropagation(); addToCart(@product.Id, '@(isArabic ? product.NameAr.Replace("'", "\\'") : product.NameEn.Replace("'", "\\'"))', '@(product.MainImagePath ?? "")')">
+                                <i class="ph ph-handbag"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Info -->
+                        <div class="product-info">
+                            <a href="/Products/Details/@product.Id" class="text-decoration-none">
+                                <h3 class="product-name hover:text-primary transition-colors">@(isArabic ? product.NameAr : product.NameEn)</h3>
+                            </a>
+                            @{
+                                var material = isArabic ? product.MaterialDetailsAr : product.MaterialDetailsEn;
+                            }
+                            @if (!string.IsNullOrEmpty(material))
+                            {
+                                <p class="text-muted mb-1" style="font-size: 12px;">@material</p>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <!-- Pagination -->
+        @if (totalPages > 1)
+        {
+            <div class="pagination-minimal" id="paginationContainer">
+                @if (currentPage > 1)
+                {
+                    <a href="javascript:void(0)" onclick="loadProducts(@(selectedCategory?.ToString() ?? "null"), '@sortOrder', @(currentPage - 1))">
+                        <i class="ph ph-arrow-@(isArabic ? "right" : "left") me-1"></i> @L["Previous"]
+                    </a>
+                }
+                
+                <span>@L["Page"] @currentPage @L["Of"] @totalPages</span>
+                
+                @if (currentPage < totalPages)
+                {
+                    <a href="javascript:void(0)" onclick="loadProducts(@(selectedCategory?.ToString() ?? "null"), '@sortOrder', @(currentPage + 1))">
+                        @L["Next"] <i class="ph ph-arrow-@(isArabic ? "left" : "right") ms-1"></i>
+                    </a>
+                }
+            </div>
+        }
+    }
+</div>

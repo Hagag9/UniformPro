@@ -57,7 +57,7 @@
                         <img id="coverImg" src="#" class="w-full h-full object-cover">
                         <button type="button" onclick="clearCover()" class="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1"><i class="ph-bold ph-x text-xs"></i></button>
                     </div>
-                    <input type="file" name="coverImageFile" id="coverInput" accept="image/*" onchange="previewCover(this)"
+                    <input type="file" name="coverImageFile" id="coverInput" accept="image/*" onchange="if(validateFileInput(this, ['image'], 5)) previewCover(this)"
                            class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-600 hover:file:bg-purple-100" />
                 </div>
 
@@ -66,7 +66,7 @@
 
                     <div id="mediaPreviewGrid" class="grid grid-cols-4 gap-3 mb-3"></div>
 
-                    <input type="file" name="mediaFiles" id="mediaInput" multiple accept="image/*,video/*"
+                    <input type="file" name="mediaFiles" id="mediaInput" multiple accept="image/*,video/*" onchange="validateFileInput(this, ['image', 'video'], 20)"
                            class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-600 hover:file:bg-purple-100" />
 
                     <div class="mt-6 border-t pt-4">

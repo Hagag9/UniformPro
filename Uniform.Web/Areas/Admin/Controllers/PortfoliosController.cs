@@ -16,11 +16,13 @@ namespace UniformPro.Web.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
+        private readonly IHtmlSanitizerService _sanitizer;
 
-        public PortfoliosController(ApplicationDbContext context, IFileService fileService)
+        public PortfoliosController(ApplicationDbContext context, IFileService fileService, IHtmlSanitizerService sanitizer)
         {
             _context = context;
             _fileService = fileService;
+            _sanitizer = sanitizer;
         }
 
         // عرض القائمة
@@ -72,8 +74,8 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 {
                     ClientNameAr = model.ClientNameAr,
                     ClientNameEn = model.ClientNameEn,
-                    DescriptionAr = model.DescriptionAr,
-                    DescriptionEn = model.DescriptionEn,
+                    DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr),
+                    DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn),
                     CategoryId = model.CategoryId,
                     ShowOnHome = model.ShowOnHome,
                     MetaDescription = model.MetaDescription,
@@ -83,7 +85,16 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
                 if (model.CoverImageFile != null)
                 {
-                    portfolio.CoverImagePath = await _fileService.SaveFileAsync(model.CoverImageFile, "portfolios/covers");
+                    try
+                    {
+                        portfolio.CoverImagePath = await _fileService.SaveFileAsync(model.CoverImageFile, "portfolios/covers");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("CoverImageFile", ex.Message);
+                        ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
+                        return View(model);
+                    }
                 }
 
                 _context.Add(portfolio);
@@ -92,16 +103,23 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 // رفع الميديا (صور وفيديو)
                 if (model.MediaFiles != null)
                 {
-                    foreach (var file in model.MediaFiles)
+                    try 
                     {
-                        var path = await _fileService.SaveFileAsync(file, "portfolios/media");
-                        var isVideo = file.ContentType.ToLower().StartsWith("video");
-                        _context.PortfolioMedias.Add(new PortfolioMedia
+                        foreach (var file in model.MediaFiles)
                         {
-                            PortfolioId = portfolio.Id,
-                            MediaUrl = path,
-                            Type = isVideo ? MediaType.Video : MediaType.Image
-                        });
+                            var path = await _fileService.SaveFileAsync(file, "portfolios/media");
+                            var isVideo = file.ContentType.ToLower().StartsWith("video");
+                            _context.PortfolioMedias.Add(new PortfolioMedia
+                            {
+                                PortfolioId = portfolio.Id,
+                                MediaUrl = path,
+                                Type = isVideo ? MediaType.Video : MediaType.Image
+                            });
+                        }
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        TempData["ErrorMessage"] = $"تم حفظ المشروع ولكن فشل رفع بعض الوسائط: {ex.Message}";
                     }
                 }
 
@@ -163,8 +181,8 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
                 portfolio.ClientNameAr = model.ClientNameAr;
                 portfolio.ClientNameEn = model.ClientNameEn;
-                portfolio.DescriptionAr = model.DescriptionAr;
-                portfolio.DescriptionEn = model.DescriptionEn;
+                portfolio.DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr);
+                portfolio.DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn);
                 portfolio.CategoryId = model.CategoryId;
                 portfolio.ShowOnHome = model.ShowOnHome;
                 portfolio.MetaDescription = model.MetaDescription;
@@ -172,19 +190,42 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
                 if (model.CoverImageFile != null)
                 {
-                    if (!string.IsNullOrEmpty(portfolio.CoverImagePath))
-                        _fileService.DeleteFile(portfolio.CoverImagePath, "portfolios/covers");
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(portfolio.CoverImagePath))
+                            _fileService.DeleteFile(portfolio.CoverImagePath, "portfolios/covers");
 
-                    portfolio.CoverImagePath = await _fileService.SaveFileAsync(model.CoverImageFile, "portfolios/covers");
+                        portfolio.CoverImagePath = await _fileService.SaveFileAsync(model.CoverImageFile, "portfolios/covers");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("CoverImageFile", ex.Message);
+                        // Reload data
+                        var existingP = await _context.Portfolios.Include(p => p.PortfolioMedias).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+                        if (existingP != null)
+                        {
+                            model.CurrentCoverImagePath = existingP.CoverImagePath;
+                            model.CurrentMedia = existingP.PortfolioMedias.ToList();
+                        }
+                        ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
+                        return View(model);
+                    }
                 }
 
                 if (model.MediaFiles != null)
                 {
-                    foreach (var file in model.MediaFiles)
+                    try
                     {
-                        var path = await _fileService.SaveFileAsync(file, "portfolios/media");
-                        var isVideo = file.ContentType.ToLower().StartsWith("video");
-                        _context.PortfolioMedias.Add(new PortfolioMedia { PortfolioId = portfolio.Id, MediaUrl = path, Type = isVideo ? MediaType.Video : MediaType.Image });
+                        foreach (var file in model.MediaFiles)
+                        {
+                            var path = await _fileService.SaveFileAsync(file, "portfolios/media");
+                            var isVideo = file.ContentType.ToLower().StartsWith("video");
+                            _context.PortfolioMedias.Add(new PortfolioMedia { PortfolioId = portfolio.Id, MediaUrl = path, Type = isVideo ? MediaType.Video : MediaType.Image });
+                        }
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        TempData["ErrorMessage"] = $"تم تحديث المشروع ولكن فشل رفع بعض الوسائط: {ex.Message}";
                     }
                 }
 
@@ -234,6 +275,8 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         }
 
         // ================== DELETE PORTFOLIO ==================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var portfolio = await _context.Portfolios

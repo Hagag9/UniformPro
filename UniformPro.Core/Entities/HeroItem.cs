@@ -5,12 +5,14 @@ namespace UniformPro.Core.Entities
     public class HeroItem : BaseEntity
     {
         [Required]
-        public string ImagePath { get; set; } = string.Empty; // صورة الخلفية
+        public string ImagePath { get; set; } = string.Empty; // صورة Desktop
+
+        public string? MobileImagePath { get; set; } // صورة Mobile (للـ Responsive)
 
         [MaxLength(100)]
-        public string TitleAr { get; set; } = string.Empty; // العنوان الرئيسي
+        public string? TitleAr { get; set; } // العنوان الرئيسي (اختياري)
         [MaxLength(100)]
-        public string TitleEn { get; set; } = string.Empty;
+        public string? TitleEn { get; set; }
 
         [MaxLength(200)]
         public string? SubtitleAr { get; set; } // الوصف الصغير

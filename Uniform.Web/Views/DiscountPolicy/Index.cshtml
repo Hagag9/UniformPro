@@ -1,0 +1,157 @@
+@model UniformPro.Web.ViewModels.DiscountTiersPageViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
+@{
+    Layout = "_FrontLayout";
+    ViewData["Title"] = L["DiscountPolicy"];
+    var isArabic = ViewData["IsArabic"] as bool? ?? true;
+}
+
+@section Styles {
+    <style>
+        .tier-card {
+            transition: all 0.3s ease;
+        }
+        .tier-card:hover {
+            transform: translateY(-8px);
+        }
+        .promo-badge {
+            animation: pulse 2s infinite;
+        }
+        @@keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+}
+
+<!-- Hero Section -->
+<section class="py-10 md:py-14 bg-gradient-to-br from-gray-100 via-gray-50 to-white relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-40">
+        <div class="absolute top-10 @(isArabic ? "left-10" : "right-10") w-32 h-32 bg-gray-200 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 @(isArabic ? "right-20" : "left-20") w-40 h-40 bg-gray-300 rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-2xl @(isArabic ? "text-right" : "text-left")" data-aos="fade-up">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-3">
+                @L["DiscountPageTitle"]
+                <span class="text-purple-600">@L["DiscountPageTitle2"]</span>
+            </h1>
+            <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xl">
+                @L["DiscountPageDesc"]
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Tiers Grid -->
+<section class="py-12 md:py-16">
+    <div class="container mx-auto px-4">
+        @if (Model.Tiers.Any())
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+                @foreach (var tier in Model.Tiers)
+                {
+                    <div class="tier-card relative bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-xl border-2 transition-all"
+                         style="border-color: @tier.ColorCode;"
+                         data-aos="fade-up"
+                         data-aos-delay="@(Model.Tiers.IndexOf(tier) * 100)">
+                        
+                        <!-- Promo Badge -->
+                        @if (!string.IsNullOrEmpty(tier.PromoText))
+                        {
+                            <div class="promo-badge absolute top-4 @(isArabic ? "left-4" : "right-4") flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
+                                 style="background-color: @(tier.ColorCode)20; color: @tier.ColorCode;">
+                                <i class="ph-fill ph-crown text-sm"></i>
+                                @tier.PromoText
+                            </div>
+                        }
+
+                        <!-- Tier Name -->
+                        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mt-8 mb-6">
+                            @tier.Name
+                        </h3>
+
+                        <!-- Discount Percentage -->
+                        <div class="flex items-baseline gap-2 mb-4">
+                            <span class="text-4xl md:text-5xl font-extrabold text-gray-900">
+                                @((int)tier.DiscountPercentage)%
+                            </span>
+                            <span class="text-lg font-bold text-gray-500">@L["Discount"]</span>
+                        </div>
+
+                        <!-- Quantity Range -->
+                        <div class="mb-6">
+                            <p class="text-gray-500 text-sm mb-1">@L["ForOrdersBetween"]</p>
+                            <p class="text-lg font-bold text-gray-800">
+                                @tier.MinQuantity.ToString("N0")
+                                @if (tier.MaxQuantity.HasValue)
+                                {
+                                    <span> - @tier.MaxQuantity.Value.ToString("N0")</span>
+                                }
+                                else
+                                {
+                                    <span>+</span>
+                                }
+                                <span class="text-gray-500 font-normal">@L["Pieces"]</span>
+                            </p>
+                        </div>
+
+                        <!-- Benefits List -->
+                        @if (tier.Benefits.Any())
+                        {
+                            <div class="space-y-3 pt-4 border-t border-gray-100">
+                                @foreach (var benefit in tier.Benefits)
+                                {
+                                    <div class="flex items-center gap-3">
+                                        <span class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
+                                            <i class="ph-bold ph-check text-green-600 text-xs"></i>
+                                        </span>
+                                        <span class="text-gray-700 text-sm">@benefit</span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <!-- Empty State -->
+            <div class="text-center py-16">
+                <i class="ph ph-percent text-6xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500 text-lg">@L["NoDiscountTiers"]</p>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-12 md:py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto text-center" data-aos="fade-up">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                @L["ReadyToOrder"]
+            </h2>
+            <p class="text-gray-600 mb-6">
+                @L["ContactUsForOrder"]
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="https://wa.me/@ViewData["WhatsApp"]" target="_blank"
+                   class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow-lg shadow-green-100 transition-all hover:-translate-y-1">
+                    <i class="ph-fill ph-whatsapp-logo text-xl"></i>
+                    @L["WhatsAppContact"]
+                </a>
+                <a href="/Products"
+                   class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white font-bold rounded-xl shadow-lg transition-all hover:-translate-y-1">
+                    <i class="ph ph-shopping-bag text-xl"></i>
+                    @L["Products"]
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

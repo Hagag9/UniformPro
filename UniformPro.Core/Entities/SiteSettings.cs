@@ -33,5 +33,10 @@ namespace UniformPro.Core.Entities
         public string? InstagramUrl { get; set; }
         public string? YoutubeUrl { get; set; }  
         public string? TikTokUrl { get; set; }   
+
+        // --- محتوى من نحن ---
+        public string? AboutUsAr { get; set; }  // محتوى عربي (HTML من Summernote)
+        public string? AboutUsEn { get; set; }  // محتوى إنجليزي (HTML)
+        public string? OwnerImage { get; set; } // اسم ملف صورة المالك
     }
 }

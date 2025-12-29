@@ -247,6 +247,15 @@
     <value>من نحن</value>
   </data>
   <data name="Welcome" xml:space="preserve">
-    <value>مرحب</value>
+    <value>Welcome</value>
+  </data>
+  <data name="CustomDesign" xml:space="preserve">
+    <value>Customized with Your Logo</value>
+  </data>
+  <data name="PremiumMaterials" xml:space="preserve">
+    <value>Premium Cotton Materials</value>
+  </data>
+  <data name="FastShipping" xml:space="preserve">
+    <value>Fast &amp; Safe Shipping</value>
   </data>
 </root>

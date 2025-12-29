@@ -14,19 +14,36 @@
             <div class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">العنوان (عربي)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">العنوان (عربي) - اختياري</label>
                         <input asp-for="TitleAr" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Title (En)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Title (En) - Optional</label>
                         <input asp-for="TitleEn" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary dir-ltr" style="direction:ltr;">
                     </div>
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">الوصف (عربي) - اختياري</label>
+                        <input asp-for="SubtitleAr" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Subtitle (En) - Optional</label>
+                        <input asp-for="SubtitleEn" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary dir-ltr" style="direction:ltr;">
+                    </div>
+                </div>
+
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">صورة الخلفية (مطلوب)</label>
-                    <input type="file" name="imageFile" accept="image/*" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-primary hover:file:bg-green-100" />
-                    <p class="text-xs text-gray-500 mt-1">يفضل مقاس 1920x800 بيكسل</p>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">صورة الديسكتوب (مطلوب)</label>
+                    <input type="file" name="desktopImage" accept="image/*" required onchange="validateFileInput(this, ['image'], 5)" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-primary hover:file:bg-green-100" />
+                    <p class="text-xs text-gray-500 mt-1">يفضل مقاس عرضي (Landscape) مثل 1920x800</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">صورة الموبايل (اختياري)</label>
+                    <input type="file" name="mobileImage" accept="image/*" onchange="validateFileInput(this, ['image'], 5)" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-primary hover:file:bg-green-100" />
+                    <p class="text-xs text-gray-500 mt-1">يفضل مقاس طولي (Portrait) للموبايل. إذا تركتها فارغة سيتم اقتصاص صورة الديسكتوب.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
