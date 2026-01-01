@@ -78,6 +78,35 @@
         .note-editor .note-modal-footer {
             box-sizing: content-box;
         }
+
+        /* Fix Summernote Color Palette on Mobile */
+        @@media (max-width: 768px) {
+            .note-color-palette {
+                display: flex;
+                flex-wrap: wrap;
+                width: auto !important;
+            }
+            .note-color .dropdown-menu {
+                min-width: 100%;
+                left: 0 !important;
+                right: 0 !important;
+                transform: none !important;
+                position: fixed !important;
+                bottom: 0 !important;
+                top: auto !important;
+                max-height: 50vh;
+                overflow-y: auto;
+                z-index: 9999;
+                border: none;
+                border-radius: 12px 12px 0 0;
+                box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.1);
+            }
+            .note-color .dropdown-menu .note-palette-title {
+                font-size: 14px;
+                margin: 5px 0;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body class="flex h-[100dvh] overflow-hidden text-sm md:text-base font-sans">
@@ -186,7 +215,7 @@
         </nav>
     </div>
     <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
-    <div class="flex-1 flex flex-col h-[100dvh] overflow-hidden relative">
+    <div class="flex-1 flex flex-col h-full overflow-hidden relative">
 
         <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-8 z-10 shadow-sm">
             <div class="flex items-center gap-4">
@@ -203,7 +232,7 @@
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-4 md:p-8 relative scroll-smooth">
+        <main class="flex-1 overflow-y-auto p-4 pb-24 md:p-8 relative scroll-smooth">
             @RenderBody()
         </main>
     </div>
@@ -254,15 +283,39 @@
         }
 
         // 3. Client Check for File Size & Type
+        // 3. Client Check for File Size & Type
         window.validateFileInput = function(input, typeNames, maxSizeMB) {
             const file = input.files[0];
+            // 1. Direct sibling (common case)
+            let helper = $(input).siblings('p.helper-text');
+            
+            // 2. Parent's sibling (for inputs inside flex/wrappers)
+            if (!helper.length) {
+                helper = $(input).parent().next('p.helper-text');
+            }
+
+            // 3. Fallback: Any gray/red text in parent (legacy support)
+            if (!helper.length) {
+                helper = $(input).parent().find('p.text-gray-500, p.text-red-500');
+            }
+
+            // Reset helper style first
+            if (helper.length) {
+                helper.removeClass('text-red-500').addClass('text-gray-500');
+                // Store original text
+                if (!helper.data('original-text')) {
+                     helper.data('original-text', helper.text());
+                }
+                helper.text(helper.data('original-text'));
+            }
+
             if (!file) return true;
-    
+
             const allowedTypes = {
                 'image': ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'],
-                'video': ['video/mp4', 'video/webm', 'video/quicktime']
+                'video': ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-matroska']
             };
-    
+
             // Type check
             let valid = false;
             for (let t of typeNames) {
@@ -270,27 +323,42 @@
             }
             
             if (!valid) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'نوع الملف غير مدعوم',
-                    text: 'الصيغ المدعومة: ' + typeNames.join(', ')
-                });
-                input.value = '';
+                 // Error UI
+                if (helper.length) {
+                    helper.removeClass('text-gray-500').addClass('text-red-500');
+                    helper.text('عفواً، هذا الملف غير مدعوم. الصيغ المسموحة: ' + typeNames.join(', '));
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'نوع الملف غير مدعوم',
+                        text: 'الصيغ المدعومة: ' + typeNames.join(', ')
+                    });
+                }
+               
+                input.value = ''; 
                 return false;
             }
     
             // Size check
             if (file.size > maxSizeMB * 1024 * 1024) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'حجم الملف كبير جداً',
-                    text: `الحد الأقصى ${maxSizeMB} ميجابايت`
-                });
+                 if (helper.length) {
+                    helper.removeClass('text-gray-500').addClass('text-red-500');
+                    helper.text(`عفواً، حجم الملف كبير جداً. الحد الأقصى ${maxSizeMB} ميجابايت.`);
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'حجم الملف كبير جداً',
+                        text: `الحد الأقصى ${maxSizeMB} ميجابايت`
+                    });
+                }
+
                 input.value = '';
                 return false;
             }
             return true;
         }
+
+
 
         // 4. تفعيل Summernote لأي حقل يحمل كلاس richtext
         $(document).ready(function() {

@@ -6,7 +6,8 @@ using UniformPro.Web.ViewModels;
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class ProfileController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;

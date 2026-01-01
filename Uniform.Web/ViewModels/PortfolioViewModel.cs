@@ -17,6 +17,8 @@ namespace UniformPro.Web.ViewModels
         [Required(ErrorMessage = "اختيار القطاع مطلوب")]
         public int CategoryId { get; set; }
 
+        public int DisplayOrder { get; set; }
+
         public bool ShowOnHome { get; set; }
 
         // --- الميديا ---

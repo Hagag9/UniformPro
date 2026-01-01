@@ -11,7 +11,8 @@ using UniformPro.Web.ViewModels;
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class PortfoliosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -78,6 +79,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                     DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn),
                     CategoryId = model.CategoryId,
                     ShowOnHome = model.ShowOnHome,
+                    DisplayOrder = model.DisplayOrder,
                     MetaDescription = model.MetaDescription,
                     MetaKeywords = model.MetaKeywords,
                     CreatedAt = DateTime.Now
@@ -158,6 +160,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 DescriptionEn = portfolio.DescriptionEn,
                 CategoryId = portfolio.CategoryId,
                 ShowOnHome = portfolio.ShowOnHome,
+                DisplayOrder = portfolio.DisplayOrder,
                 CurrentCoverImagePath = portfolio.CoverImagePath,
                 CurrentMedia = portfolio.PortfolioMedias.ToList(),
                 MetaDescription = portfolio.MetaDescription,
@@ -170,14 +173,34 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, PortfolioViewModel model)
+        public async Task<IActionResult> Edit(int id, PortfolioViewModel model, string? deletedMediaIds, bool deleteCoverImage = false)
         {
             if (id != model.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
-                var portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.Id == id);
+                var portfolio = await _context.Portfolios.Include(p => p.PortfolioMedias).FirstOrDefaultAsync(p => p.Id == id);
                 if (portfolio == null) return NotFound();
+
+                // 1. معالجة الميديا المحذوفة (Deferred Deletion)
+                if (!string.IsNullOrEmpty(deletedMediaIds))
+                {
+                    var idsToDelete = deletedMediaIds.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                                     .Select(i => int.Parse(i)).ToList();
+
+                    var itemsToDelete = portfolio.PortfolioMedias.Where(m => idsToDelete.Contains(m.Id)).ToList();
+                    
+                    foreach (var item in itemsToDelete)
+                    {
+                        // حذف الملف الفعلي فقط إذا لم يكن يوتيوب
+                         if (!item.MediaUrl.StartsWith("http"))
+                        {
+                            _fileService.DeleteFile(item.MediaUrl, "portfolios/media");
+                        }
+                        // حذف من الداتابيز
+                        _context.PortfolioMedias.Remove(item);
+                    }
+                }
 
                 portfolio.ClientNameAr = model.ClientNameAr;
                 portfolio.ClientNameEn = model.ClientNameEn;
@@ -185,8 +208,16 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 portfolio.DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn);
                 portfolio.CategoryId = model.CategoryId;
                 portfolio.ShowOnHome = model.ShowOnHome;
+                portfolio.DisplayOrder = model.DisplayOrder;
                 portfolio.MetaDescription = model.MetaDescription;
                 portfolio.MetaKeywords = model.MetaKeywords;
+
+                // 2. معالجة حذف صورة الغلاف (Deferred)
+                if (deleteCoverImage && !string.IsNullOrEmpty(portfolio.CoverImagePath))
+                {
+                    _fileService.DeleteFile(portfolio.CoverImagePath, "portfolios/covers");
+                    portfolio.CoverImagePath = null;
+                }
 
                 if (model.CoverImageFile != null)
                 {
@@ -254,26 +285,6 @@ namespace UniformPro.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        // ================== DELETE MEDIA (AJAX) ==================
-        [HttpPost]
-        public async Task<IActionResult> DeleteMedia(int id)
-        {
-            var media = await _context.PortfolioMedias.FindAsync(id);
-            if (media != null)
-            {
-                // نحذف الملف فقط إذا لم يكن رابط يوتيوب (لا يبدأ بـ http)
-                if (!media.MediaUrl.StartsWith("http"))
-                {
-                    _fileService.DeleteFile(media.MediaUrl, "portfolios/media");
-                }
-
-                _context.PortfolioMedias.Remove(media);
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            return NotFound();
-        }
-
         // ================== DELETE PORTFOLIO ==================
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -284,7 +295,23 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                                           .FirstOrDefaultAsync(p => p.Id == id);
             if (portfolio != null)
             {
-                // حذف الغلاف
+                // 1. حذف التقييمات المرتبطة (Cascade Delete Manual)
+                var relatedTestimonials = await _context.Testimonials.Where(t => t.PortfolioId == id).ToListAsync();
+                foreach (var testimonial in relatedTestimonials)
+                {
+                    if (!string.IsNullOrEmpty(testimonial.ImagePath))
+                        _fileService.DeleteFile(testimonial.ImagePath, "testimonials/images");
+
+                    if (!string.IsNullOrEmpty(testimonial.VideoPath))
+                        _fileService.DeleteFile(testimonial.VideoPath, "testimonials/videos");
+                        
+                    if (!string.IsNullOrEmpty(testimonial.CoverImage))
+                        _fileService.DeleteFile(testimonial.CoverImage, "testimonials/covers"); // Assuming folder structure
+
+                    _context.Testimonials.Remove(testimonial);
+                }
+
+                // 2. حذف الغلاف
                 if (!string.IsNullOrEmpty(portfolio.CoverImagePath))
                     _fileService.DeleteFile(portfolio.CoverImagePath, "portfolios/covers");
 

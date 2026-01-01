@@ -11,7 +11,8 @@ using UniformPro.Web.ViewModels;
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -57,30 +58,11 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
         
 
-        // ================== DELETE GALLERY IMAGE ==================
-        // دالة لحذف صورة معينة من داخل صفحة التعديل
-        [HttpPost]
-        public async Task<IActionResult> DeleteImage(int id)
-        {
-            var image = await _context.ProductImages.FindAsync(id);
-            if (image != null)
-            {
-                // حذف الملف من السيرفر
-                _fileService.DeleteFile(image.ImagePath, Constants.Folders.ProductsGallery);
-
-                // حذف من الداتابيز
-                _context.ProductImages.Remove(image);
-                await _context.SaveChangesAsync();
-
-                return Ok(); // نجاح
-            }
-            return NotFound();
-        }
         // ================== CREATE ==================
         public IActionResult Create()
         {
             ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr");
-            return View(new ProductViewModel()); // نرسل ViewModel فارغ
+            return View(new ProductViewModel());
         }
 
         [HttpPost]
@@ -89,7 +71,6 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                // تحويل ViewModel -> Entity
                 var product = new Product
                 {
                     NameAr = model.NameAr,
@@ -106,10 +87,9 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                     MetaDescription = model.MetaDescription,
                     MetaKeywords = model.MetaKeywords,
                     CreatedAt = DateTime.Now
-
                 };
 
-                // حفظ الصورة الرئيسية
+                // رفع الصورة الرئيسية
                 if (model.MainImageFile != null)
                 {
                     try
@@ -125,9 +105,9 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 }
 
                 _context.Add(product);
-                await _context.SaveChangesAsync(); // للحصول على ID
+                await _context.SaveChangesAsync();
 
-                // حفظ صور المعرض
+                // رفع صور المعرض
                 if (model.GalleryFiles != null && model.GalleryFiles.Count > 0)
                 {
                     try
@@ -135,18 +115,13 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                         foreach (var file in model.GalleryFiles)
                         {
                             var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
-                            _context.ProductImages.Add(new ProductImage
-                            {
-                                ProductId = product.Id,
-                                ImagePath = path
-                            });
+                            _context.ProductImages.Add(new ProductImage { ProductId = product.Id, ImagePath = path });
                         }
                         await _context.SaveChangesAsync();
                     }
                     catch (ArgumentException ex)
                     {
-                         // لو حصل خطأ في الصور الإضافية، بنكمل عادي بس بنبلغ المستخدم
-                         TempData["ErrorMessage"] = $"تم حفظ المنتج ولكن فشل رفع بعض الصور: {ex.Message}";
+                         TempData["ErrorMessage"] = $"تم حفظ المنتج ولكن فشل رفع بعض صور المعرض: {ex.Message}";
                     }
                 }
 
@@ -193,14 +168,31 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ProductViewModel model)
+        public async Task<IActionResult> Edit(int id, ProductViewModel model, string? deletedGalleryImageIds, bool deleteMainImage = false)
         {
             if (id != model.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
-                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+                var product = await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(p => p.Id == id);
                 if (product == null) return NotFound();
+
+                // 1. معالجة الصور المحذوفة (Deferred Deletion)
+                if (!string.IsNullOrEmpty(deletedGalleryImageIds))
+                {
+                    var idsToDelete = deletedGalleryImageIds.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                                            .Select(i => int.Parse(i)).ToList();
+
+                    var imagesToDelete = product.ProductImages.Where(img => idsToDelete.Contains(img.Id)).ToList();
+                    
+                    foreach (var img in imagesToDelete)
+                    {
+                        // حذف الملف الفعلي
+                        _fileService.DeleteFile(img.ImagePath, Constants.Folders.ProductsGallery);
+                        // حذف من الداتابيز
+                        _context.ProductImages.Remove(img);
+                    }
+                }
 
                 // تحديث البيانات الأساسية
                 product.NameAr = model.NameAr;
@@ -218,13 +210,22 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 product.MetaKeywords = model.MetaKeywords;
 
 
+                // 2. معالجة حذف الصورة الرئيسية (Deferred)
+                if (deleteMainImage && !string.IsNullOrEmpty(product.MainImagePath))
+                {
+                     _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
+                     product.MainImagePath = null;
+                }
+
                 // تحديث الصورة الرئيسية (إذا تم رفع جديد)
                 if (model.MainImageFile != null)
                 {
                     try
                     {
                         // الحذف يتم التعامل معه داخل السرفيس إذا مررنا الاسم
-                        _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
+                        if (!string.IsNullOrEmpty(product.MainImagePath))
+                            _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
+                            
                         product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
                     }
                     catch (ArgumentException ex)

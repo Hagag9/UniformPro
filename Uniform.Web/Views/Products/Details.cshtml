@@ -242,10 +242,7 @@
                             </div>
                             <div class="p-4">
                                 <h3 class="font-bold text-gray-800 line-clamp-2 group-hover:text-gray-600 transition-colors">@(isArabic ? product.NameAr : product.NameEn)</h3>
-                                @if (product.StartPrice.HasValue)
-                                {
-                                    <p class="text-gray-800 font-bold mt-2 text-sm">@L["StartingFrom"] @product.StartPrice?.ToString("N0") @L["EGP"]</p>
-                                }
+                                
                             </div>
                         </div>
                     </a>

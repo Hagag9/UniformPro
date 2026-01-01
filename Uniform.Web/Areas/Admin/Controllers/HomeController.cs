@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Identity;
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -31,17 +32,17 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 // 2. عدد الرسائل غير المقروءة (المهمة للمدير)
                 UnreadMessagesCount = await _context.ContactMessages.CountAsync(m => !m.IsRead),
 
-                // 3. جلب آخر 5 رسائل (الأحدث أولاً)
+                // 3. جلب آخر 4 رسائل (الأحدث أولاً)
                 RecentMessages = await _context.ContactMessages
                                                .OrderByDescending(m => m.SentAt)
-                                               .Take(5)
+                                               .Take(4)
                                                .ToListAsync(),
 
-                // 4. جلب أحدث 5 منتجات مضافة (مع القسم الخاص بها)
+                // 4. جلب أحدث 4 منتجات مضافة (مع القسم الخاص بها)
                 RecentProducts = await _context.Products
                                                .Include(p => p.Category)
                                                .OrderByDescending(p => p.CreatedAt)
-                                               .Take(5)
+                                               .Take(4)
                                                .ToListAsync()
             };
 

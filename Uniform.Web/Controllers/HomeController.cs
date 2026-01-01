@@ -37,6 +37,37 @@ namespace UniformPro.Web.Controllers
 
             ViewBag.HeroItems = heroItems;
             ViewBag.LatestProducts = featuredProducts;
+
+            // جلب أعمالنا السابقة المختارة للعرض في الرئيسية
+            var homePortfolios = await _context.Portfolios
+                .AsNoTracking()
+                .Where(p => p.ShowOnHome)
+                .OrderBy(p => p.DisplayOrder)
+                .ThenByDescending(p => p.CreatedAt)
+                .Select(p => new UniformPro.Web.ViewModels.PortfolioCardViewModel
+                {
+                    Id = p.Id,
+                    ClientNameAr = p.ClientNameAr,
+                    ClientNameEn = p.ClientNameEn,
+                    CoverImagePath = p.CoverImagePath,
+                    CategoryNameAr = p.Category.NameAr,
+                    CategoryNameEn = p.Category.NameEn
+                })
+                .ToListAsync();
+
+            ViewBag.HomePortfolios = homePortfolios;
+
+            ViewBag.HomePortfolios = homePortfolios;
+
+            // Fetch Happy Customers (Testimonials)
+            var testimonials = await _context.Testimonials
+                .AsNoTracking()
+                .Where(t => t.IsActive && t.ShowOnHome)
+                .OrderByDescending(t => t.CreatedAt)
+                .ToListAsync();
+
+            ViewBag.Testimonials = testimonials;
+
             return View();
         }
 

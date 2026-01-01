@@ -33,6 +33,7 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
             let timer;
@@ -54,7 +55,6 @@
                             $('#searchSpinner').addClass('hidden');
                         },
                         error: function() {
-                            // alert('خطأ في البحث'); // ممكن تشيلها لو مش عايز تزعج المستخدم
                             $('#searchSpinner').addClass('hidden');
                         }
                     });
@@ -73,12 +73,28 @@
                 success: function(result) {
                     $('#portfolioListContainer').html(result);
                     $('#searchSpinner').addClass('hidden');
-                    // عمل Scroll لأعلى الجدول
                     $('html, body').animate({
                         scrollTop: $("#portfolioListContainer").offset().top - 100
                     }, 500);
                 }
             });
+        }
+
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "سيتم حذف هذا المشروع وكل التقييمات (Link Testimonials) المرتبطة به. لن يمكنك استرجاع البيانات!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، احذف الكل',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                   $('#delete-form-' + id).submit();
+                }
+            })
         }
     </script>
 }

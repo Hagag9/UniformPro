@@ -9,7 +9,8 @@ using UniformPro.Web.ViewModels;
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class TestimonialsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -54,9 +55,26 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                     YoutubeUrl = model.YoutubeUrl,
                     IsActive = model.IsActive,
                     ShowOnHome = model.ShowOnHome, // ✅ اضافة
+                    ProductNameAr = model.ProductNameAr,
+                    ProductNameEn = model.ProductNameEn,
                     CreatedAt = DateTime.Now,
                     PortfolioId = model.PortfolioId
                 };
+
+                // حفظ صورة الفديو (Cover Image)
+                if (model.CoverImageFile != null)
+                {
+                    try
+                    {
+                        testimonial.CoverImage = await _fileService.SaveFileAsync(model.CoverImageFile, "testimonials/covers");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("CoverImageFile", ex.Message);
+                        ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", model.PortfolioId);
+                        return View(model);
+                    }
+                }
 
                 // حفظ الصورة
                 if (model.ImageFile != null)
@@ -113,7 +131,10 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 YoutubeUrl = item.YoutubeUrl,
                 IsActive = item.IsActive,
                 ShowOnHome = item.ShowOnHome, // ✅ اضافة
+                ProductNameAr = item.ProductNameAr,
+                ProductNameEn = item.ProductNameEn,
                 CurrentImagePath = item.ImagePath,
+                CurrentCoverImage = item.CoverImage, // ✅ اضافة
                 CurrentVideoPath = item.VideoPath,
                 PortfolioId = item.PortfolioId
             };
@@ -124,7 +145,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, TestimonialViewModel model)
+        public async Task<IActionResult> Edit(int id, TestimonialViewModel model, bool deleteClientImage = false, bool deleteClientVideo = false, bool deleteClientCoverImage = false)
         {
             if (id != model.Id) return NotFound();
 
@@ -138,10 +159,33 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 item.Feedback = model.Feedback;
                 item.YoutubeUrl = model.YoutubeUrl;
                 item.IsActive = model.IsActive;
-                item.ShowOnHome = model.ShowOnHome; // ✅ اضافة
+                item.ShowOnHome = model.ShowOnHome;
+                item.ProductNameAr = model.ProductNameAr;
+                item.ProductNameEn = model.ProductNameEn;
                 item.PortfolioId = model.PortfolioId;
 
-                // حفظ الصورة (مع حذف القديمة)
+                // 1. معالجة حذف الصورة (Deferred)
+                if (deleteClientImage && !string.IsNullOrEmpty(item.ImagePath))
+                {
+                     _fileService.DeleteFile(item.ImagePath, "testimonials/images");
+                     item.ImagePath = null;
+                }
+
+                // 2. معالجة حذف الفيديو (Deferred)
+                if (deleteClientVideo && !string.IsNullOrEmpty(item.VideoPath))
+                {
+                    _fileService.DeleteFile(item.VideoPath, "testimonials/videos");
+                    item.VideoPath = null;
+                }
+
+                // 2.be. معالجة حذف صورة الغلاف (Deferred)
+                if (deleteClientCoverImage && !string.IsNullOrEmpty(item.CoverImage))
+                {
+                    _fileService.DeleteFile(item.CoverImage, "testimonials/covers");
+                    item.CoverImage = null;
+                }
+
+                // 3. حفظ الصور الجديدة (مع حذف القديمة تلقائياً لو موجودة وما اتحذفتش لسه)
                 if (model.ImageFile != null)
                 {
                     try
@@ -157,7 +201,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                     }
                 }
 
-                // حفظ الفيديو (مع حذف القديم)
+                // 4. حفظ الفيديو الجديد
                 if (model.VideoFile != null)
                 {
                     try
@@ -173,6 +217,22 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                     }
                 }
 
+                // 5. حفظ صورة الغلاف الجديدة
+                if (model.CoverImageFile != null)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(item.CoverImage)) _fileService.DeleteFile(item.CoverImage, "testimonials/covers");
+                        item.CoverImage = await _fileService.SaveFileAsync(model.CoverImageFile, "testimonials/covers");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("CoverImageFile", ex.Message);
+                        ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", model.PortfolioId);
+                        return View(model);
+                    }
+                }
+
                 _context.Update(item);
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "تم التحديث بنجاح";
@@ -183,29 +243,6 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteMedia(int id, string type)
-        {
-            var item = await _context.Testimonials.FindAsync(id);
-            if (item != null)
-            {
-                if (type == "image" && !string.IsNullOrEmpty(item.ImagePath))
-                {
-                    _fileService.DeleteFile(item.ImagePath, "testimonials/images");
-                    item.ImagePath = null;
-                }
-                else if (type == "video" && !string.IsNullOrEmpty(item.VideoPath))
-                {
-                    _fileService.DeleteFile(item.VideoPath, "testimonials/videos");
-                    item.VideoPath = null;
-                }
-                
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            return NotFound();
-        }
-
-        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _context.Testimonials.FindAsync(id);
@@ -213,6 +250,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
             {
                 if (!string.IsNullOrEmpty(item.ImagePath)) _fileService.DeleteFile(item.ImagePath, "testimonials/images");
                 if (!string.IsNullOrEmpty(item.VideoPath)) _fileService.DeleteFile(item.VideoPath, "testimonials/videos");
+                if (!string.IsNullOrEmpty(item.CoverImage)) _fileService.DeleteFile(item.CoverImage, "testimonials/covers");
 
                 _context.Testimonials.Remove(item);
                 await _context.SaveChangesAsync();

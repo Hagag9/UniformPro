@@ -36,6 +36,19 @@ namespace UniformPro.Infrastructure.Data
             builder.Entity<DiscountTier>()
                 .Property(d => d.DiscountPercentage)
                 .HasPrecision(5, 2);
+
+            // منع الحذف التلقائي للتصنيفات المرتبطة بمنتجات أو مشاريع (Restrict Deletion)
+            builder.Entity<Category>()
+                .HasMany(c => c.Products)
+                .WithOne(p => p.Category)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Category>()
+                .HasMany(c => c.Portfolios)
+                .WithOne(p => p.Category)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

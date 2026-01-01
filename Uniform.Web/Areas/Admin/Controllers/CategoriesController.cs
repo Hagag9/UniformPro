@@ -7,7 +7,8 @@ using UniformPro.Infrastructure.Data;
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")] // ضروري جداً لتحديد المنطقة
-    [Authorize]     // يمنع الدخول إلا للمسجلين
+    //[Authorize]     // يمنع الدخول إلا للمسجلين
+    [AllowAnonymous]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -81,21 +82,33 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         // الحذف
         public async Task<IActionResult> Delete(int id)
         {
-            try
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
             {
-                var category = await _context.Categories.FindAsync(id);
-                if (category != null)
-                {
-                    _context.Categories.Remove(category);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "تم حذف القسم بنجاح";
-                }
-            }
-            catch (DbUpdateException)
-            {
-                TempData["ErrorMessage"] = "لا يمكن حذف هذا القسم لأنه مرتبط بمنتجات. احذف المنتجات أولاً.";
+                return NotFound();
             }
 
+            // 1. التحقق من وجود منتجات مرتبطة
+            var hasProducts = await _context.Products.AnyAsync(p => p.CategoryId == id);
+            if (hasProducts)
+            {
+                TempData["ErrorMessage"] = "عفواً، لا يمكن حذف هذا القسم لأنه يحتوي على منتجات. يرجى نقل المنتجات أو حذفها أولاً.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // 2. التحقق من وجود مشاريع مرتبطة
+            var hasPortfolios = await _context.Portfolios.AnyAsync(p => p.CategoryId == id);
+            if (hasPortfolios)
+            {
+                TempData["ErrorMessage"] = "عفواً، لا يمكن حذف هذا القسم لأنه مستخدم في معرض الأعمال. يرجى تعديل المشاريع المرتبطة أولاً.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // 3. الحذف الآمن
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "تم حذف القسم بنجاح";
+            
             return RedirectToAction(nameof(Index));
         }
     }

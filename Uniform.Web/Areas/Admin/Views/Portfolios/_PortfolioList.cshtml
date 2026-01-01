@@ -1,72 +1,92 @@
 ﻿@using UniformPro.Web.Helpers
 @model PaginatedList<UniformPro.Core.Entities.Portfolio>
 
-<div id="portfolioContainer">
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-6">
-        @if (Model.Count == 0)
-        {
-            <div class="col-span-full text-center py-12 bg-white rounded-lg border border-dashed border-gray-300">
-                <i class="ph ph-magnifying-glass text-4xl text-gray-300 mb-3 block"></i>
-                <p class="text-gray-500">لا توجد مشاريع تطابق بحثك</p>
-            </div>
-        }
-
-        @foreach (var item in Model)
-        {
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow flex flex-col">
-                <div class="relative h-32 bg-gray-100 group">
-                    @if (!string.IsNullOrEmpty(item.CoverImagePath))
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    @if (Model.Count == 0)
+    {
+        <div class="text-center py-12">
+            <i class="ph ph-magnifying-glass text-4xl text-gray-300 mb-3 block"></i>
+            <p class="text-gray-500">لا توجد مشاريع تطابق بحثك</p>
+        </div>
+    }
+    else
+    {
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-right">
+                <thead class="bg-gray-50 text-gray-700 border-b custom-font font-bold">
+                    <tr>
+                        <th class="px-4 py-3 w-20">الصورة</th>
+                        <th class="px-4 py-3">اسم العميل</th>
+                        <th class="px-4 py-3 w-24">الترتيب</th>
+                        <th class="px-4 py-3 w-24">عرض في الرئيسية</th>
+                        <th class="px-4 py-3 w-32 text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    @foreach (var item in Model)
                     {
-                        <img src="~/uploads/portfolios/covers/@item.CoverImagePath" alt="Cover" class="w-full h-full object-cover">
+                        <tr class="hover:bg-gray-50 transition-colors group">
+                            <td class="px-4 py-3">
+                                <div class="w-12 h-12 rounded-md overflow-hidden bg-gray-100 border">
+                                    @if (!string.IsNullOrEmpty(item.CoverImagePath))
+                                    {
+                                        <img src="~/uploads/portfolios/covers/@item.CoverImagePath" alt="Cover" class="w-full h-full object-cover">
+                                    }
+                                    else
+                                    {
+                                        <div class="flex items-center justify-center h-full text-gray-400"><i class="ph ph-image text-xl"></i></div>
+                                    }
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 font-medium text-gray-900">@item.ClientNameAr</td>
+                            <td class="px-4 py-3">
+                                <span class="text-gray-600 font-mono">@item.DisplayOrder</span>
+                            </td>
+                            <td class="px-4 py-3">
+                                @if (item.ShowOnHome)
+                                {
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                        <i class="ph-bold ph-check"></i> نعم
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                                        لا
+                                    </span>
+                                }
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 w-8 h-8 flex items-center justify-center rounded-lg transition-colors" title="تعديل">
+                                        <i class="ph-bold ph-pencil-simple"></i>
+                                    </a>
+                                    <button type="button" onclick="confirmDelete(@item.Id)" class="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 w-8 h-8 flex items-center justify-center rounded-lg transition-colors" title="حذف">
+                                        <i class="ph-bold ph-trash"></i>
+                                    </button>
+                                </div>
+                                <form id="delete-form-@item.Id" asp-action="Delete" asp-route-id="@item.Id" method="post" class="hidden"></form>
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <div class="flex items-center justify-center h-full text-gray-400"><i class="ph ph-image text-3xl"></i></div>
-                    }
-
-                    <div class="absolute top-2 right-2 flex gap-1">
-                        @if (item.ShowOnHome)
-                        {
-                            <span class="bg-green-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm cursor-help" title="يعرض في الرئيسية">Home</span>
-                        }
-                    </div>
-                </div>
-
-                <div class="p-3 flex flex-col flex-grow">
-                    <div class="mb-2">
-                        <h3 class="font-bold text-sm text-gray-800 line-clamp-1" title="@item.ClientNameAr">@item.ClientNameAr</h3>
-                        <div class="flex items-center justify-between mt-1">
-                             <span class="text-[10px] text-gray-500 bg-gray-100 px-1.5 rounded">@item.Category.NameAr</span>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-auto flex gap-2 pt-2 border-t border-gray-100">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="flex-1 bg-blue-50 text-blue-600 py-1.5 rounded text-center hover:bg-blue-100 transition-colors" title="تعديل">
-                            <i class="ph-bold ph-pencil-simple text-sm"></i>
-                        </a>
-                        <button type="button" onclick="confirmDelete(@item.Id, this)" class="flex-1 bg-red-50 text-red-600 py-1.5 rounded text-center hover:bg-red-100 transition-colors" title="حذف">
-                            <i class="ph-bold ph-trash text-sm"></i>
-                        </button>
-                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="hidden"></form>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+                </tbody>
+            </table>
+        </div>
+    }
 
     @if (Model.TotalPages > 1)
     {
-        <div class="flex justify-between items-center bg-gray-50/50 p-4 rounded-lg border border-gray-200">
+        <div class="flex justify-between items-center p-4 border-t bg-gray-50">
             <span class="text-sm text-gray-500">
                 صفحة @Model.PageIndex من @Model.TotalPages
             </span>
             <div class="flex gap-2">
-                <a href="@Url.Action("Index", new { pageNumber = Model.PageIndex - 1, searchString = ViewData["CurrentFilter"] })"
+                <a href="javascript:void(0)" onclick="loadPage(@(Model.PageIndex - 1))"
                    class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white hover:bg-gray-50 text-gray-700 @(!Model.HasPreviousPage ? "pointer-events-none opacity-50" : "")">
                     السابق
                 </a>
 
-                <a href="@Url.Action("Index", new { pageNumber = Model.PageIndex + 1, searchString = ViewData["CurrentFilter"] })"
+                <a href="javascript:void(0)" onclick="loadPage(@(Model.PageIndex + 1))"
                    class="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white hover:bg-gray-50 text-gray-700 @(!Model.HasNextPage ? "pointer-events-none opacity-50" : "")">
                     التالي
                 </a>

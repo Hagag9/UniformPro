@@ -7,7 +7,8 @@ using UniformPro.Infrastructure.Data;
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class DiscountTiersController : Controller
     {
         private readonly ApplicationDbContext _context;

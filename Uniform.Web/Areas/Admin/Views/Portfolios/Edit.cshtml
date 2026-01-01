@@ -4,34 +4,41 @@
 }
 
 <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-bold text-gray-800">تعديل: @Model.ClientNameAr</h2>
-        <a asp-action="Index" class="text-gray-500 hover:text-gray-700">عودة</a>
-    </div>
-
     <form asp-action="Edit" enctype="multipart/form-data">
         <input type="hidden" asp-for="Id" />
+        <input type="hidden" name="DeletedMediaIds" id="DeletedMediaIds" value="" />
+        <input type="hidden" name="DeleteCoverImage" id="DeleteCoverImage" value="false" />
         
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
+                <h2 class="text-xl font-bold text-gray-800">تعديل: @Model.ClientNameAr</h2>
+                
+                <div class="flex items-center bg-white px-3 py-1.5 rounded-md shadow-sm border border-gray-200 w-full md:w-auto">
+                    <input asp-for="ShowOnHome" type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                    <label asp-for="ShowOnHome" class="mr-2 text-sm font-bold text-gray-700 select-none cursor-pointer">عرض في الصفحة الرئيسية</label>
+                </div>
+            </div>
+            <a asp-action="Index" class="text-gray-500 hover:text-gray-700 self-end md:self-auto">عودة</a>
+        </div>
    
-
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
             <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">💼 بيانات المشروع</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">اسم العميل (عربي)</label>
-                    <input asp-for="ClientNameAr" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                    <input asp-for="ClientNameAr" autocomplete="off" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Client Name (En)</label>
-                    <input asp-for="ClientNameEn" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary dir-ltr" style="direction:ltr;">
+                    <input asp-for="ClientNameEn" autocomplete="off" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary dir-ltr" style="direction:ltr;">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">القطاع</label>
                     <select asp-for="CategoryId" class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white" asp-items="ViewBag.CategoryId"></select>
                 </div>
-                <div class="flex items-center pt-6">
-                    <input asp-for="ShowOnHome" type="checkbox" class="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary">
-                    <label asp-for="ShowOnHome" class="mr-2 text-sm font-medium text-gray-700">عرض في الصفحة الرئيسية</label>
+                <div>
+                     <label class="block text-sm font-medium text-gray-700 mb-1">ترتيب العرض (Display Order)</label>
+                     <input asp-for="DisplayOrder" type="number" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -52,14 +59,18 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">الغلاف الحالي</label>
-                    <div class="mb-4">
+                    <div class="mb-4 relative group" id="coverContainer">
                         @if (!string.IsNullOrEmpty(Model.CurrentCoverImagePath))
                         {
                             <img src="~/uploads/portfolios/covers/@Model.CurrentCoverImagePath" class="h-48 w-full object-cover rounded border">
+                            <button type="button" onclick="markCoverForDeletion()"
+                                    class="absolute top-1 left-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg transform hover:scale-110"
+                                    title="حذف الغلاف">
+                                <i class="ph-bold ph-trash text-xs"></i>
+                            </button>
                         }
                         else
                         {
-
                             <span class="text-gray-400">لا يوجد غلاف</span>
                         }
                     </div>
@@ -71,6 +82,7 @@
                     </div>
                     <input type="file" name="coverImageFile" id="coverInput" accept="image/*" onchange="if(validateFileInput(this, ['image'], 5)) previewCover(this)"
                            class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-600 hover:file:bg-purple-100" />
+                    <p class="text-xs text-gray-500 mt-1 helper-text">الصيغ المدعومة: JPG, PNG, WEBP. الحد الأقصى: 5 ميجابايت.</p>
                 </div>
 
                 <div>
@@ -89,7 +101,7 @@
                                         <i class="ph-fill @(media.MediaUrl.StartsWith("http") ? "ph-youtube-logo text-red-500" : "ph-video-camera") text-3xl"></i>
                                     </div>
                                 }
-                                <button type="button" onclick="deleteMedia(@media.Id)" class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-red-700" title="حذف">
+                                <button type="button" onclick="markMediaForDeletion(@media.Id)" class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-red-700" title="حذف (عند الحفظ)">
                                     <i class="ph-bold ph-trash text-xs"></i>
                                 </button>
                             </div>
@@ -102,8 +114,22 @@
 
                         <input type="file" name="mediaFiles" id="mediaInput" multiple accept="image/*,video/*" onchange="validateFileInput(this, ['image', 'video'], 20)"
                                class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-600 hover:file:bg-purple-100 mb-4" />
+                        <p class="text-xs text-gray-500 mt-1 mb-3 helper-text">صور أو فيديوهات. الحد الأقصى للفيديو 20MB. الصيغ: JPG, PNG, GIF, MP4.</p>
 
-                        <div id="youtube-container" class="space-y-2 mb-2"></div>
+                        <div id="youtube-container" class="space-y-2 mb-2">
+                             @if (Model.CurrentMedia != null)
+                             {
+                                 foreach (var media in Model.CurrentMedia.Where(m => m.Type == UniformPro.Core.Entities.MediaType.Video && m.MediaUrl.StartsWith("http")))
+                                 {
+                                     <div class="relative" id="youtube-edit-@media.Id">
+                                         <input type="text" value="@media.MediaUrl" readonly class="w-full border border-gray-300 bg-gray-50 rounded-md px-3 py-2 text-xs dir-ltr" style="direction:ltr;">
+                                         <button type="button" onclick="markMediaForDeletion(@media.Id); $('#youtube-edit-@media.Id').remove();" class="absolute top-2 right-2 text-red-500 hover:text-red-700" title="حذف">
+                                             <i class="ph-bold ph-trash"></i>
+                                         </button>
+                                     </div>
+                                 }
+                             }
+                        </div>
                         <button type="button" onclick="addYoutubeInput()" class="text-xs text-primary hover:underline flex items-center gap-1"><i class="ph-bold ph-plus"></i> رابط يوتيوب آخر</button>
                     </div>
                 </div>
@@ -147,13 +173,19 @@
         function removeMediaFile(index) { const dt = new DataTransfer(); const { files } = mediaFilesDT; for (let i = 0; i < files.length; i++) if (i !== index) dt.items.add(files[i]); mediaFilesDT = dt; document.getElementById('mediaInput').files = dt.files; renderMediaPreview(); }
         function addYoutubeInput() { var html = `<div class="relative"><input type="text" name="youtubeUrls" placeholder="Link..." class="w-full border border-gray-300 rounded-md px-3 py-2 text-xs dir-ltr" style="direction:ltr;"><button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-500 hover:text-red-700"><i class="ph-bold ph-x"></i></button></div>`; $('#youtube-container').append(html); }
 
-        // === AJAX Delete Existing Media ===
-        function deleteMedia(id) {
-            Swal.fire({ title: 'هل أنت متأكد؟', text: "حذف نهائي!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'حذف' }).then((result) => {
-                if (result.isConfirmed) {
-                    $.post('/Admin/Portfolios/DeleteMedia', { id: id }, function() { $('#media-' + id).fadeOut(); Swal.fire('تم!', 'تم الحذف.', 'success'); }).fail(function() { Swal.fire('خطأ', 'فشل الحذف', 'error'); });
-                }
-            })
+        // === Deferred Deletion Logic ===
+        let deletedMediaIds = [];
+        function markMediaForDeletion(id) {
+            if (!deletedMediaIds.includes(id)) {
+                deletedMediaIds.push(id);
+                $('#DeletedMediaIds').val(deletedMediaIds.join(','));
+                $('#media-' + id).fadeOut();
+            }
+        }
+        
+        function markCoverForDeletion() {
+            $('#DeleteCoverImage').val('true');
+            $('#coverContainer').fadeOut();
         }
     </script>
 }

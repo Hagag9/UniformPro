@@ -21,7 +21,7 @@ namespace UniformPro.Core.Helpers
         {
             if (string.IsNullOrEmpty(url)) return "";
             
-            var regex = new Regex(@"(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^""&?\/\s]{11})");
+            var regex = new Regex(@"(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^""&?\/\s]{11})");
             var match = regex.Match(url);
             
             return match.Success ? match.Groups[1].Value : "";

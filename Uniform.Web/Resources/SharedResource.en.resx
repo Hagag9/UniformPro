@@ -291,4 +291,79 @@
   <data name="CheckDiscountPolicy" xml:space="preserve">
     <value>Check Discount Policy</value>
   </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="YourName" xml:space="preserve">
+    <value>Your Name</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Optional</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="CustomersAreSaying" xml:space="preserve">
+    <value>Customers are saying</value>
+  </data>
+  <data name="OurProjects" xml:space="preserve">
+    <value>Our Projects</value>
+  </data>
+  <data name="OurPortfolioDesc" xml:space="preserve">
+    <value>We are proud to provide the best uniform solutions for our success partners in various sectors.</value>
+  </data>
+  <data name="NoProjects" xml:space="preserve">
+    <value>No projects added yet.</value>
+  </data>
+  <data name="LatestProducts" xml:space="preserve">
+    <value>Latest Products</value>
+  </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>View All</value>
+  </data>
+  <data name="NoHeroImages" xml:space="preserve">
+    <value>No hero images added yet</value>
+  </data>
+  <data name="OrderNow" xml:space="preserve">
+    <value>Order Now</value>
+  </data>
+  <data name="PreviousWork" xml:space="preserve">
+    <value>Our Previous Work</value>
+  </data>
+  <data name="ValueProp_Heading" xml:space="preserve">
+    <value>We create uniforms that confidently reflect your brand identity every workday.</value>
+  </data>
+  <data name="ValueProp_Desc" xml:space="preserve">
+    <value>Because your team's appearance is part of your success story, we've designed a collection that combines style and functionality. Our uniforms are made from sustainable, easy-care, and easy-to-clean materials, ensuring your team's comfort and impeccable appearance, whatever the work environment.</value>
+  </data>
+  <data name="WhyMano" xml:space="preserve">
+    <value>WHY MANO UNIFORM?</value>
+  </data>
+  <data name="Feat_Tailoring_Title" xml:space="preserve">
+    <value>Tailored Perfection</value>
+  </data>
+  <data name="Feat_Tailoring_Desc" xml:space="preserve">
+    <value>Expertly crafted uniforms tailored to fit your team's specific needs.</value>
+  </data>
+  <data name="Feat_Quality_Title" xml:space="preserve">
+    <value>Premium &amp; Durable</value>
+  </data>
+  <data name="Feat_Quality_Desc" xml:space="preserve">
+    <value>High-quality fabrics that maintain their look and feel, wash after wash.</value>
+  </data>
+  <data name="Feat_Partner_Title" xml:space="preserve">
+    <value>Trusted Partner</value>
+  </data>
+  <data name="Feat_Partner_Desc" xml:space="preserve">
+    <value>We build lasting partnerships through reliable service and expert support.</value>
+  </data>
+  <data name="HappyCustomers" xml:space="preserve">
+    <value>Happy Customers!</value>
+  </data>
+  <data name="FromReviews" xml:space="preserve">
+    <value>from our trusted reviews</value>
+  </data>
 </root>

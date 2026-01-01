@@ -70,6 +70,7 @@ namespace UniformPro.Web.Services
                 using (var stream = imageFile.OpenReadStream())
                 using (var image = await Image.LoadAsync(stream))
                 {
+                    image.Mutate(x => x.AutoOrient());
                     // تغيير الحجم إذا كانت الصورة أكبر من MaxWidth
                     if (image.Width > Constants.Images.MaxWidth)
                     {

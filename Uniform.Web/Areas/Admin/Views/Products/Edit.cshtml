@@ -4,26 +4,33 @@
 }
 
 <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-bold text-gray-800">تعديل: @Model.NameAr</h2>
-        <a asp-action="Index" class="text-gray-500 hover:text-gray-700">إلغاء وعودة</a>
-    </div>
-
-    <form asp-action="Edit" enctype="multipart/form-data">
+    <form asp-action="Edit" enctype="multipart/form-data" id="editForm">
         <input type="hidden" asp-for="Id" />
-        
-       
+        <input type="hidden" name="DeletedGalleryImageIds" id="DeletedGalleryImageIds" value="" />
+        <input type="hidden" name="DeleteMainImage" id="DeleteMainImage" value="false" />
+
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
+                <h2 class="text-xl font-bold text-gray-800">تعديل: @Model.NameAr</h2>
+                
+                <div class="flex items-center bg-white px-3 py-1.5 rounded-md shadow-sm border border-gray-200 w-full md:w-auto">
+                    <input asp-for="ShowOnHome" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                    <label asp-for="ShowOnHome" class="mr-2 text-sm font-bold text-gray-700 select-none cursor-pointer">عرض في الرئيسية</label>
+                </div>
+            </div>
+            <a asp-action="Index" class="text-gray-500 hover:text-gray-700 self-end md:self-auto">إلغاء وعودة</a>
+        </div>
 
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
             <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">📦 بيانات المنتج</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">اسم المنتج (عربي)</label>
-                    <input asp-for="NameAr" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                    <input asp-for="NameAr" autocomplete="off" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Name (English)</label>
-                    <input asp-for="NameEn" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary dir-ltr" style="direction:ltr;">
+                    <input asp-for="NameEn" autocomplete="off" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary dir-ltr" style="direction:ltr;">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">القطاع</label>
@@ -31,29 +38,24 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">السعر المبدئي</label>
-                    <input type="number" name="StartPrice" value="@(Model.StartPrice.HasValue ? Model.StartPrice.Value.ToString("0") : "")" 
+                    <input type="number" name="StartPrice" autocomplete="off" value="@(Model.StartPrice.HasValue ? Model.StartPrice.Value.ToString("0") : "")" 
                            class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">أقل كمية</label>
-                    <input asp-for="MinQuantity" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
-                </div>
-
-                <div class="flex items-center mt-6">
-                    <input asp-for="ShowOnHome" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
-                    <label asp-for="ShowOnHome" class="mr-2 text-sm font-bold text-gray-700">عرض في الصفحة الرئيسية (Show on Home)</label>
+                    <input asp-for="MinQuantity" autocomplete="off" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">المقاسات المتاحة</label>
-                    <input asp-for="AvailableSizes" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                    <input asp-for="AvailableSizes" autocomplete="off" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">الخامة (عربي)</label>
-                    <input asp-for="MaterialDetailsAr" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
+                    <input asp-for="MaterialDetailsAr" autocomplete="off" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Material (En)</label>
-                    <input asp-for="MaterialDetailsEn" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary dir-ltr" style="direction:ltr;">
+                    <input asp-for="MaterialDetailsEn" autocomplete="off" class="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-primary dir-ltr" style="direction:ltr;">
                 </div>
             </div>
 
@@ -75,10 +77,15 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">الصورة الرئيسية الحالية</label>
-                    <div class="mb-4">
+                    <div class="mb-4 relative group" id="mainImageContainer">
                         @if (!string.IsNullOrEmpty(Model.CurrentMainImagePath))
                         {
                             <img src="~/uploads/products/@Model.CurrentMainImagePath" class="h-48 rounded border shadow-sm object-cover zoomable cursor-pointer">
+                            <button type="button" onclick="markMainImageForDeletion()"
+                                    class="absolute top-1 left-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg transform hover:scale-110"
+                                    title="حذف الصورة">
+                                <i class="ph-bold ph-trash text-xs"></i>
+                            </button>
                         }
                         else
                         {
@@ -93,6 +100,7 @@
                     </div>
                     <input type="file" name="mainImageFile" id="mainImageInput" accept="image/*" onchange="if(validateFileInput(this, ['image'], 5)) previewMainImage(this)"
                            class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100" />
+                    <p class="text-xs text-gray-500 mt-1 helper-text">الصيغ المدعومة: JPG, PNG, WEBP. الحد الأقصى: 5 ميجابايت.</p>
                 </div>
 
                 <div>
@@ -102,8 +110,8 @@
                         {
                             <div class="relative h-24 border rounded overflow-hidden group shadow-sm" id="img-container-@img.Id">
                                 <img src="~/uploads/products/gallery/@img.ImagePath" class="w-full h-full object-cover">
-                                <button type="button" onclick="deleteServerImage(@img.Id)"
-                                        class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-red-700 transition-colors" title="حذف نهائي">
+                                <button type="button" onclick="markImageForDeletion(@img.Id)"
+                                        class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-red-700 transition-colors" title="حذف (سيتم الحذف عند الحفظ)">
                                     <i class="ph-bold ph-trash text-xs"></i>
                                 </button>
                             </div>
@@ -120,6 +128,7 @@
 
                         <input type="file" name="galleryFiles" id="galleryInput" multiple accept="image/*" onchange="validateFileInput(this, ['image'], 5)"
                                class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100" />
+                         <p class="text-xs text-gray-500 mt-1 helper-text">يمكنك اختيار أكثر من صورة. الصيغ المدعومة: JPG, PNG, WEBP.</p>
                     </div>
                 </div>
             </div>
@@ -153,7 +162,6 @@
 @section Scripts {
     <script>
         // === نفس دوال الـ Create (Main + Gallery Preview) ===
-        // يمكنك وضعها في ملف JS مشترك، أو نسخها هنا
         function previewMainImage(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -188,18 +196,20 @@
             renderGalleryPreview();
         }
 
-        // === دالة حذف الصور القديمة (AJAX) ===
-        function deleteServerImage(imageId) {
-            Swal.fire({
-                title: 'هل أنت متأكد؟', text: "سيتم حذف الصورة نهائياً!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'حذف', cancelButtonText: 'إلغاء'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.post('/Admin/Products/DeleteImage', { id: imageId }, function() {
-                        $('#img-container-' + imageId).fadeOut();
-                        Swal.fire('تم!', 'تم حذف الصورة.', 'success');
-                    }).fail(function() { Swal.fire('خطأ', 'فشل الحذف', 'error'); });
-                }
-            })
+        // === Deferred Deletion Logic ===
+        let deletedImageIds = [];
+        
+        function markImageForDeletion(imageId) {
+            if (!deletedImageIds.includes(imageId)) {
+                deletedImageIds.push(imageId);
+                $('#DeletedGalleryImageIds').val(deletedImageIds.join(','));
+                $('#img-container-' + imageId).fadeOut();
+            }
+        }
+
+        function markMainImageForDeletion() {
+            $('#DeleteMainImage').val('true');
+            $('#mainImageContainer').fadeOut();
         }
     </script>
 }

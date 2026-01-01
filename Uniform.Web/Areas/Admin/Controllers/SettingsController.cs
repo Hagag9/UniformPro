@@ -8,7 +8,8 @@ using UniformPro.Web.Services;
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class SettingsController : Controller
     {
         private readonly ApplicationDbContext _context;

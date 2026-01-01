@@ -300,4 +300,79 @@
   <data name="CheckDiscountPolicy" xml:space="preserve">
     <value>تعرف على سياسة الخصومات</value>
   </data>
+  <data name="Phone" xml:space="preserve">
+    <value>رقم الهاتف</value>
+  </data>
+  <data name="YourName" xml:space="preserve">
+    <value>الاسم بالكامل</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>اسم الشركة</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>اختياري</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>الرسالة</value>
+  </data>
+  <data name="CustomersAreSaying" xml:space="preserve">
+    <value>يقول العملاء عنا</value>
+  </data>
+  <data name="OurProjects" xml:space="preserve">
+    <value>معرض أعمالنا</value>
+  </data>
+  <data name="OurPortfolioDesc" xml:space="preserve">
+    <value>نفتخر بتقديم أفضل حلول الزي الموحد لشركاء النجاح في مختلف القطاعات.</value>
+  </data>
+  <data name="NoProjects" xml:space="preserve">
+    <value>لا توجد مشاريع مضافة حالياً.</value>
+  </data>
+  <data name="LatestProducts" xml:space="preserve">
+    <value>أحدث المنتجات</value>
+  </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>عرض الكل</value>
+  </data>
+  <data name="NoHeroImages" xml:space="preserve">
+    <value>لم يتم إضافة صور للسلايدر بعد</value>
+  </data>
+  <data name="OrderNow" xml:space="preserve">
+    <value>اطلب الآن</value>
+  </data>
+  <data name="PreviousWork" xml:space="preserve">
+    <value>بعض من أعمالنا السابقة</value>
+  </data>
+  <data name="ValueProp_Heading" xml:space="preserve">
+    <value>نصنع لك يونيفورم يعكس هوية علامتك التجارية بكل ثقة في كل يوم عمل</value>
+  </data>
+  <data name="ValueProp_Desc" xml:space="preserve">
+    <value>لأن مظهر فريقك هو جزء من قصة نجاحك، صممنا لك مجموعة تجمع بين الأناقة والعملية. زي موحد مصنوع من خامات مستدامة، سهلة العناية والتنظيف، لتضمن لفريقك الراحة التامة والمظهر المثالي مهما كانت ظروف العمل</value>
+  </data>
+  <data name="WhyMano" xml:space="preserve">
+    <value>لماذا مانو يونيفورم؟</value>
+  </data>
+  <data name="Feat_Tailoring_Title" xml:space="preserve">
+    <value>تفصيل دقيق</value>
+  </data>
+  <data name="Feat_Tailoring_Desc" xml:space="preserve">
+    <value>زي موحد مصنع باحترافية ليناسب احتياجات فريقك بدقة.</value>
+  </data>
+  <data name="Feat_Quality_Title" xml:space="preserve">
+    <value>جودة ومتانة</value>
+  </data>
+  <data name="Feat_Quality_Desc" xml:space="preserve">
+    <value>خامات عالية الجودة تحافظ على مظهرها ورونقها غسلة بعد غسلة.</value>
+  </data>
+  <data name="Feat_Partner_Title" xml:space="preserve">
+    <value>شريك موثوق</value>
+  </data>
+  <data name="Feat_Partner_Desc" xml:space="preserve">
+    <value>نبني شراكات دائمة من خلال خدمة موثوقة ودعم متميز.</value>
+  </data>
+  <data name="HappyCustomers" xml:space="preserve">
+    <value>!عملاء سعداء</value>
+  </data>
+  <data name="FromReviews" xml:space="preserve">
+    <value>من تقييمات عملائنا الموثوقة</value>
+  </data>
 </root>

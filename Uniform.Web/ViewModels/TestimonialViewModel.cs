@@ -10,6 +10,12 @@ namespace UniformPro.Web.ViewModels
         public string ClientName { get; set; }
 
         public string? Position { get; set; }
+        
+        [Display(Name = "اسم المنتج (عربي)")]
+        public string? ProductNameAr { get; set; }
+
+        [Display(Name = "اسم المنتج (إنجليزي)")]
+        public string? ProductNameEn { get; set; }
 
         [Required(ErrorMessage = "نص التقييم مطلوب")]
         public string Feedback { get; set; }
@@ -25,6 +31,9 @@ namespace UniformPro.Web.ViewModels
         public IFormFile? ImageFile { get; set; } // صورة العميل
         public bool DeleteImage { get; set; }     // حذف الصورة الحالية
 
+        public IFormFile? CoverImageFile { get; set; } // صورة الغلاف 
+        public bool DeleteCoverImage { get; set; }     // حذف صورة الغلاف
+
         public IFormFile? VideoFile { get; set; } // ملف الفيديو
         public bool DeleteVideo { get; set; }     // حذف الفيديو الحالي
         
@@ -32,6 +41,7 @@ namespace UniformPro.Web.ViewModels
 
         // --- للعرض فقط (في التعديل) ---
         public string? CurrentImagePath { get; set; }
+        public string? CurrentCoverImage { get; set; }    // ✅ اضافة
         public string? CurrentVideoPath { get; set; }
     }
 }

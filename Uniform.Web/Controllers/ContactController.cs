@@ -25,11 +25,11 @@ namespace UniformPro.Web.Controllers
             {
                 var contactMessage = new ContactMessage
                 {
-                    FullName = model.FullName,
-                    Phone = model.Phone, // Save as is (e.g. 010xxxx), Admin logic handles the "2" prefix for WhatsApp
-                    Email = model.Email,
-                    CompanyName = model.CompanyName,
-                    Message = model.Message,
+                    FullName = Sanitize(model.FullName),
+                    Phone = Sanitize(model.Phone), // Save as is (e.g. 010xxxx), Admin logic handles the "2" prefix for WhatsApp
+                    Email = Sanitize(model.Email),
+                    CompanyName = Sanitize(model.CompanyName),
+                    Message = Sanitize(model.Message),
                     SentAt = DateTime.Now,
                     IsRead = false
                 };
@@ -42,6 +42,12 @@ namespace UniformPro.Web.Controllers
             }
 
             return View(model);
+        }
+        private string Sanitize(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+            // Remove HTML tags using Regex
+            return System.Text.RegularExpressions.Regex.Replace(input, "<.*?>", string.Empty);
         }
     }
 }

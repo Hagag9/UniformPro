@@ -5,23 +5,52 @@
     ViewData["Title"] = Model.ClientName;
     ViewData["MetaDescription"] = Model.MetaDescription;
     ViewData["MetaKeywords"] = Model.MetaKeywords;
+
+    // تجهيز صورة الخلفية للهيرو
+    var heroImage = Model.GalleryImages.FirstOrDefault();
+    var heroBgStyle = heroImage != null 
+        ? $"background-image: url('{Url.Content($"~/uploads/portfolios/media/{heroImage}")}');" 
+        : "";
 }
 
-<div class="bg-gradient-to-b from-white to-gray-50 py-8 md:py-14 border-b">
-    <div class="container mx-auto px-4">
-        <div class="max-w-3xl mx-auto text-center">
-            <span class="inline-block px-3 py-1 bg-primary/5 text-primary text-xs font-bold rounded-full mb-3 tracking-wide">
+<div class="relative w-full min-h-[65vh] flex items-center justify-center bg-gray-900 text-white overflow-hidden isolate">
+    
+    @if (heroImage != null)
+    {
+        <div class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-[10s] hover:scale-110" 
+             style="@heroBgStyle">
+        </div>
+        <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/60 to-black/30"></div>
+    }
+    else
+    {
+        <div class="absolute inset-0 z-0 bg-gradient-to-br from-gray-800 to-black"></div>
+    }
+
+    <div class="container mx-auto px-4 relative z-20 pt-20 pb-12 text-center">
+        <div class="animate-fade-in-up" style="animation-delay: 0.1s;">
+            <span class="inline-block px-5 py-2 backdrop-blur-md bg-white/10 border border-white/20 text-white text-xs md:text-sm font-bold rounded-full mb-6 tracking-widest uppercase shadow-lg hover:bg-white/20 transition-colors cursor-default">
                 @Model.CategoryName
             </span>
-            <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-3 font-outfit">
+        </div>
+
+        <div class="animate-fade-in-up" style="animation-delay: 0.2s;">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 font-outfit drop-shadow-lg leading-tight">
                 @Model.ClientName
             </h1>
-            @if (!string.IsNullOrEmpty(Model.Description))
-            {
-                <div class="text-gray-600 text-base leading-relaxed whitespace-pre-line">
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <div class="animate-fade-in-up" style="animation-delay: 0.3s;">
+                <div class="max-w-3xl mx-auto text-gray-100 text-lg md:text-xl leading-relaxed font-light mix-blend-screen opacity-90 whitespace-pre-line">
                     @Html.Raw(Model.Description)
                 </div>
-            }
+            </div>
+        }
+
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 hidden md:block">
+            <i class="ph-bold ph-arrow-down text-3xl text-white"></i>
         </div>
     </div>
 </div>
@@ -32,50 +61,114 @@
         @if (Model.GalleryImages.Any())
         {
             <div class="mb-16">
-                <div class="columns-1 sm:columns-2 md:columns-3 gap-4">
-                   @{ int i = 0; }
-                   @foreach (var imgUrl in Model.GalleryImages)
-                   {
-                       <div class="break-inside-avoid mb-4 relative group cursor-zoom-in overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow" onclick="openLightbox(@i)">
-                           
-                           <img src="~/uploads/portfolios/media/@imgUrl" 
-                                class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500" 
-                                loading="lazy"
-                                alt="@Model.ClientName - صورة @(i+1)"> <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
-                       </div>
-                       i++;
-                   }
+                <div class="columns-2 md:columns-3 gap-4">
+                    @{ int i = 0; }
+                    @foreach (var imgUrl in Model.GalleryImages)
+                    {
+                        <div class="break-inside-avoid mb-4 relative group cursor-zoom-in overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow" 
+                             onclick="openLightbox(@i)">
+                            
+                            <img src="~/uploads/portfolios/media/@imgUrl" 
+                                 class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500" 
+                                 loading="lazy"
+                                 alt="@Model.ClientName - @(isArabic ? "صورة" : "Image") @(i+1)">
+                            
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+                        </div>
+                        i++;
+                    }
                 </div>
             </div>
         }
 
         @if (Model.VideoUrls.Any())
         {
-            <div class="max-w-4xl mx-auto mb-16">
+            <div class="max-w-5xl mx-auto mb-16 relative">
                 <div class="flex items-center gap-3 mb-6 justify-center">
                     <span class="h-px w-8 bg-gray-200"></span>
                     <h2 class="text-xl font-bold text-gray-800">@(isArabic ? "فيديو المشروع" : "Project Video")</h2>
                     <span class="h-px w-8 bg-gray-200"></span>
                 </div>
                 
-                <div class="@(Model.VideoUrls.Count == 1 ? "max-w-2xl mx-auto" : "grid grid-cols-1 md:grid-cols-2 gap-6")">
-                    @foreach (var videoUrl in Model.VideoUrls)
-                    {
-                        <div class="aspect-video bg-black rounded-xl overflow-hidden shadow-lg relative border border-gray-100">
-                             @if (videoUrl.Contains("youtube") || videoUrl.Contains("youtu.be"))
-                             {
-                                  <iframe src="@YoutubeHelper.GetEmbedUrl(videoUrl)" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
-                             }
-                             else
-                             {
-                                  <video controls class="w-full h-full">
-                                      <source src="~/uploads/portfolios/media/@videoUrl" type="video/mp4">
-                                      Your browser does not support the video tag.
-                                  </video>
-                             }
+                <div class="relative group px-4 md:px-12" id="video-slider-container">
+                    <button class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-primary hover:text-white text-gray-700 w-10 h-10 flex items-center justify-center rounded-full shadow-lg border border-gray-100 transition-all" 
+                            id="vid-prev-btn" onclick="moveVideoSlider(-1)">
+                        <i class="ph-bold @(isArabic ? "ph-caret-right" : "ph-caret-left") text-xl"></i>
+                    </button>
+
+                    <button class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-primary hover:text-white text-gray-700 w-10 h-10 flex items-center justify-center rounded-full shadow-lg border border-gray-100 transition-all" 
+                            id="vid-next-btn" onclick="moveVideoSlider(1)">
+                        <i class="ph-bold @(isArabic ? "ph-caret-left" : "ph-caret-right") text-xl"></i>
+                    </button>
+
+                    <div class="overflow-hidden rounded-xl shadow-lg bg-black">
+                        <div class="flex transition-transform duration-500 ease-out will-change-transform" id="video-track" dir="ltr">
+                            @foreach (var videoUrl in Model.VideoUrls)
+                            {
+                                <div class="w-full md:w-1/2 flex-shrink-0 px-2 py-4 md:py-8">
+                                    <div class="aspect-video bg-gray-900 rounded-lg overflow-hidden relative border border-gray-800">
+                                         @if (videoUrl.Contains("youtube") || videoUrl.Contains("youtu.be"))
+                                         {
+                                              <iframe src="@YoutubeHelper.GetEmbedUrl(videoUrl)" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                                         }
+                                         else
+                                         {
+                                              <video controls class="w-full h-full object-contain">
+                                                  <source src="~/uploads/portfolios/media/@videoUrl" type="video/mp4">
+                                              </video>
+                                         }
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    }
+                    </div>
                 </div>
+
+                <script>
+                    (function() {
+                        let currentVideoIndex = 0;
+                        const videoTrack = document.getElementById('video-track');
+                        const videoPrevBtn = document.getElementById('vid-prev-btn');
+                        const videoNextBtn = document.getElementById('vid-next-btn');
+                        const totalVideos = @Model.VideoUrls.Count;
+
+                        function getVisibleCount() { return window.innerWidth >= 768 ? 2 : 1; }
+
+                        function updateVideoSliderButtons() {
+                            const visibleCount = getVisibleCount();
+                            const maxIndex = Math.max(0, totalVideos - visibleCount);
+                            
+                            if (totalVideos <= visibleCount) {
+                                videoPrevBtn.style.display = 'none';
+                                videoNextBtn.style.display = 'none';
+                                return;
+                            }
+                            videoPrevBtn.style.display = 'flex';
+                            videoNextBtn.style.display = 'flex';
+                            
+                            videoPrevBtn.disabled = currentVideoIndex === 0;
+                            videoNextBtn.disabled = currentVideoIndex >= maxIndex;
+                            videoPrevBtn.style.opacity = currentVideoIndex === 0 ? '0.5' : '1';
+                            videoNextBtn.style.opacity = currentVideoIndex >= maxIndex ? '0.5' : '1';
+                        }
+
+                        window.moveVideoSlider = function(direction) {
+                            const visibleCount = getVisibleCount();
+                            const maxIndex = Math.max(0, totalVideos - visibleCount);
+                            currentVideoIndex += direction;
+                            if (currentVideoIndex < 0) currentVideoIndex = 0;
+                            if (currentVideoIndex > maxIndex) currentVideoIndex = maxIndex;
+                            const percent = currentVideoIndex * (100 / visibleCount);
+                            videoTrack.style.transform = `translateX(-${percent}%)`;
+                            updateVideoSliderButtons();
+                        }
+
+                        document.addEventListener('DOMContentLoaded', () => {
+                            updateVideoSliderButtons();
+                            window.addEventListener('resize', () => { currentVideoIndex = 0; moveVideoSlider(0); });
+                        });
+                    })();
+                </script>
             </div>
         }
 
@@ -88,7 +181,6 @@
                     </div>
 
                     <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-8">
-                        
                         <div class="w-full md:w-1/3 flex-shrink-0">
                              @if (!string.IsNullOrEmpty(Model.ClientTestimonial.YoutubeUrl))
                              {
@@ -118,7 +210,7 @@
                              }
                         </div>
 
-                        <div class="flex-grow text-center md:text-right">
+                        <div class="flex-grow text-center md:text-start rtl:md:text-right">
                              <div class="flex items-center justify-center md:justify-start gap-1 mb-3 text-orange-400 text-lg">
                                  <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
                              </div>
@@ -128,12 +220,7 @@
                              </blockquote>
 
                              <div class="flex items-center justify-center md:justify-start gap-4">
-                                 @if (!string.IsNullOrEmpty(Model.ClientTestimonial.ImagePath))
-                                 {
-                                     <img src="~/uploads/testimonials/images/@Model.ClientTestimonial.ImagePath" class="w-12 h-12 rounded-full border-2 border-white shadow-sm object-cover">
-                                 }
-
-                                 <div class="text-right">
+                                 <div class="text-start rtl:text-right">
                                      <div class="font-bold text-gray-900">@Model.ClientTestimonial.ClientName</div>
                                      @if (!string.IsNullOrEmpty(Model.ClientTestimonial.Position))
                                      {
@@ -142,66 +229,67 @@
                                  </div>
                              </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         }
-
     </div>
 </div>
 
-<div id="lightbox" class="fixed inset-0 z-50 bg-black/95 hidden items-center justify-center backdrop-blur-sm transition-opacity duration-300 opacity-0" aria-hidden="true">
-    
-    <div id="lightbox-loader" class="absolute inset-0 flex items-center justify-center z-40 hidden">
+<div id="lightbox" class="fixed inset-0 z-[100] bg-black/95 hidden transition-opacity duration-300 opacity-0" aria-hidden="true" role="dialog">
+    <div id="lightbox-loader" class="absolute inset-0 z-40 flex items-center justify-center hidden">
         <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
     </div>
 
-    <button class="absolute top-4 right-4 text-white/50 hover:text-white p-2 z-[60] transition-colors" onclick="closeLightbox()">
+    <button class="absolute top-4 right-4 text-white/50 hover:text-white p-2 z-[110] transition-colors" onclick="closeLightbox()">
         <i class="ph-bold ph-x text-3xl"></i>
     </button>
     
-    <button class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white p-4 z-[60] transition-colors hidden md:block" onclick="prevImage()">
+    <button class="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white p-4 z-[110] transition-colors" onclick="prevImage()">
         <i class="ph-bold ph-caret-left text-4xl"></i>
     </button>
 
-    <button class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white p-4 z-[60] transition-colors hidden md:block" onclick="nextImage()">
+    <button class="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white p-4 z-[110] transition-colors" onclick="nextImage()">
         <i class="ph-bold ph-caret-right text-4xl"></i>
     </button>
     
     <div class="relative w-full h-full flex items-center justify-center p-4" onclick="if(event.target === this) closeLightbox()">
-        <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain shadow-2xl rounded-sm transform scale-95 transition-all duration-300 opacity-0">
+        <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain shadow-2xl rounded-sm transform scale-95 transition-all duration-300 opacity-0 select-none" draggable="false">
     </div>
 
+    <div class="md:hidden absolute bottom-8 left-0 right-0 text-center text-white/50 text-sm pointer-events-none">
+        @(isArabic ? "اسحب للتنقل" : "Swipe to navigate")
+    </div>
 </div>
+
+<style>
+    @@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
+</style>
 
 @section Scripts {
     <script>
-        // تعديل 4: استخدام JSON Serialize للأمان والسرعة
         const galleryImages = @Json.Serialize(Model.GalleryImages);
-
         let currentIndex = 0;
         const lightbox = document.getElementById('lightbox');
         const img = document.getElementById('lightbox-img');
-        const loader = document.getElementById('lightbox-loader'); // الـ Loader
+        const loader = document.getElementById('lightbox-loader');
+        let touchStartX = 0;
+        let touchEndX = 0;
 
         function openLightbox(index) {
-            if (index < 0 || index >= galleryImages.length) return;
-            
+            if (!galleryImages || index < 0 || index >= galleryImages.length) return;
             currentIndex = index;
-            
-            // Show Modal
-            lightbox.classList.remove('hidden', 'pointer-events-none');
-            void lightbox.offsetWidth; // Reflow
-            lightbox.classList.remove('opacity-0');
-            lightbox.classList.add('flex');
-            lightbox.setAttribute('aria-hidden', 'false');
-            
+            lightbox.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                lightbox.classList.remove('opacity-0');
+                lightbox.classList.add('flex');
+                lightbox.setAttribute('aria-hidden', 'false');
+            });
             document.body.style.overflow = 'hidden'; 
-
             updateImage();
         }
 
@@ -209,14 +297,11 @@
             lightbox.classList.add('opacity-0');
             img.classList.remove('scale-100');
             img.classList.add('scale-95');
-            
             setTimeout(() => {
                 lightbox.classList.add('hidden');
                 lightbox.classList.remove('flex');
                 lightbox.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = 'auto';
-                
-                // Reset image source to avoid flickering next time
+                document.body.style.overflow = '';
                 img.src = "";
             }, 300);
         }
@@ -235,17 +320,13 @@
 
         function updateImage() {
             const imgSrc = '/uploads/portfolios/media/' + galleryImages[currentIndex];
-            
-            // 1. Show Loader & Hide Image
             loader.classList.remove('hidden');
             img.classList.add('opacity-0', 'scale-95');
             img.classList.remove('scale-100');
-
-            // 2. Set Source
-            img.src = imgSrc;
-
-            // 3. When Loaded -> Show Image & Hide Loader
-            img.onload = function() {
+            const tempImg = new Image();
+            tempImg.src = imgSrc;
+            tempImg.onload = function() {
+                img.src = imgSrc;
                 loader.classList.add('hidden');
                 img.classList.remove('opacity-0', 'scale-95');
                 img.classList.add('scale-100');
@@ -254,10 +335,17 @@
 
         document.addEventListener('keydown', function(e) {
             if (lightbox.classList.contains('hidden')) return;
-
             if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowRight' || e.key === 'ArrowUp') nextImage(); 
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') prevImage();
+            if (e.key === 'ArrowRight') @(isArabic ? "prevImage()" : "nextImage()"); 
+            if (e.key === 'ArrowLeft') @(isArabic ? "nextImage()" : "prevImage()");
         });
+
+        lightbox.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+        lightbox.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (Math.abs(touchEndX - touchStartX) < 50) return;
+            if (touchEndX < touchStartX) { @(isArabic ? "prevImage()" : "nextImage()") }
+            if (touchEndX > touchStartX) { @(isArabic ? "nextImage()" : "prevImage()") }
+        }, {passive: true});
     </script>
 }

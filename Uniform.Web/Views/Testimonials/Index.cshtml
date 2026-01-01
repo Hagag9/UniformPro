@@ -1,0 +1,257 @@
+@using UniformPro.Core.Helpers
+@using Microsoft.Extensions.Localization
+@model IEnumerable<UniformPro.Core.Entities.Testimonial>
+@inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
+
+@{
+    var isArabic = ViewData["IsArabic"] as bool? ?? false;
+    ViewData["Title"] = L["CustomersAreSaying"];
+}
+
+<!-- Header Section -->
+<div class="bg-white pt-8 pb-4 border-b border-gray-100">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-2xl md:text-4xl font-bold text-gray-900 font-outfit mb-2">
+            @L["CustomersAreSaying"]
+        </h1>
+        <div class="flex justify-center gap-1 text-orange-400 text-sm">
+            <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star-half"></i>
+            <span class="text-gray-400 text-xs ml-2 pt-0.5">(4.9/5)</span>
+        </div>
+    </div>
+</div>
+
+<!-- Testimonials Carousel Section -->
+<div class="bg-gray-50 py-8">
+    <div class="container mx-auto px-4 relative max-w-6xl">
+        
+        <!-- Navigation Buttons (Responsive: Inside on Tablet, Outside on Large Screens) -->
+        <button class="hidden md:flex absolute top-1/2 left-0 xl:-left-12 -translate-y-1/2 z-10 bg-white hover:bg-primary hover:text-white text-gray-800 w-10 h-10 rounded-full shadow-md items-center justify-center transition-colors" onclick="prevSlide()">
+            <i class="ph-bold ph-caret-left text-xl"></i>
+        </button>
+        <button class="hidden md:flex absolute top-1/2 right-0 xl:-right-12 -translate-y-1/2 z-10 bg-white hover:bg-primary hover:text-white text-gray-800 w-10 h-10 rounded-full shadow-md items-center justify-center transition-colors" onclick="nextSlide()">
+            <i class="ph-bold ph-caret-right text-xl"></i>
+        </button>
+
+        <!-- Slider Container -->
+        <div class="overflow-hidden relative" id="testimonial-slider">
+            <div class="flex transition-transform duration-500 ease-out" id="testimonial-track">
+                @foreach (var item in Model)
+                {
+                    <!-- Slide Item: Mobile 100%, Desktop 33.333% -->
+                    <div class="w-full md:w-1/3 flex-shrink-0 px-3">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-full flex flex-col hover:shadow-lg transition-shadow duration-300">
+                            
+                            <!-- Video Top (No spacing below) -->
+                            <div class="aspect-[9/16] max-h-80 bg-black relative group video-container border-b border-gray-100">
+                                @if (!string.IsNullOrEmpty(item.YoutubeUrl))
+                                {
+                                     <div class="w-full h-full cursor-pointer relative" onclick="playCardYoutube(this, '@YoutubeHelper.GetEmbedUrl(item.YoutubeUrl)')">
+                                         <img src="@YoutubeHelper.GetThumbnailUrl(item.YoutubeUrl)" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
+                                         <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                             <div class="w-14 h-14 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                                                 <i class="ph-fill ph-play text-red-600 text-2xl pl-1"></i>
+                                             </div>
+                                         </div>
+                                     </div>
+                                }
+                                else if (!string.IsNullOrEmpty(item.VideoPath))
+                                {
+                                     <video src="~/uploads/testimonials/videos/@item.VideoPath" controls class="w-full h-full object-cover"></video>
+                                }
+                                else
+                                {
+                                     <div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300">
+                                         <i class="ph-duotone ph-video-camera-slash text-4xl"></i>
+                                     </div>
+                                }
+                            </div>
+
+                            <!-- Content -->
+                            <div class="p-5 flex flex-col flex-grow text-center relative bg-white">
+                                <!-- Feedback -->
+                                <p class="text-gray-700 text-sm leading-relaxed mb-4 italic line-clamp-3">
+                                    " @item.Feedback "
+                                </p>
+
+                                <!-- Stars -->
+                                <div class="flex justify-center gap-1 text-yellow-400 text-xs mb-3">
+                                    <i class="ph-fill ph-star"></i>
+                                    <i class="ph-fill ph-star"></i>
+                                    <i class="ph-fill ph-star"></i>
+                                    <i class="ph-fill ph-star"></i>
+                                    <i class="ph-fill ph-star"></i>
+                                </div>
+
+                                <!-- Client Info (Centered & Compact) -->
+                                <div class="mt-auto pt-3 border-t border-gray-50 flex flex-col items-center">
+                                    <div class="w-12 h-12 rounded-full border-2 border-white shadow-md p-0.5 mb-2 -mt-8 bg-white overflow-hidden">
+                                        @if (!string.IsNullOrEmpty(item.ImagePath))
+                                        {
+                                            <img src="~/uploads/testimonials/images/@item.ImagePath" class="w-full h-full rounded-full object-cover">
+                                        }
+                                        else
+                                        {
+                                            <div class="w-full h-full rounded-full bg-gray-50 flex items-center justify-center text-gray-400"><i class="ph-fill ph-user"></i></div>
+                                        }
+                                    </div>
+                                    
+                                    <h4 class="text-base font-bold text-gray-900">@item.ClientName</h4>
+                                    <p class="text-gray-400 text-xs mt-0.5 font-medium">
+                                        @if (isArabic) { @(string.IsNullOrEmpty(item.ProductNameAr) ? item.Position : item.ProductNameAr) }
+                                        else { @(string.IsNullOrEmpty(item.ProductNameEn) ? item.Position : item.ProductNameEn) }
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const track = document.getElementById('testimonial-track');
+            const items = track.children;
+            const totalItems = items.length;
+            
+            if (totalItems === 0) return;
+
+            let currentIndex = 0;
+            let autoPlayInterval;
+            // Configuration
+            const autoPlayDelay = 7000; // Slower (7s)
+
+            function getItemsPerScreen() {
+                return window.innerWidth >= 768 ? 3 : 1;
+            }
+
+            function updateSlider() {
+                const itemsPerScreen = getItemsPerScreen();
+                const itemWidth = 100 / itemsPerScreen;
+                
+                // Infinite Loop Logic Preparation:
+                // For true infinite loop we need cloning, but simple "rewind" is acceptable for now.
+                // To center content if few items:
+                if (totalItems < itemsPerScreen) {
+                    track.classList.add('justify-center');
+                } else {
+                    track.classList.remove('justify-center');
+                }
+
+                // If index goes out of bounds
+                if (currentIndex >= totalItems) currentIndex = 0;
+                if (currentIndex < 0) currentIndex = totalItems - 1;
+
+                // Adjust Scroll
+                let transformIndex = currentIndex;
+                const maxIndex = totalItems - itemsPerScreen;
+                
+                if (transformIndex > maxIndex) {
+                     if (totalItems > itemsPerScreen) { 
+                        transformIndex = 0;
+                        currentIndex = 0;
+                     }
+                }
+
+                const translateVal = transformIndex * itemWidth;
+                const isRtl = document.documentElement.dir === 'rtl';
+                track.style.transform = `translateX(${isRtl ? translateVal : -translateVal}%)`;
+            }
+
+            window.nextSlide = function() { // Global for onclick
+                const itemsPerScreen = getItemsPerScreen();
+                const maxIndex = totalItems - itemsPerScreen;
+                
+                if (currentIndex < maxIndex) {
+                    currentIndex++;
+                } else {
+                    currentIndex = 0; // Loop back
+                }
+                updateSlider();
+            }
+
+            window.prevSlide = function() {
+                const itemsPerScreen = getItemsPerScreen();
+                const maxIndex = totalItems - itemsPerScreen;
+                
+                if (currentIndex > 0) {
+                    currentIndex--;
+                } else {
+                    currentIndex = maxIndex; // Loop to end
+                }
+                updateSlider();
+            }
+
+            function startAutoPlay() {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
+            }
+
+            function stopAutoPlay() {
+                clearInterval(autoPlayInterval);
+            }
+            
+            // Touch / Swipe Logic
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            track.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+                stopAutoPlay();
+            }, { passive: true });
+
+            track.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+                startAutoPlay();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const threshold = 50; // min distance
+                if (touchEndX < touchStartX - threshold) {
+                    // Swiped Left -> Next
+                    // In RTL, Swipe Left means Previous? No, standard physics:
+                    // Content moves Left <<-- Finger moves Left. 
+                    // Showing MORE RIGHT content. (Next)
+                    // Wait, RTL:
+                    // List starts Right. 
+                    // Next Item is to the Left.
+                    // To see Left item, I swipe Right? NO.
+                    // To see Left item, I drag content to Right >>-- 
+                    // So content moves Right.
+                    
+                    const isRtl = document.documentElement.dir === 'rtl';
+                    if (isRtl) prevSlide(); 
+                    else nextSlide();
+                }
+                if (touchEndX > touchStartX + threshold) {
+                    // Swiped Right -> Prev (in LTR)
+                    const isRtl = document.documentElement.dir === 'rtl';
+                    if (isRtl) nextSlide(); 
+                    else prevSlide();
+                }
+            }
+            
+            window.addEventListener('resize', () => {
+                currentIndex = 0;
+                updateSlider();
+            });
+
+            track.addEventListener('mouseenter', stopAutoPlay);
+            track.addEventListener('mouseleave', startAutoPlay);
+
+            startAutoPlay();
+            updateSlider();
+        });
+
+        function playCardYoutube(el, url) {
+            el.innerHTML = `<iframe src="${url}?autoplay=1" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        }
+    </script>
+}
