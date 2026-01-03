@@ -7,6 +7,8 @@ using UniformPro.Infrastructure.Data;
 using UniformPro.Web.Helpers;
 using UniformPro.Web.Services;
 using UniformPro.Web.ViewModels;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.OutputCaching; // Added
 
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
@@ -18,12 +20,16 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
         private readonly IHtmlSanitizerService _sanitizer;
+        private readonly ILogger<PortfoliosController> _logger;
+        private readonly IOutputCacheStore _cacheStore; // Added
 
-        public PortfoliosController(ApplicationDbContext context, IFileService fileService, IHtmlSanitizerService sanitizer)
+        public PortfoliosController(ApplicationDbContext context, IFileService fileService, IHtmlSanitizerService sanitizer, ILogger<PortfoliosController> logger, IOutputCacheStore cacheStore)
         {
             _context = context;
             _fileService = fileService;
             _sanitizer = sanitizer;
+            _logger = logger;
+            _cacheStore = cacheStore; // Initialize the new field
         }
 
         // عرض القائمة
@@ -69,75 +75,89 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PortfolioViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var portfolio = new Portfolio
+                if (ModelState.IsValid)
                 {
-                    ClientNameAr = model.ClientNameAr,
-                    ClientNameEn = model.ClientNameEn,
-                    DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr),
-                    DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn),
-                    CategoryId = model.CategoryId,
-                    ShowOnHome = model.ShowOnHome,
-                    IsActive = model.IsActive,
-                    DisplayOrder = model.DisplayOrder,
-                    MetaDescription = model.MetaDescription,
-                    MetaKeywords = model.MetaKeywords,
-                    CreatedAt = DateTime.Now
-                };
-
-                if (model.CoverImageFile != null)
-                {
-                    try
+                    var portfolio = new Portfolio
                     {
-                        portfolio.CoverImagePath = await _fileService.SaveFileAsync(model.CoverImageFile, "portfolios/covers");
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        ModelState.AddModelError("CoverImageFile", ex.Message);
-                        ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
-                        return View(model);
-                    }
-                }
+                        ClientNameAr = model.ClientNameAr,
+                        ClientNameEn = model.ClientNameEn,
+                        DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr),
+                        DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn),
+                        CategoryId = model.CategoryId,
+                        ShowOnHome = model.ShowOnHome,
+                        IsActive = model.IsActive,
+                        DisplayOrder = model.DisplayOrder,
+                        MetaDescription = model.MetaDescription,
+                        MetaKeywords = model.MetaKeywords,
+                        CreatedAt = DateTime.Now
+                    };
 
-                _context.Add(portfolio);
-                await _context.SaveChangesAsync();
-
-                // رفع الميديا (صور وفيديو)
-                if (model.MediaFiles != null)
-                {
-                    try 
+                    if (model.CoverImageFile != null)
                     {
-                        foreach (var file in model.MediaFiles)
+                        try
                         {
-                            var path = await _fileService.SaveFileAsync(file, "portfolios/media");
-                            var isVideo = file.ContentType.ToLower().StartsWith("video");
-                            _context.PortfolioMedias.Add(new PortfolioMedia
-                            {
-                                PortfolioId = portfolio.Id,
-                                MediaUrl = path,
-                                Type = isVideo ? MediaType.Video : MediaType.Image
-                            });
+                            portfolio.CoverImagePath = await _fileService.SaveFileAsync(model.CoverImageFile, "portfolios/covers");
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            _logger.LogError(ex, "Error uploading cover image in Create Portfolio");
+                            ModelState.AddModelError("CoverImageFile", ex.Message);
+                            ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
+                            return View(model);
                         }
                     }
-                    catch (ArgumentException ex)
-                    {
-                        TempData["ErrorMessage"] = $"تم حفظ المشروع ولكن فشل رفع بعض الوسائط: {ex.Message}";
-                    }
-                }
 
-                // حفظ روابط يوتيوب
-                if (model.YoutubeUrls != null)
-                {
-                    foreach (var url in model.YoutubeUrls.Where(u => !string.IsNullOrWhiteSpace(u)))
-                    {
-                        _context.PortfolioMedias.Add(new PortfolioMedia { PortfolioId = portfolio.Id, MediaUrl = url, Type = MediaType.Video });
-                    }
-                }
+                    _context.Add(portfolio);
+                    await _context.SaveChangesAsync();
 
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "تم إضافة المشروع بنجاح";
-                return RedirectToAction(nameof(Index));
+                    // Evict caches
+                    await _cacheStore.EvictByTagAsync("portfolio_data", CancellationToken.None);
+                    await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+
+                    // رفع الميديا (صور وفيديو)
+                    if (model.MediaFiles != null)
+                    {
+                        try 
+                        {
+                            foreach (var file in model.MediaFiles)
+                            {
+                                var path = await _fileService.SaveFileAsync(file, "portfolios/media");
+                                var isVideo = file.ContentType.ToLower().StartsWith("video");
+                                _context.PortfolioMedias.Add(new PortfolioMedia
+                                {
+                                    PortfolioId = portfolio.Id,
+                                    MediaUrl = path,
+                                    Type = isVideo ? MediaType.Video : MediaType.Image
+                                });
+                            }
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            _logger.LogError(ex, "Error uploading media files in Create Portfolio");
+                            TempData["ErrorMessage"] = $"تم حفظ المشروع ولكن فشل رفع بعض الوسائط: {ex.Message}";
+                        }
+                    }
+
+                    // حفظ روابط يوتيوب
+                    if (model.YoutubeUrls != null)
+                    {
+                        foreach (var url in model.YoutubeUrls.Where(u => !string.IsNullOrWhiteSpace(u)))
+                        {
+                            _context.PortfolioMedias.Add(new PortfolioMedia { PortfolioId = portfolio.Id, MediaUrl = url, Type = MediaType.Video });
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "تم إضافة المشروع بنجاح";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Create));
+                return Redirect("/Admin/Error/General");
             }
 
             ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
@@ -179,102 +199,117 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         {
             if (id != model.Id) return NotFound();
 
-            if (ModelState.IsValid)
+            try
             {
-                var portfolio = await _context.Portfolios.Include(p => p.PortfolioMedias).FirstOrDefaultAsync(p => p.Id == id);
-                if (portfolio == null) return NotFound();
-
-                // 1. معالجة الميديا المحذوفة (Deferred Deletion)
-                if (!string.IsNullOrEmpty(deletedMediaIds))
+                if (ModelState.IsValid)
                 {
-                    var idsToDelete = deletedMediaIds.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                                     .Select(i => int.Parse(i)).ToList();
+                    var portfolio = await _context.Portfolios.Include(p => p.PortfolioMedias).FirstOrDefaultAsync(p => p.Id == id);
+                    if (portfolio == null) return NotFound();
 
-                    var itemsToDelete = portfolio.PortfolioMedias.Where(m => idsToDelete.Contains(m.Id)).ToList();
-                    
-                    foreach (var item in itemsToDelete)
+                    // 1. معالجة الميديا المحذوفة (Deferred Deletion)
+                    if (!string.IsNullOrEmpty(deletedMediaIds))
                     {
-                        // حذف الملف الفعلي فقط إذا لم يكن يوتيوب
-                         if (!item.MediaUrl.StartsWith("http"))
+                        var idsToDelete = deletedMediaIds.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                                         .Select(i => int.Parse(i)).ToList();
+
+                        var itemsToDelete = portfolio.PortfolioMedias.Where(m => idsToDelete.Contains(m.Id)).ToList();
+                        
+                        foreach (var item in itemsToDelete)
                         {
-                            _fileService.DeleteFile(item.MediaUrl, "portfolios/media");
-                        }
-                        // حذف من الداتابيز
-                        _context.PortfolioMedias.Remove(item);
-                    }
-                }
-
-                portfolio.ClientNameAr = model.ClientNameAr;
-                portfolio.ClientNameEn = model.ClientNameEn;
-                portfolio.DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr);
-                portfolio.DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn);
-                portfolio.CategoryId = model.CategoryId;
-                portfolio.ShowOnHome = model.ShowOnHome;
-                portfolio.IsActive = model.IsActive;
-                portfolio.DisplayOrder = model.DisplayOrder;
-                portfolio.MetaDescription = model.MetaDescription;
-                portfolio.MetaKeywords = model.MetaKeywords;
-
-                // 2. معالجة حذف صورة الغلاف (Deferred)
-                if (deleteCoverImage && !string.IsNullOrEmpty(portfolio.CoverImagePath))
-                {
-                    _fileService.DeleteFile(portfolio.CoverImagePath, "portfolios/covers");
-                    portfolio.CoverImagePath = null;
-                }
-
-                if (model.CoverImageFile != null)
-                {
-                    try
-                    {
-                        if (!string.IsNullOrEmpty(portfolio.CoverImagePath))
-                            _fileService.DeleteFile(portfolio.CoverImagePath, "portfolios/covers");
-
-                        portfolio.CoverImagePath = await _fileService.SaveFileAsync(model.CoverImageFile, "portfolios/covers");
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        ModelState.AddModelError("CoverImageFile", ex.Message);
-                        // Reload data
-                        var existingP = await _context.Portfolios.Include(p => p.PortfolioMedias).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
-                        if (existingP != null)
-                        {
-                            model.CurrentCoverImagePath = existingP.CoverImagePath;
-                            model.CurrentMedia = existingP.PortfolioMedias.ToList();
-                        }
-                        ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
-                        return View(model);
-                    }
-                }
-
-                if (model.MediaFiles != null)
-                {
-                    try
-                    {
-                        foreach (var file in model.MediaFiles)
-                        {
-                            var path = await _fileService.SaveFileAsync(file, "portfolios/media");
-                            var isVideo = file.ContentType.ToLower().StartsWith("video");
-                            _context.PortfolioMedias.Add(new PortfolioMedia { PortfolioId = portfolio.Id, MediaUrl = path, Type = isVideo ? MediaType.Video : MediaType.Image });
+                            // حذف الملف الفعلي فقط إذا لم يكن يوتيوب
+                             if (!item.MediaUrl.StartsWith("http"))
+                            {
+                                _fileService.DeleteFile(item.MediaUrl, "portfolios/media");
+                            }
+                            // حذف من الداتابيز
+                            _context.PortfolioMedias.Remove(item);
                         }
                     }
-                    catch (ArgumentException ex)
-                    {
-                        TempData["ErrorMessage"] = $"تم تحديث المشروع ولكن فشل رفع بعض الوسائط: {ex.Message}";
-                    }
-                }
 
-                if (model.YoutubeUrls != null)
-                {
-                    foreach (var url in model.YoutubeUrls.Where(u => !string.IsNullOrWhiteSpace(u)))
-                    {
-                        _context.PortfolioMedias.Add(new PortfolioMedia { PortfolioId = portfolio.Id, MediaUrl = url, Type = MediaType.Video });
-                    }
-                }
+                    portfolio.ClientNameAr = model.ClientNameAr;
+                    portfolio.ClientNameEn = model.ClientNameEn;
+                    portfolio.DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr);
+                    portfolio.DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn);
+                    portfolio.CategoryId = model.CategoryId;
+                    portfolio.ShowOnHome = model.ShowOnHome;
+                    portfolio.IsActive = model.IsActive;
+                    portfolio.DisplayOrder = model.DisplayOrder;
+                    portfolio.MetaDescription = model.MetaDescription;
+                    portfolio.MetaKeywords = model.MetaKeywords;
 
-                _context.Update(portfolio);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "تم التحديث بنجاح";
-                return RedirectToAction(nameof(Index));
+                    // 2. معالجة حذف صورة الغلاف (Deferred)
+                    if (deleteCoverImage && !string.IsNullOrEmpty(portfolio.CoverImagePath))
+                    {
+                        _fileService.DeleteFile(portfolio.CoverImagePath, "portfolios/covers");
+                        portfolio.CoverImagePath = null;
+                    }
+
+                    if (model.CoverImageFile != null)
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(portfolio.CoverImagePath))
+                                _fileService.DeleteFile(portfolio.CoverImagePath, "portfolios/covers");
+
+                            portfolio.CoverImagePath = await _fileService.SaveFileAsync(model.CoverImageFile, "portfolios/covers");
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            _logger.LogError(ex, "Error uploading cover image in Edit Portfolio");
+                            ModelState.AddModelError("CoverImageFile", ex.Message);
+                            // Reload data
+                            var existingP = await _context.Portfolios.Include(p => p.PortfolioMedias).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+                            if (existingP != null)
+                            {
+                                model.CurrentCoverImagePath = existingP.CoverImagePath;
+                                model.CurrentMedia = existingP.PortfolioMedias.ToList();
+                            }
+                            ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
+                            return View(model);
+                        }
+                    }
+
+                    if (model.MediaFiles != null)
+                    {
+                        try
+                        {
+                            foreach (var file in model.MediaFiles)
+                            {
+                                var path = await _fileService.SaveFileAsync(file, "portfolios/media");
+                                var isVideo = file.ContentType.ToLower().StartsWith("video");
+                                _context.PortfolioMedias.Add(new PortfolioMedia { PortfolioId = portfolio.Id, MediaUrl = path, Type = isVideo ? MediaType.Video : MediaType.Image });
+                            }
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            _logger.LogError(ex, "Error uploading media in Edit Portfolio");
+                            TempData["ErrorMessage"] = $"تم تحديث المشروع ولكن فشل رفع بعض الوسائط: {ex.Message}";
+                        }
+                    }
+
+                    if (model.YoutubeUrls != null)
+                    {
+                        foreach (var url in model.YoutubeUrls.Where(u => !string.IsNullOrWhiteSpace(u)))
+                        {
+                            _context.PortfolioMedias.Add(new PortfolioMedia { PortfolioId = portfolio.Id, MediaUrl = url, Type = MediaType.Video });
+                        }
+                    }
+
+                    _context.Update(portfolio);
+                    await _context.SaveChangesAsync();
+
+                    // Evict caches
+                    await _cacheStore.EvictByTagAsync("portfolio_data", CancellationToken.None);
+                    await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+
+                    TempData["SuccessMessage"] = "تم التحديث بنجاح";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                 _logger.LogError(ex, "Error in {ActionName}", nameof(Edit));
+                 return Redirect("/Admin/Error/General");
             }
 
             var existing = await _context.Portfolios.Include(p => p.PortfolioMedias).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
@@ -293,40 +328,52 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var portfolio = await _context.Portfolios
-                                          .Include(p => p.PortfolioMedias)
-                                          .FirstOrDefaultAsync(p => p.Id == id);
-            if (portfolio != null)
+            try
             {
-                // 1. حذف التقييمات المرتبطة (Cascade Delete Manual)
-                var relatedTestimonials = await _context.Testimonials.Where(t => t.PortfolioId == id).ToListAsync();
-                foreach (var testimonial in relatedTestimonials)
+                var portfolio = await _context.Portfolios
+                                              .Include(p => p.PortfolioMedias)
+                                              .FirstOrDefaultAsync(p => p.Id == id);
+                if (portfolio != null)
                 {
-                    if (!string.IsNullOrEmpty(testimonial.ImagePath))
-                        _fileService.DeleteFile(testimonial.ImagePath, "testimonials/images");
+                    // 1. حذف التقييمات المرتبطة (Cascade Delete Manual)
+                    var relatedTestimonials = await _context.Testimonials.Where(t => t.PortfolioId == id).ToListAsync();
+                    foreach (var testimonial in relatedTestimonials)
+                    {
+                        if (!string.IsNullOrEmpty(testimonial.ImagePath))
+                            _fileService.DeleteFile(testimonial.ImagePath, "testimonials/images");
 
-                    if (!string.IsNullOrEmpty(testimonial.VideoPath))
-                        _fileService.DeleteFile(testimonial.VideoPath, "testimonials/videos");
-                        
-                    if (!string.IsNullOrEmpty(testimonial.CoverImage))
-                        _fileService.DeleteFile(testimonial.CoverImage, "testimonials/covers"); // Assuming folder structure
+                        if (!string.IsNullOrEmpty(testimonial.VideoPath))
+                            _fileService.DeleteFile(testimonial.VideoPath, "testimonials/videos");
+                            
+                        if (!string.IsNullOrEmpty(testimonial.CoverImage))
+                            _fileService.DeleteFile(testimonial.CoverImage, "testimonials/covers"); // Assuming folder structure
 
-                    _context.Testimonials.Remove(testimonial);
+                        _context.Testimonials.Remove(testimonial);
+                    }
+
+                    // 2. حذف الغلاف
+                    if (!string.IsNullOrEmpty(portfolio.CoverImagePath))
+                        _fileService.DeleteFile(portfolio.CoverImagePath, "portfolios/covers");
+
+                    // حذف الميديا
+                    foreach (var media in portfolio.PortfolioMedias)
+                    {
+                        if (!media.MediaUrl.StartsWith("http"))
+                            _fileService.DeleteFile(media.MediaUrl, "portfolios/media");
+                    }
+
+                    _context.Portfolios.Remove(portfolio);
+                    await _context.SaveChangesAsync();
+
+                    // Evict caches
+                    await _cacheStore.EvictByTagAsync("portfolio_data", CancellationToken.None);
+                    await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
                 }
-
-                // 2. حذف الغلاف
-                if (!string.IsNullOrEmpty(portfolio.CoverImagePath))
-                    _fileService.DeleteFile(portfolio.CoverImagePath, "portfolios/covers");
-
-                // حذف الميديا
-                foreach (var media in portfolio.PortfolioMedias)
-                {
-                    if (!media.MediaUrl.StartsWith("http"))
-                        _fileService.DeleteFile(media.MediaUrl, "portfolios/media");
-                }
-
-                _context.Portfolios.Remove(portfolio);
-                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Delete));
+                return Redirect("/Admin/Error/General");
             }
             return RedirectToAction(nameof(Index));
         }

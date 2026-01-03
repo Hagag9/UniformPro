@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniformPro.Infrastructure.Data;
 using UniformPro.Web.ViewModels;
+using Microsoft.AspNetCore.OutputCaching; // Added namespace
 using UniformPro.Core.Entities;
 
 namespace UniformPro.Web.Controllers
@@ -10,6 +11,7 @@ namespace UniformPro.Web.Controllers
     {
         public PortfolioController(ApplicationDbContext context) : base(context) { }
 
+        [OutputCache(PolicyName = "Portfolios")]
         public async Task<IActionResult> Index()
         {
              var isArabic = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");

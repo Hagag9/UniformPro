@@ -1,0 +1,12 @@
+2026-01-04 00:46:07.332 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 00:46:12.413 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 00:46:12.664 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 00:46:12.698 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 00:46:53.012 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 00:46:53.021 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 00:46:53.648 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 619.0490 ms
+2026-01-04 00:46:53.882 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 00:46:54.740 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 00:47:07.011 +02:00 [INF] HTTP GET / responded 200 in 13216.6579 ms
+2026-01-04 00:48:08.690 +02:00 [INF] HTTP GET / responded 200 in 16.3031 ms
+2026-01-04 00:48:24.318 +02:00 [INF] HTTP GET / responded 200 in 2.1543 ms

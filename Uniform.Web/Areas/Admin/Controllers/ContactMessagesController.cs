@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using UniformPro.Core.Entities;
 using UniformPro.Infrastructure.Data;
 using UniformPro.Web.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
@@ -13,10 +14,12 @@ namespace UniformPro.Web.Areas.Admin.Controllers
     public class ContactMessagesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<ContactMessagesController> _logger;
 
-        public ContactMessagesController(ApplicationDbContext context)
+        public ContactMessagesController(ApplicationDbContext context, ILogger<ContactMessagesController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // عرض الرسائل (الأحدث أولاً)
@@ -85,12 +88,20 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var message = await _context.ContactMessages.FindAsync(id);
-            if (message != null)
+            try
             {
-                _context.ContactMessages.Remove(message);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "تم حذف الرسالة بنجاح";
+                var message = await _context.ContactMessages.FindAsync(id);
+                if (message != null)
+                {
+                    _context.ContactMessages.Remove(message);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "تم حذف الرسالة بنجاح";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting contact message {Id}", id);
+                return Redirect("/Admin/Error/General");
             }
             return RedirectToAction(nameof(Index));
         }

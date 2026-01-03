@@ -24,7 +24,7 @@
             </button>
             
             <!-- Dropdown -->
-            <div id="categoriesDropdown" class="hidden absolute top-full left-0 mt-2 w-56 bg-white border border-gray-100 rounded-lg shadow-lg z-50 py-1">
+            <div id="categoriesDropdown" class="hidden absolute top-full @(isArabic ? "right-0" : "left-0") mt-2 w-56 bg-white border border-gray-100 rounded-lg shadow-lg z-50 py-1">
                 <a href="javascript:void(0)" onclick="loadProducts(null)" 
                    class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-black transition-colors @(Model.SelectedCategoryId == null ? "bg-gray-50 font-medium text-black" : "")">
                     @L["AllProducts"]

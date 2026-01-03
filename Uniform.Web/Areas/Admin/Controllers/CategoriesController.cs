@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniformPro.Core.Entities;
 using UniformPro.Infrastructure.Data;
+using Microsoft.Extensions.Logging;
 
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
@@ -12,10 +13,12 @@ namespace UniformPro.Web.Areas.Admin.Controllers
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<CategoriesController> _logger;
 
-        public CategoriesController(ApplicationDbContext context)
+        public CategoriesController(ApplicationDbContext context, ILogger<CategoriesController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // عرض كل الأقسام
@@ -35,11 +38,19 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Category category)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(category);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Create));
+                return Redirect("/Admin/Error/General");
             }
             return View(category);
         }
@@ -62,19 +73,31 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         {
             if (id != category.Id) return NotFound();
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    try
+                    {
+                        _context.Update(category);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException ex)
+                    {
+                        if (!_context.Categories.Any(e => e.Id == category.Id)) return NotFound();
+                        else 
+                        {
+                            _logger.LogError(ex, "Concurrency error in Edit Category");
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Categories.Any(e => e.Id == category.Id)) return NotFound();
-                    else throw;
-                }
-                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Edit));
+                return Redirect("/Admin/Error/General");
             }
             return View(category);
         }
@@ -82,32 +105,40 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         // الحذف
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            try
             {
-                return NotFound();
-            }
+                var category = await _context.Categories.FindAsync(id);
+                if (category == null)
+                {
+                    return NotFound();
+                }
 
-            // 1. التحقق من وجود منتجات مرتبطة
-            var hasProducts = await _context.Products.AnyAsync(p => p.CategoryId == id);
-            if (hasProducts)
+                // 1. التحقق من وجود منتجات مرتبطة
+                var hasProducts = await _context.Products.AnyAsync(p => p.CategoryId == id);
+                if (hasProducts)
+                {
+                    TempData["ErrorMessage"] = "عفواً، لا يمكن حذف هذا القسم لأنه يحتوي على منتجات. يرجى نقل المنتجات أو حذفها أولاً.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // 2. التحقق من وجود مشاريع مرتبطة
+                var hasPortfolios = await _context.Portfolios.AnyAsync(p => p.CategoryId == id);
+                if (hasPortfolios)
+                {
+                    TempData["ErrorMessage"] = "عفواً، لا يمكن حذف هذا القسم لأنه مستخدم في معرض الأعمال. يرجى تعديل المشاريع المرتبطة أولاً.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // 3. الحذف الآمن
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "تم حذف القسم بنجاح";
+            }
+            catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "عفواً، لا يمكن حذف هذا القسم لأنه يحتوي على منتجات. يرجى نقل المنتجات أو حذفها أولاً.";
-                return RedirectToAction(nameof(Index));
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Delete));
+                return Redirect("/Admin/Error/General");
             }
-
-            // 2. التحقق من وجود مشاريع مرتبطة
-            var hasPortfolios = await _context.Portfolios.AnyAsync(p => p.CategoryId == id);
-            if (hasPortfolios)
-            {
-                TempData["ErrorMessage"] = "عفواً، لا يمكن حذف هذا القسم لأنه مستخدم في معرض الأعمال. يرجى تعديل المشاريع المرتبطة أولاً.";
-                return RedirectToAction(nameof(Index));
-            }
-
-            // 3. الحذف الآمن
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "تم حذف القسم بنجاح";
             
             return RedirectToAction(nameof(Index));
         }

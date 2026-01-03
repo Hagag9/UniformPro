@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniformPro.Core.Entities;
 using UniformPro.Infrastructure.Data;
+using Microsoft.Extensions.Logging;
 
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
@@ -12,10 +13,12 @@ namespace UniformPro.Web.Areas.Admin.Controllers
     public class DiscountTiersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<DiscountTiersController> _logger;
 
-        public DiscountTiersController(ApplicationDbContext context)
+        public DiscountTiersController(ApplicationDbContext context, ILogger<DiscountTiersController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // عرض كل الشرائح
@@ -38,12 +41,20 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DiscountTier tier)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(tier);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "تم إضافة الشريحة بنجاح";
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(tier);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "تم إضافة الشريحة بنجاح";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Create));
+                return Redirect("/Admin/Error/General");
             }
             return View(tier);
         }
@@ -66,22 +77,33 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         {
             if (id != tier.Id) return NotFound();
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(tier);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "تم تعديل الشريحة بنجاح";
+                    try
+                    {
+                        _context.Update(tier);
+                        await _context.SaveChangesAsync();
+                        TempData["SuccessMessage"] = "تم تعديل الشريحة بنجاح";
+                    }
+                    catch (DbUpdateConcurrencyException ex)
+                    {
+                        if (!_context.DiscountTiers.Any(e => e.Id == tier.Id))
+                            return NotFound();
+                        else
+                        {
+                            _logger.LogError(ex, "Concurrency error in Edit DiscountTier");
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.DiscountTiers.Any(e => e.Id == tier.Id))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Edit));
+                return Redirect("/Admin/Error/General");
             }
             return View(tier);
         }
@@ -91,12 +113,20 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var tier = await _context.DiscountTiers.FindAsync(id);
-            if (tier != null)
+            try
             {
-                _context.DiscountTiers.Remove(tier);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "تم حذف الشريحة بنجاح";
+                var tier = await _context.DiscountTiers.FindAsync(id);
+                if (tier != null)
+                {
+                    _context.DiscountTiers.Remove(tier);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "تم حذف الشريحة بنجاح";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Delete));
+                return Redirect("/Admin/Error/General");
             }
             return RedirectToAction(nameof(Index));
         }

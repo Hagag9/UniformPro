@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using UniformPro.Infrastructure.Data;
 using UniformPro.Web.ViewModels;
 using UniformPro.Core.Entities;
+using Microsoft.AspNetCore.OutputCaching; // Added namespace
 
 namespace UniformPro.Web.Controllers
 {
@@ -10,6 +11,7 @@ namespace UniformPro.Web.Controllers
     {
         public HomeController(ApplicationDbContext context) : base(context) { }
 
+        [OutputCache(PolicyName = "HomePage")]
         public async Task<IActionResult> Index()
         {
             // جلب عناصر الـ Hero المفعلة مرتبة

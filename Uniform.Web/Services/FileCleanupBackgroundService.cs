@@ -33,8 +33,9 @@ namespace UniformPro.Web.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("FileCleanupBackgroundService: Waiting 10 minutes before first run...");
-            await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
+            var delay = _env.IsDevelopment() ? TimeSpan.FromSeconds(5) : TimeSpan.FromMinutes(3);
+            _logger.LogInformation($"FileCleanupBackgroundService: Waiting {delay} before first run ({(_env.IsDevelopment() ? "Development" : "Production")} Mode)...");
+            await Task.Delay(delay, stoppingToken);
 
             while (!stoppingToken.IsCancellationRequested)
             {

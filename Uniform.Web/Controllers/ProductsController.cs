@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniformPro.Infrastructure.Data;
+using Microsoft.AspNetCore.OutputCaching; // Added namespace
 
 namespace UniformPro.Web.Controllers
 {
@@ -10,6 +11,8 @@ namespace UniformPro.Web.Controllers
 
         // GET: /Products?category=1&search=shirt&sort=newest&page=1&pageSize=12
         // GET: /Products?category=1&search=shirt&page=1
+        // GET: /Products?category=1&search=shirt&page=1
+        [OutputCache(PolicyName = "Products")]
         public async Task<IActionResult> Index(int? category, string? search, int page = 1)
         {
             int pageSize = 12;
@@ -92,6 +95,8 @@ namespace UniformPro.Web.Controllers
 
         // GET: /Products/Details/5
         // GET: /Products/Details/5
+        // GET: /Products/Details/5
+        [OutputCache(Duration = 300, VaryByRouteValueNames = new[] { "id" })]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();

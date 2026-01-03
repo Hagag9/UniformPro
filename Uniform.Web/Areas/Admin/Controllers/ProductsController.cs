@@ -5,25 +5,29 @@ using Microsoft.EntityFrameworkCore;
 using UniformPro.Core.Entities;
 using UniformPro.Infrastructure.Data;
 using UniformPro.Web.Services;
+using Microsoft.AspNetCore.OutputCaching; // Added
 using UniformPro.Web.Helpers;
 using UniformPro.Web.ViewModels;
 
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize]
-    [AllowAnonymous]
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
         private readonly IHtmlSanitizerService _sanitizer;
+        private readonly ILogger<ProductsController> _logger;
+        private readonly IOutputCacheStore _cacheStore; // Added
 
-        public ProductsController(ApplicationDbContext context, IFileService fileService, IHtmlSanitizerService sanitizer)
+        public ProductsController(ApplicationDbContext context, IFileService fileService, IHtmlSanitizerService sanitizer, ILogger<ProductsController> logger, IOutputCacheStore cacheStore)
         {
             _context = context;
             _fileService = fileService;
             _sanitizer = sanitizer;
+            _logger = logger;
+            _cacheStore = cacheStore; // Added
         }
 
         // عرض المنتجات
@@ -69,64 +73,78 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var product = new Product
+                if (ModelState.IsValid)
                 {
-                    NameAr = model.NameAr,
-                    NameEn = model.NameEn,
-                    StartPrice = model.StartPrice,
-                    DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr),
-                    DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn),
-                    CategoryId = model.CategoryId,
-                    MaterialDetailsAr = _sanitizer.Sanitize(model.MaterialDetailsAr),
-                    MaterialDetailsEn = _sanitizer.Sanitize(model.MaterialDetailsEn),
-                    AvailableSizes = model.AvailableSizes,
-                    MinQuantity = model.MinQuantity,
-                    ShowOnHome = model.ShowOnHome,
-                    MetaDescription = model.MetaDescription,
-                    MetaKeywords = model.MetaKeywords,
-                    CreatedAt = DateTime.Now
-                };
-
-                // رفع الصورة الرئيسية
-                if (model.MainImageFile != null)
-                {
-                    try
+                    var product = new Product
                     {
-                        product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        ModelState.AddModelError("MainImageFile", ex.Message);
-                        ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
-                        return View(model);
-                    }
-                }
+                        NameAr = model.NameAr,
+                        NameEn = model.NameEn,
+                        StartPrice = model.StartPrice,
+                        DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr),
+                        DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn),
+                        CategoryId = model.CategoryId,
+                        MaterialDetailsAr = _sanitizer.Sanitize(model.MaterialDetailsAr),
+                        MaterialDetailsEn = _sanitizer.Sanitize(model.MaterialDetailsEn),
+                        AvailableSizes = model.AvailableSizes,
+                        MinQuantity = model.MinQuantity,
+                        ShowOnHome = model.ShowOnHome,
+                        MetaDescription = model.MetaDescription,
+                        MetaKeywords = model.MetaKeywords,
+                        CreatedAt = DateTime.Now
+                    };
 
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-
-                // رفع صور المعرض
-                if (model.GalleryFiles != null && model.GalleryFiles.Count > 0)
-                {
-                    try
+                    // رفع الصورة الرئيسية
+                    if (model.MainImageFile != null)
                     {
-                        foreach (var file in model.GalleryFiles)
+                        try
                         {
-                            var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
-                            _context.ProductImages.Add(new ProductImage { ProductId = product.Id, ImagePath = path });
+                            product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
                         }
-                        await _context.SaveChangesAsync();
+                        catch (ArgumentException ex)
+                        {
+                            _logger.LogError(ex, "Error uploading main image in Create Product");
+                            ModelState.AddModelError("MainImageFile", ex.Message);
+                            ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
+                            return View(model);
+                        }
                     }
-                    catch (ArgumentException ex)
-                    {
-                         TempData["ErrorMessage"] = $"تم حفظ المنتج ولكن فشل رفع بعض صور المعرض: {ex.Message}";
-                    }
-                }
 
-                TempData["SuccessMessage"] = "تم إضافة المنتج بنجاح";
-                return RedirectToAction(nameof(Index));
+                    _context.Add(product);
+                    await _context.SaveChangesAsync();
+
+                    // Evict caches
+                    await _cacheStore.EvictByTagAsync("products_data", CancellationToken.None);
+                    await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+
+                    // رفع صور المعرض
+                    if (model.GalleryFiles != null && model.GalleryFiles.Count > 0)
+                    {
+                        try
+                        {
+                            foreach (var file in model.GalleryFiles)
+                            {
+                                var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
+                                _context.ProductImages.Add(new ProductImage { ProductId = product.Id, ImagePath = path });
+                            }
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (ArgumentException ex)
+                        {
+                             _logger.LogError(ex, "Error uploading gallery images in Create Product");
+                             TempData["ErrorMessage"] = $"تم حفظ المنتج ولكن فشل رفع بعض صور المعرض: {ex.Message}";
+                        }
+                    }
+
+                    TempData["SuccessMessage"] = "تم إضافة المنتج بنجاح";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Create));
+                return Redirect("/Admin/Error/General");
             }
 
             ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
@@ -172,99 +190,113 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         {
             if (id != model.Id) return NotFound();
 
-            if (ModelState.IsValid)
+            try
             {
-                var product = await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(p => p.Id == id);
-                if (product == null) return NotFound();
-
-                // 1. معالجة الصور المحذوفة (Deferred Deletion)
-                if (!string.IsNullOrEmpty(deletedGalleryImageIds))
+                if (ModelState.IsValid)
                 {
-                    var idsToDelete = deletedGalleryImageIds.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                                            .Select(i => int.Parse(i)).ToList();
+                    var product = await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(p => p.Id == id);
+                    if (product == null) return NotFound();
 
-                    var imagesToDelete = product.ProductImages.Where(img => idsToDelete.Contains(img.Id)).ToList();
-                    
-                    foreach (var img in imagesToDelete)
+                    // 1. معالجة الصور المحذوفة (Deferred Deletion)
+                    if (!string.IsNullOrEmpty(deletedGalleryImageIds))
                     {
-                        // حذف الملف الفعلي
-                        _fileService.DeleteFile(img.ImagePath, Constants.Folders.ProductsGallery);
-                        // حذف من الداتابيز
-                        _context.ProductImages.Remove(img);
-                    }
-                }
+                        var idsToDelete = deletedGalleryImageIds.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                                                .Select(i => int.Parse(i)).ToList();
 
-                // تحديث البيانات الأساسية
-                product.NameAr = model.NameAr;
-                product.NameEn = model.NameEn;
-                product.StartPrice = model.StartPrice;
-                product.DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr);
-                product.DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn);
-                product.CategoryId = model.CategoryId;
-                product.MaterialDetailsAr = _sanitizer.Sanitize(model.MaterialDetailsAr);
-                product.MaterialDetailsEn = _sanitizer.Sanitize(model.MaterialDetailsEn);
-                product.AvailableSizes = model.AvailableSizes;
-                product.MinQuantity = model.MinQuantity;
-                product.ShowOnHome = model.ShowOnHome;
-                product.MetaDescription = model.MetaDescription;
-                product.MetaKeywords = model.MetaKeywords;
-
-
-                // 2. معالجة حذف الصورة الرئيسية (Deferred)
-                if (deleteMainImage && !string.IsNullOrEmpty(product.MainImagePath))
-                {
-                     _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
-                     product.MainImagePath = null;
-                }
-
-                // تحديث الصورة الرئيسية (إذا تم رفع جديد)
-                if (model.MainImageFile != null)
-                {
-                    try
-                    {
-                        // الحذف يتم التعامل معه داخل السرفيس إذا مررنا الاسم
-                        if (!string.IsNullOrEmpty(product.MainImagePath))
-                            _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
-                            
-                        product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        ModelState.AddModelError("MainImageFile", ex.Message);
-                        // Reload data for view
-                        var existingP = await _context.Products.Include(p => p.ProductImages).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
-                        if (existingP != null)
+                        var imagesToDelete = product.ProductImages.Where(img => idsToDelete.Contains(img.Id)).ToList();
+                        
+                        foreach (var img in imagesToDelete)
                         {
-                            model.CurrentMainImagePath = existingP.MainImagePath;
-                            model.CurrentGalleryImages = existingP.ProductImages.ToList();
-                        }
-                        ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
-                        return View(model);
-                    }
-                }
-
-                // إضافة صور معرض جديدة
-                if (model.GalleryFiles != null && model.GalleryFiles.Count > 0)
-                {
-                    try
-                    {
-                        foreach (var file in model.GalleryFiles)
-                        {
-                            var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
-                            _context.ProductImages.Add(new ProductImage { ProductId = product.Id, ImagePath = path });
+                            // حذف الملف الفعلي
+                            _fileService.DeleteFile(img.ImagePath, Constants.Folders.ProductsGallery);
+                            // حذف من الداتابيز
+                            _context.ProductImages.Remove(img);
                         }
                     }
-                    catch (ArgumentException ex)
+
+                    // تحديث البيانات الأساسية
+                    product.NameAr = model.NameAr;
+                    product.NameEn = model.NameEn;
+                    product.StartPrice = model.StartPrice;
+                    product.DescriptionAr = _sanitizer.Sanitize(model.DescriptionAr);
+                    product.DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn);
+                    product.CategoryId = model.CategoryId;
+                    product.MaterialDetailsAr = _sanitizer.Sanitize(model.MaterialDetailsAr);
+                    product.MaterialDetailsEn = _sanitizer.Sanitize(model.MaterialDetailsEn);
+                    product.AvailableSizes = model.AvailableSizes;
+                    product.MinQuantity = model.MinQuantity;
+                    product.ShowOnHome = model.ShowOnHome;
+                    product.MetaDescription = model.MetaDescription;
+                    product.MetaKeywords = model.MetaKeywords;
+
+
+                    // 2. معالجة حذف الصورة الرئيسية (Deferred)
+                    if (deleteMainImage && !string.IsNullOrEmpty(product.MainImagePath))
                     {
-                         TempData["ErrorMessage"] = $"تم تحديث المنتج ولكن فشل رفع بعض الصور: {ex.Message}";
+                         _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
+                         product.MainImagePath = null;
                     }
+
+                    // تحديث الصورة الرئيسية (إذا تم رفع جديد)
+                    if (model.MainImageFile != null)
+                    {
+                        try
+                        {
+                            // الحذف يتم التعامل معه داخل السرفيس إذا مررنا الاسم
+                            if (!string.IsNullOrEmpty(product.MainImagePath))
+                                _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
+                                
+                            product.MainImagePath = await _fileService.SaveFileAsync(model.MainImageFile, Constants.Folders.Products);
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            _logger.LogError(ex, "Error uploading main image in Edit Product");
+                            ModelState.AddModelError("MainImageFile", ex.Message);
+                            // Reload data for view
+                            var existingP = await _context.Products.Include(p => p.ProductImages).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+                            if (existingP != null)
+                            {
+                                model.CurrentMainImagePath = existingP.MainImagePath;
+                                model.CurrentGalleryImages = existingP.ProductImages.ToList();
+                            }
+                            ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "NameAr", model.CategoryId);
+                            return View(model);
+                        }
+                    }
+
+                    // إضافة صور معرض جديدة
+                    if (model.GalleryFiles != null && model.GalleryFiles.Count > 0)
+                    {
+                        try
+                        {
+                            foreach (var file in model.GalleryFiles)
+                            {
+                                var path = await _fileService.SaveFileAsync(file, Constants.Folders.ProductsGallery);
+                                _context.ProductImages.Add(new ProductImage { ProductId = product.Id, ImagePath = path });
+                            }
+                        }
+                        catch (ArgumentException ex)
+                        {
+                             _logger.LogError(ex, "Error uploading gallery images in Edit Product");
+                             TempData["ErrorMessage"] = $"تم تحديث المنتج ولكن فشل رفع بعض الصور: {ex.Message}";
+                        }
+                    }
+
+                    _context.Update(product);
+                    await _context.SaveChangesAsync();
+
+                    // Evict caches
+                    await _cacheStore.EvictByTagAsync("products_data", CancellationToken.None);
+                    await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+
+                    TempData["SuccessMessage"] = "تم تحديث المنتج بنجاح";
+                    return RedirectToAction(nameof(Index));
                 }
-
-                _context.Update(product);
-                await _context.SaveChangesAsync();
-
-                TempData["SuccessMessage"] = "تم تحديث المنتج بنجاح";
-                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Edit));
+                return Redirect("/Admin/Error/General");
             }
 
             // في حالة الخطأ، أعد تحميل الصور القديمة للعرض
@@ -283,23 +315,35 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var product = await _context.Products
-                .Include(p => p.ProductImages)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (product != null)
+            try
             {
-                // حذف الصورة الرئيسية
-                _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
+                var product = await _context.Products
+                    .Include(p => p.ProductImages)
+                    .FirstOrDefaultAsync(p => p.Id == id);
 
-                // حذف صور المعرض
-                foreach (var img in product.ProductImages)
+                if (product != null)
                 {
-                    _fileService.DeleteFile(img.ImagePath, Constants.Folders.ProductsGallery);
-                }
+                    // حذف الصورة الرئيسية
+                    _fileService.DeleteFile(product.MainImagePath, Constants.Folders.Products);
 
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
+                    // حذف صور المعرض
+                    foreach (var img in product.ProductImages)
+                    {
+                        _fileService.DeleteFile(img.ImagePath, Constants.Folders.ProductsGallery);
+                    }
+
+                    _context.Products.Remove(product);
+                    await _context.SaveChangesAsync();
+                    
+                    // Evict caches
+                    await _cacheStore.EvictByTagAsync("products_data", CancellationToken.None);
+                    await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {ActionName}", nameof(Delete));
+                return Redirect("/Admin/Error/General");
             }
             return RedirectToAction(nameof(Index));
         }

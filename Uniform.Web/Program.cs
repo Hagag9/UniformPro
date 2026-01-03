@@ -4,9 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using UniformPro.Core.Entities;
 using UniformPro.Infrastructure.Data;
+using Serilog;
+using Microsoft.AspNetCore.Http.Features;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Serilog Configuration
+builder.Host.UseSerilog((context, configuration) => 
+    configuration.ReadFrom.Configuration(context.Configuration));
+
+// Increase Multipart Body Length Limit to 30MB
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 31457280; // 30 MB
+});
+
 
 // 1. جلب نص الاتصال
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -32,6 +45,35 @@ builder.Services.AddRazorPages();
 //builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddLocalization();
 builder.Services.AddHostedService<UniformPro.Web.Services.FileCleanupBackgroundService>();
+
+// --- Caching & Performance Services ---
+builder.Services.AddMemoryCache(); // 1. Memory Cache
+
+builder.Services.AddResponseCompression(options => // 2. Response Compression
+{
+    options.EnableForHttps = true;
+});
+
+builder.Services.AddOutputCache(options => // 3. Output Cache
+{
+    // Base Policy: Default 1 min
+    options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromMinutes(1)));
+
+    // HomePage Policy: 1 hour, Tag "home_data" for eviction
+    options.AddPolicy("HomePage", builder => 
+        builder.Expire(TimeSpan.FromHours(1)).Tag("home_data"));
+
+    // Products Policy: 5 mins, Vary by query keys, Tag "products_data"
+    options.AddPolicy("Products", builder => 
+        builder.Expire(TimeSpan.FromMinutes(5))
+               .SetVaryByQuery("category", "search", "page")
+               .Tag("products_data")); // Added tag for eviction
+
+    // Portfolios Policy: 30 mins, Tag "portfolio_data"
+    options.AddPolicy("Portfolios", builder => 
+        builder.Expire(TimeSpan.FromMinutes(30)).Tag("portfolio_data"));
+});
+// --------------------------------------
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new[] { new CultureInfo("ar"), new CultureInfo("en") };
@@ -63,10 +105,19 @@ else
 app.UseStatusCodePages(async context =>
 {
     var response = context.HttpContext.Response;
-    var path = context.HttpContext.Request.Path.Value ?? "";
+    var request = context.HttpContext.Request;
+    var path = request.Path.Value ?? "";
     
     if (response.StatusCode == 404)
     {
+        // 🔥 الإضافة الجديدة: تسجيل اللوج قبل التوجيه
+        
+        var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+        
+        // بنسجلها كـ Warning   وبنسجل الرابط اللي اليوزر كتبه غلط
+        logger.LogWarning("⚠️ 404 Not Found: User tried to access '{Path}' but it does not exist.", path);
+
+        // كود التوجيه القديم زي ما هو
         var isAdmin = path.StartsWith("/Admin", StringComparison.OrdinalIgnoreCase);
         if (isAdmin)
         {
@@ -80,12 +131,30 @@ app.UseStatusCodePages(async context =>
 });
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // للسماح بملفات wwwroot
+app.UseHttpsRedirection();
+
+// --- Static Files with Aggressive Caching (1 Year) ---
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers.Append(
+             "Cache-Control", "public,max-age=31536000");
+    }
+});
+// ----------------------------------------------------
+
+app.UseSerilogRequestLogging();
 
 app.UseRouting();
 
 // 5. تفعيل تعدد اللغات
 app.UseRequestLocalization();
+
+// --- Performance Middlewares ---
+app.UseResponseCompression(); // Must be before OutputCache
+app.UseOutputCache();
+// ------------------------------
 app.UseAuthentication();
 app.UseAuthorization();
 
