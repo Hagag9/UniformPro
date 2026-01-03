@@ -21,5 +21,6 @@ namespace UniformPro.Core.Entities
 
         public string? LinkUrl { get; set; } // زر "اطلب الآن" يودي فين؟
         public int DisplayOrder { get; set; } = 0; // للترتيب
+        public bool HasOverlay { get; set; } = true; // طبقة شفافة
     }
 }

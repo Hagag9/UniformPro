@@ -1,458 +1,184 @@
-@model IEnumerable<UniformPro.Web.ViewModels.ProductListViewModel>
+@model UniformPro.Web.ViewModels.ProductIndexViewModel
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
 @{
-    var categories = ViewBag.Categories as IEnumerable<UniformPro.Core.Entities.Category>;
-    int? selectedCategory = ViewBag.SelectedCategory;
-    var isArabic = ViewData["IsArabic"] as bool? ?? true;
-    int currentPage = ViewBag.CurrentPage ?? 1;
-    int pageSize = ViewBag.PageSize ?? 12;
-    int totalProducts = ViewBag.TotalProducts ?? 0;
-    int totalPages = ViewBag.TotalPages ?? 1;
+    var isArabic = Model.IsArabic;
 }
 
-@section Styles {
-    <style>
-        .products-header {
-            border-bottom: 1px solid #e5e5e5;
-        }
-        .filter-btn {
-            background: transparent;
-            border: 1px solid #e5e5e5;
-            padding: 8px 20px;
-            font-size: 12px;
-            font-weight: 500;
-            border-radius: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .filter-btn:hover, .filter-btn.active {
-            background: #111;
-            color: #fff;
-            border-color: #111;
-        }
-        .view-toggle {
-            display: flex;
-            gap: 4px;
-        }
-        .view-toggle button {
-            background: transparent;
-            border: 1px solid #e5e5e5;
-            padding: 6px 10px;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.2s;
-            font-size: 12px;
-        }
-        .view-toggle button:hover {
-            background: #f5f5f5;
-        }
-        .view-toggle button.active {
-            background: #111;
-            color: #fff;
-            border-color: #111;
-        }
-        
-        /* Column Views */
-        #productsGrid {
-            display: flex !important;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-        #productsGrid.cols-1 > div {
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-        #productsGrid.cols-2 > div {
-            flex: 0 0 calc(50% - 0.75rem);
-            max-width: calc(50% - 0.75rem);
-        }
-        #productsGrid.cols-4 > div {
-            flex: 0 0 calc(25% - 1.125rem);
-            max-width: calc(25% - 1.125rem);
-        }
-        #productsGrid.cols-6 > div {
-            flex: 0 0 calc(16.666% - 1.25rem);
-            max-width: calc(16.666% - 1.25rem);
-        }
-        
-        /* List View */
-        #productsGrid.list-view {
-            flex-direction: column;
-        }
-        #productsGrid.list-view > div {
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-        #productsGrid.list-view .product-card {
-            display: flex;
-            flex-direction: row;
-        }
-        #productsGrid.list-view .product-image-container {
-            width: 180px;
-            min-width: 180px;
-            aspect-ratio: 1/1;
-        }
-        #productsGrid.list-view .product-info {
-            text-align: start;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        /* Responsive adjustments */
-        @@media (max-width: 768px) {
-            #productsGrid.cols-4 > div,
-            #productsGrid.cols-6 > div,
-            #productsGrid.cols-2 > div {
-                flex: 0 0 calc(50% - 0.75rem);
-                max-width: calc(50% - 0.75rem);
-            }
-            #productsGrid.list-view .product-image-container {
-                width: 100px;
-                min-width: 100px;
-            }
-            #productsGrid.list-view .product-info {
-                padding: 10px;
-            }
-            #productsGrid.list-view .product-name {
-                font-size: 13px;
-                margin-bottom: 4px;
-            }
-            #productsGrid.list-view .product-price {
-                font-size: 12px;
-            }
-        }
-        @@media (max-width: 480px) {
-            /* On very small screens, maybe keep 2 cols but with smaller gap? Or go 1 col? 
-               Let's stick to 2 cols as it's standard for fashion, but reduce gap if needed manually. 
-               Actually, let's allow 1 col if user wants, but default is usually 2. 
-            */
-             #productsGrid {
-                gap: 1rem;
-            }
-             #productsGrid.cols-4 > div,
-            #productsGrid.cols-6 > div,
-            #productsGrid.cols-2 > div {
-                flex: 0 0 calc(50% - 0.5rem);
-                max-width: calc(50% - 0.5rem);
-            }
-        }
-        
-        /* Product Card Redesign */
-        .product-card {
-            position: relative;
-            cursor: pointer;
-        }
-        .product-image-container {
-            position: relative;
-            overflow: hidden;
-            background: #f8f8f8;
-            aspect-ratio: 3/4;
-        }
-        .product-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        .product-card:hover .product-image {
-            transform: scale(1.03);
-        }
-        
-        /* Floating Add to Cart Button */
-        .btn-add-cart-fab {
-            position: absolute;
-            bottom: 12px;
-            right: 12px; /* LTR */
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #D32F2F; /* Deep Red */
-            color: white;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10;
-            opacity: 1; /* Always visible or hover? User said "like image", usually always visible or slide up */
-            /* Let's keep it always visible for mobile friendliness and strong CTA */
-        }
-        html[dir="rtl"] .btn-add-cart-fab {
-            right: auto;
-            left: 12px;
-        }
-        .btn-add-cart-fab:hover {
-            transform: scale(1.1);
-            background: #b71c1c;
-            box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4);
-        }
-        
-        /* Badge */
-        .product-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: #D32F2F;
-            color: white;
-            font-size: 10px;
-            font-weight: 600;
-            padding: 4px 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            z-index: 5;
-        }
-        html[dir="rtl"] .product-badge {
-            left: auto;
-            right: 12px;
-        }
-        .product-info {
-            padding: 16px 0;
-            text-align: center;
-        }
-        .product-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: #000;
-            margin-bottom: 6px;
-            text-transform: capitalize;
-            line-height: 1.3;
-        }
-        .product-price {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        /* Categories Dropdown */
-        .categories-dropdown {
-            position: absolute;
-            top: 100%;
-            background: white;
-            border: 1px solid #e5e5e5;
-            min-width: 200px;
-            z-index: 100;
-            display: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        /* RTL: dropdown on right side */
-        html[dir="rtl"] .categories-dropdown {
-            right: 0;
-            left: auto;
-        }
-        /* LTR: dropdown on left side */
-        html[dir="ltr"] .categories-dropdown {
-            left: 0;
-            right: auto;
-        }
-        .categories-dropdown.show {
-            display: block;
-        }
-        .categories-dropdown a {
-            display: block;
-            padding: 12px 20px;
-            color: #333;
-            text-decoration: none;
-            font-size: 13px;
-            border-bottom: 1px solid #f5f5f5;
-        }
-        .categories-dropdown a:hover, .categories-dropdown a.active {
-            background: #f5f5f5;
-        }
-        
-        /* Pagination */
-        .pagination-minimal {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            padding: 40px 0;
-        }
-        .pagination-minimal a {
-            color: #111;
-            text-decoration: none;
-            font-size: 13px;
-            font-size: 13px;
-            padding: 8px 16px;
-            border: 1px solid #e5e5e5;
-            transition: all 0.2s;
-            border-radius: 6px;
-        }
-        .pagination-minimal a:hover {
-            background: #111;
-            color: #fff;
-            border-color: #111;
-        }
-        .pagination-minimal span {
-            color: #666;
-            font-size: 13px;
-        }
-    </style>
-}
+<!-- Page Title -->
+<div class="container py-8 md:py-12">
+    <h1 class="text-3xl md:text-4xl font-light text-center mb-2 tracking-wide text-gray-900">
+        @ViewData["Title"]
+    </h1>
+    <div class="w-16 h-0.5 bg-gray-900 mx-auto mb-8"></div>
 
-<!-- Products Header -->
-<div class="products-header py-4">
-    <div class="container">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-            <!-- Filters -->
-            <div class="flex gap-2 position-relative w-full md:w-auto justify-center md:justify-start">
-                <button class="filter-btn" id="browseBtn" onclick="toggleCategories()">
-                    @(isArabic ? "التصنيفات" : "BROWSE") <i class="ph ph-caret-down ms-1"></i>
-                </button>
-                
-                <!-- Categories Dropdown -->
-                <div class="categories-dropdown" id="categoriesDropdown">
-                    <a href="javascript:void(0)" onclick="loadProducts(null, '@ViewBag.SortOrder')" class="@(selectedCategory == null ? "active" : "")">
-                        @L["AllProducts"]
+    <!-- Filter Bar & Tools -->
+    <div class="flex flex-row justify-between items-center gap-4 mb-8">
+        
+        <!-- Categories Filter -->
+        <div class="relative w-auto">
+            <button id="browseBtn" onclick="toggleCategories()" 
+                    class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 rounded-lg transition-colors duration-200 border border-gray-200">
+                <span>@(isArabic ? "التصنيفات" : "BROWSE")</span>
+                <i class="ph ph-caret-down text-gray-400"></i>
+            </button>
+            
+            <!-- Dropdown -->
+            <div id="categoriesDropdown" class="hidden absolute top-full left-0 mt-2 w-56 bg-white border border-gray-100 rounded-lg shadow-lg z-50 py-1">
+                <a href="javascript:void(0)" onclick="loadProducts(null)" 
+                   class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-black transition-colors @(Model.SelectedCategoryId == null ? "bg-gray-50 font-medium text-black" : "")">
+                    @L["AllProducts"]
+                </a>
+                @foreach (var cat in Model.Categories)
+                {
+                    <a href="javascript:void(0)" onclick="loadProducts(@cat.Id)" 
+                       class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-black transition-colors @(Model.SelectedCategoryId == cat.Id ? "bg-gray-50 font-medium text-black" : "")">
+                        @(isArabic ? cat.NameAr : cat.NameEn)
                     </a>
-                    @foreach (var cat in categories)
-                    {
-                        <a href="javascript:void(0)" onclick="loadProducts(@cat.Id, '@ViewBag.SortOrder')" class="@(selectedCategory == cat.Id ? "active" : "")">
-                            @(isArabic ? cat.NameAr : cat.NameEn)
-                        </a>
-                    }
-                </div>
+                }
             </div>
+        </div>
 
-            <!-- Sorting Dropdown -->
-            <div class="flex gap-2 position-relative w-full md:w-auto justify-center md:justify-start">
-                <button class="filter-btn" id="sortBtn" onclick="toggleSort()">
-                     <i class="ph ph-sort-ascending me-1"></i> @(ViewBag.SortOrder switch { "price_asc" => isArabic ? "الأقل سعراً" : "Price: Low to High", "price_desc" => isArabic ? "الأعلى سعراً" : "Price: High to Low", _ => isArabic ? "الأحدث" : "Newest" }) <i class="ph ph-caret-down ms-1"></i>
+        <!-- View Options -->
+        <div class="flex items-center gap-4">
+            <span class="text-sm text-gray-500">
+                @Model.TotalProducts @L["Products"]
+            </span>
+            
+            <!-- View Toggles -->
+            <div class="flex items-center gap-1 bg-gray-50 p-1 rounded-lg border border-gray-100 view-toggle-container">
+                <button onclick="setView('cols-1')" data-view="cols-1" 
+                        class="p-1.5 text-gray-400 hover:text-black rounded transition-colors"
+                        title="@(isArabic ? "عمود واحد" : "1 Column")">
+                    <i class="ph ph-square text-lg"></i>
                 </button>
-                <div class="categories-dropdown" id="sortDropdown">
-                    <a href="javascript:void(0)" onclick="loadProducts(@(selectedCategory?.ToString() ?? "null"), 'newest')" class="@(string.IsNullOrEmpty(ViewBag.SortOrder as string) || ViewBag.SortOrder == "newest" ? "active" : "")">
-                        @(isArabic ? "الأحدث" : "Newest")
-                    </a>
-                    <a href="javascript:void(0)" onclick="loadProducts(@(selectedCategory?.ToString() ?? "null"), 'price_asc')" class="@(ViewBag.SortOrder == "price_asc" ? "active" : "")">
-                        @(isArabic ? "الأقل سعراً" : "Price: Low to High")
-                    </a>
-                    <a href="javascript:void(0)" onclick="loadProducts(@(selectedCategory?.ToString() ?? "null"), 'price_desc')" class="@(ViewBag.SortOrder == "price_desc" ? "active" : "")">
-                        @(isArabic ? "الأعلى سعراً" : "Price: High to Low")
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Page Title (Center) - Dutch Line Style -->
-            <h1 class="dutch-title mb-0 text-xl md:text-2xl lg:text-3xl text-center order-first md:order-none">
-                @ViewData["Title"]
-            </h1>
-            
-            <!-- View Toggle & Count -->
-            <div class="flex flex-col sm:flex-row align-items-center gap-3 w-full md:w-auto justify-center md:justify-end">
-                <span class="text-muted" style="font-size: 13px;">@totalProducts @L["Products"]</span>
-                <div class="view-toggle">
-                    <button onclick="setView('cols-1')" data-view="cols-1" title="@(isArabic ? "عمود واحد" : "1 Column")"><i class="ph ph-square"></i></button>
-                    <button onclick="setView('cols-2')" data-view="cols-2" title="@(isArabic ? "٢ أعمدة" : "2 Columns")"><i class="ph ph-columns"></i></button>
-                    <button onclick="setView('cols-4')" data-view="cols-4" class="active" title="@(isArabic ? "٤ أعمدة" : "4 Columns")"><i class="ph ph-squares-four"></i></button>
-                    <button onclick="setView('cols-6')" data-view="cols-6" title="@(isArabic ? "٦ أعمدة" : "6 Columns")"><i class="ph ph-grid-nine"></i></button>
-                    <button onclick="setView('list-view')" data-view="list-view" title="@(isArabic ? "قائمة" : "List")"><i class="ph ph-list"></i></button>
-                </div>
+                <button onclick="setView('cols-2')" data-view="cols-2" 
+                        class="p-1.5 text-gray-400 hover:text-black rounded transition-colors"
+                        title="@(isArabic ? "٢ أعمدة" : "2 Columns")">
+                    <i class="ph ph-columns text-lg"></i>
+                </button>
+                <!-- Hidden on Mobile -->
+                <button onclick="setView('cols-4')" data-view="cols-4" 
+                        class="hidden md:block p-1.5 text-gray-400 hover:text-black rounded transition-colors view-btn-desktop-only"
+                        title="@(isArabic ? "٤ أعمدة" : "4 Columns")">
+                    <i class="ph ph-squares-four text-lg"></i>
+                </button>
+                <button onclick="setView('cols-6')" data-view="cols-6" 
+                        class="hidden md:block p-1.5 text-gray-400 hover:text-black rounded transition-colors view-btn-desktop-only"
+                        title="@(isArabic ? "٦ أعمدة" : "6 Columns")">
+                    <i class="ph ph-grid-nine text-lg"></i>
+                </button>
             </div>
         </div>
     </div>
+
+    <!-- Products Grid Container -->
+    <div id="productsContainer" class="min-h-[400px] transition-opacity duration-200">
+        <partial name="_ProductList" model="Model" />
+    </div>
 </div>
 
-<!-- Products Grid Container -->
-<!-- Products Grid Container -->
-<section class="py-5" id="productsContainer">
-    <partial name="_ProductList" model="Model" />
-</section>
-
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function toggleCategories() {
-            document.getElementById('categoriesDropdown').classList.toggle('show');
-            document.getElementById('sortDropdown').classList.remove('show');
-        }
-
-        function toggleSort() {
-            document.getElementById('sortDropdown').classList.toggle('show');
-            document.getElementById('categoriesDropdown').classList.remove('show');
-        }
-        
-        // Mobile Overlay Logic
-        function toggleMobileOverlay(card) {
-            // Only trigger on small screens (e.g. tablet/mobile) to avoid interfering with Desktop Hover
-            // Although desktop 'click' likely means they want to see it or do nothing if hover works.
-            // Let's make it universal but helpful:
-            
-            // Check if already active
-            if (card.classList.contains('mobile-active')) {
-                // If already active, do nothing (buttons inside handle actions)
-                // Or maybe toggle off? User said: "Tap 1 -> Show, Tap 2 -> Select Button". 
-                // So if I tap background while active, maybe deselect?
-                // Let's toggle off if clicked again on empty space?
-                // For now, keep it active so they can hit the button.
-            } else {
-                // Remove active from all other cards
-                document.querySelectorAll('.product-card').forEach(c => c.classList.remove('mobile-active'));
-                // Add to this one
-                card.classList.add('mobile-active');
+    <style>
+        /* Force hide specific buttons on mobile */
+        @@media (max-width: 768px) {
+            .view-btn-desktop-only {
+                display: none !important;
             }
         }
+    </style>
+    <script>
+        // Store current state
+        let currentState = {
+            category: @(Model.SelectedCategoryId?.ToString() ?? "null"),
+            page: @Model.CurrentPage
+        };
 
-        // Close dropdown/overlays when clicking outside
+        function toggleCategories() {
+            const dropdown = document.getElementById('categoriesDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdowns when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('#browseBtn') && !e.target.closest('#categoriesDropdown')) {
-                document.getElementById('categoriesDropdown').classList.remove('show');
-            }
-            if (!e.target.closest('#sortBtn') && !e.target.closest('#sortDropdown')) {
-                document.getElementById('sortDropdown').classList.remove('show');
-            }
-            
-            // Close mobile overlays if clicking outside any card
-            if (!e.target.closest('.product-card')) {
-                document.querySelectorAll('.product-card').forEach(c => c.classList.remove('mobile-active'));
+                document.getElementById('categoriesDropdown').classList.add('hidden');
             }
         });
 
-        // View Toggle Functions
+        // View Management
         function setView(viewMode) {
-            var grid = document.getElementById('productsGrid');
+            const grid = document.getElementById('productsGrid');
             if (!grid) return;
             
-            // Remove all view classes
-            grid.classList.remove('cols-1', 'cols-2', 'cols-4', 'cols-6', 'list-view');
+            // Map view modes to Tailwind classes
+            const viewClasses = {
+                'cols-1': 'grid-cols-1',
+                'cols-2': 'grid-cols-2',
+                'cols-4': 'grid-cols-4',
+                'cols-6': 'grid-cols-6'
+            };
+
+            // Remove all possible view classes
+            Object.values(viewClasses).forEach(cls => grid.classList.remove(cls));
             
+            // Add grid class if missing (ensure it's a grid)
+            if (!grid.classList.contains('grid')) grid.classList.add('grid');
+
             // Add selected view class
-            grid.classList.add(viewMode);
+            if (viewClasses[viewMode]) {
+                 grid.classList.add(viewClasses[viewMode]);
+            }
             
-            // Update active button
-            var buttons = document.querySelectorAll('.view-toggle button');
-            buttons.forEach(function(btn) {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-view') === viewMode) {
-                    btn.classList.add('active');
-                }
+            // Update active button state
+            document.querySelectorAll('[data-view]').forEach(btn => {
+                const isActive = btn.dataset.view === viewMode;
+                btn.className = isActive 
+                    ? 'p-1.5 text-black bg-white shadow-sm rounded transition-colors' 
+                    : 'p-1.5 text-gray-400 hover:text-black rounded transition-colors ' + (btn.classList.contains('view-btn-desktop-only') ? 'view-btn-desktop-only' : '');
             });
             
-            // Save preference
+            // Save preference (store the abstract name 'cols-4', not the class)
             localStorage.setItem('productsView', viewMode);
         }
-        
-        // Restore saved view preference on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            var savedView = localStorage.getItem('productsView');
-            if (savedView) {
-                setView(savedView);
+
+        function checkMobileView() {
+            const isMobile = window.innerWidth < 768; // Tailwind md breakpoint
+            const savedView = localStorage.getItem('productsView');
+            
+            if (isMobile) {
+                // Mobile: Default to 2 columns
+                // If there is no saved view, or if the saved view is invalid for mobile (4 or 6), force 2.
+                if (!savedView || savedView === 'cols-4' || savedView === 'cols-6') {
+                     setView('cols-2');
+                } else {
+                     // Respect user choice if it is cols-1 or cols-2
+                     setView(savedView);
+                }
             } else {
-                setView('cols-4'); // Default
+                // Desktop: Default to 4 columns if nothing is saved
+                setView(savedView || 'cols-4');
             }
-        });
-        function loadProducts(categoryId, sortOrder, page = 1) {
+        }
+
+        // Initial View Setup
+        document.addEventListener('DOMContentLoaded', checkMobileView);
+        
+        // Handle Resize (optional, but good for testing responsiveness)
+        window.addEventListener('resize', checkMobileView);
+
+
+        // Navigation & AJAX
+        function loadProducts(categoryId = null, page = 1) {
              const container = document.getElementById('productsContainer');
-             container.style.opacity = '0.5'; // Loading indication
+             container.style.opacity = '0.6'; // Smooth loading state
              
+             // Update State
+             currentState.category = categoryId;
+             currentState.page = page;
+
              let url = `/Products?page=${page}`;
              if(categoryId) url += `&category=${categoryId}`;
-             if(sortOrder) url += `&sort=${sortOrder}`;
              
              fetch(url, {
                  headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -462,20 +188,52 @@
                  container.innerHTML = html;
                  container.style.opacity = '1';
                  
-                 // Restore Grid View
-                 var savedView = localStorage.getItem('productsView') || 'cols-4';
-                 setView(savedView);
+                 // Restore Grid View (important to prevent flash)
+                 checkMobileView();
                  
-                 // Update URL without reload
-                 window.history.pushState({path: url}, '', url);
+                 // Push History
+                 window.history.pushState(currentState, '', url);
                  
-                 // Close dropdowns
-                 document.getElementById('categoriesDropdown').classList.remove('show');
-                 document.getElementById('sortDropdown').classList.remove('show');
+                 // Close dropdown
+                 document.getElementById('categoriesDropdown').classList.add('hidden');
              })
              .catch(error => {
                  console.error('Error:', error);
                  container.style.opacity = '1';
+             });
+        }
+
+        // Handle Browser Back/Forward Buttons
+        window.onpopstate = function(event) {
+            if (event.state) {
+                // Restore from history state
+                currentState = event.state;
+                // We reload content via AJAX to match the history state
+                // Note: we need to handle the 'null' category case carefully if standard fetch expects it.
+                // Simpler: Just reload the URL currently in address bar via AJAX?
+                // Or use the params from event.state.
+                loadProductsByUrl(window.location.href);
+            } else {
+                // Initial state
+                // loadProductsByUrl(window.location.href); 
+                // Or do nothing as the page loaded normally? 
+                // Using AJAX reload ensures smooth experience.
+                window.location.reload(); 
+            }
+        };
+
+        function loadProductsByUrl(url) {
+             const container = document.getElementById('productsContainer');
+             container.style.opacity = '0.6';
+             
+             fetch(url, {
+                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
+             })
+             .then(r => r.text())
+             .then(html => {
+                 container.innerHTML = html;
+                 container.style.opacity = '1';
+                 checkMobileView();
              });
         }
     </script>

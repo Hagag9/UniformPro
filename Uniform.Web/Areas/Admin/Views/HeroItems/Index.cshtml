@@ -19,6 +19,7 @@
             <tr>
                 <th class="w-10"></th> <th class="px-6 py-3">الصورة</th>
                 <th class="px-6 py-3">العنوان</th>
+                <th class="px-6 py-3">الحالة</th>
                 <th class="px-6 py-3">الترتيب الحالي</th>
                 <th class="px-6 py-3 text-left">إجراءات</th>
             </tr>
@@ -37,6 +38,27 @@
                     <td class="px-6 py-4">
                         <div class="font-bold text-gray-800">@item.TitleAr</div>
                         <div class="text-xs text-gray-500">@item.TitleEn</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        @if(item.IsActive)
+                        {
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <span class="w-1.5 h-1.5 mr-1 bg-green-600 rounded-full"></span> مفعل
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                <span class="w-1.5 h-1.5 mr-1 bg-red-600 rounded-full"></span> غير مفعل
+                            </span>
+                        }
+                        
+                        @if(item.HasOverlay)
+                        {
+                            <div class="mt-1 flex items-center text-xs text-gray-500" title="يوجد طبقة شفافة">
+                                <i class="ph-bold ph-layers text-primary mr-1"></i> Overlay
+                            </div>
+                        }
                     </td>
                     <td class="px-6 py-4 font-bold text-primary order-badge">
                         @item.DisplayOrder

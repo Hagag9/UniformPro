@@ -8,18 +8,17 @@ namespace UniformPro.Web.ViewModels
         public int Id { get; set; }
 
         [Required(ErrorMessage = "الاسم بالعربية مطلوب")]
+        [MaxLength(200, ErrorMessage = "الاسم يجب ألا يتجاوز 200 حرف")]
         public string NameAr { get; set; }
 
         [Required(ErrorMessage = "Name in English is required")]
+        [MaxLength(200, ErrorMessage = "Name cannot exceed 200 characters")]
         public string NameEn { get; set; }
 
-        [Required(ErrorMessage = "وصف المنتج بالعربية مطلوب")]
-        public string DescriptionAr { get; set; }
+        public string? DescriptionAr { get; set; }
 
-        [Required(ErrorMessage = "Product description in English is required")]
-        public string DescriptionEn { get; set; }
+        public string? DescriptionEn { get; set; }
 
-        [Required(ErrorMessage = "السعر مطلوب")]
         public decimal? StartPrice { get; set; }
 
         [Required(ErrorMessage = "اختر التصنيف")]
@@ -28,13 +27,17 @@ namespace UniformPro.Web.ViewModels
         public string? MaterialDetailsAr { get; set; }
         public string? MaterialDetailsEn { get; set; }
 
+        [MaxLength(100, ErrorMessage = "المقاسات يجب ألا تتجاوز 100 حرف")]
         public string? AvailableSizes { get; set; }
 
         public int MinQuantity { get; set; } = 1;
 
         public bool ShowOnHome { get; set; } // عرض في الرئيسية
 
+        [MaxLength(300, ErrorMessage = "الوصف المختصر يجب ألا يتجاوز 300 حرف")]
         public string? MetaDescription { get; set; }
+        
+        [MaxLength(200, ErrorMessage = "الكلمات المفتاحية يجب ألا تتجاوز 200 حرف")]
         public string? MetaKeywords { get; set; }
 
         // Images Input

@@ -33,27 +33,51 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(SiteSettings model, IFormFile? ownerImageFile)
+        public async Task<IActionResult> Update(SiteSettings model, IFormFile? ownerImageFile, IFormFile? logoFile)
         {
             if (ModelState.IsValid)
             {
+                // تنظيف رابط الخريطة: إذا قام المستخدم بلصق كود Iframe كامل، نستخرج الرابط فقط
+                if (!string.IsNullOrWhiteSpace(model.MapLocationUrl) && model.MapLocationUrl.Contains("<iframe"))
+                {
+                    var match = System.Text.RegularExpressions.Regex.Match(model.MapLocationUrl, "src=\"([^\"]+)\"");
+                    if (match.Success)
+                    {
+                        model.MapLocationUrl = match.Groups[1].Value;
+                    }
+                }
                 // معالجة رفع صورة المالك
                 if (ownerImageFile != null && ownerImageFile.Length > 0)
                 {
                     try
                     {
-                        // حذف الصورة القديمة إن وجدت
                         if (!string.IsNullOrEmpty(model.OwnerImage))
                         {
                             _fileService.DeleteFile(model.OwnerImage, Constants.Folders.SiteSettings);
                         }
-
-                        // رفع الصورة الجديدة
                         model.OwnerImage = await _fileService.SaveFileAsync(ownerImageFile, Constants.Folders.SiteSettings);
                     }
                     catch (ArgumentException ex)
                     {
                         ModelState.AddModelError("OwnerImage", ex.Message);
+                        return View("Index", model);
+                    }
+                }
+
+                // معالجة رفع اللوجو
+                if (logoFile != null && logoFile.Length > 0)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(model.LogoPath))
+                        {
+                            _fileService.DeleteFile(model.LogoPath, Constants.Folders.SiteSettings);
+                        }
+                        model.LogoPath = await _fileService.SaveFileAsync(logoFile, Constants.Folders.SiteSettings);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("LogoPath", ex.Message);
                         return View("Index", model);
                     }
                 }

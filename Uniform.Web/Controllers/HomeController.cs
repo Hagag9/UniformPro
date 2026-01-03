@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniformPro.Infrastructure.Data;
+using UniformPro.Web.ViewModels;
+using UniformPro.Core.Entities;
 
 namespace UniformPro.Web.Controllers
 {
@@ -35,8 +37,6 @@ namespace UniformPro.Web.Controllers
                     .ToListAsync();
             }
 
-            ViewBag.HeroItems = heroItems;
-            ViewBag.LatestProducts = featuredProducts;
 
             // جلب أعمالنا السابقة المختارة للعرض في الرئيسية
             var homePortfolios = await _context.Portfolios
@@ -55,10 +55,6 @@ namespace UniformPro.Web.Controllers
                 })
                 .ToListAsync();
 
-            ViewBag.HomePortfolios = homePortfolios;
-
-            ViewBag.HomePortfolios = homePortfolios;
-
             // Fetch Happy Customers (Testimonials)
             var testimonials = await _context.Testimonials
                 .AsNoTracking()
@@ -66,9 +62,16 @@ namespace UniformPro.Web.Controllers
                 .OrderByDescending(t => t.CreatedAt)
                 .ToListAsync();
 
-            ViewBag.Testimonials = testimonials;
+            var viewModel = new HomeViewModel
+            {
+                SiteSettings = await _context.SiteSettings.FirstOrDefaultAsync() ?? new SiteSettings(),
+                HeroItems = heroItems,
+                LatestProducts = featuredProducts,
+                Portfolios = homePortfolios,
+                Testimonials = testimonials
+            };
 
-            return View();
+            return View(viewModel);
         }
 
         public async Task<IActionResult> About()

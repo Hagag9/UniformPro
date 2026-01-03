@@ -31,6 +31,7 @@ builder.Services.AddRazorPages();
 // 4. إعداد تعدد اللغات (Localization)
 //builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddLocalization();
+builder.Services.AddHostedService<UniformPro.Web.Services.FileCleanupBackgroundService>();
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new[] { new CultureInfo("ar"), new CultureInfo("en") };

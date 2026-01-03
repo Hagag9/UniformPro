@@ -4,14 +4,35 @@
 @inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
 @{
     Layout = "_FrontLayout";
-    ViewData["Title"] = L["DiscountPolicy"];
     var isArabic = ViewData["IsArabic"] as bool? ?? true;
+
+    // --- 🧠 LOGIC: Calculate Max Discount for SEO ---
+    var maxDiscount = Model.Tiers.Any() ? Model.Tiers.Max(x => x.DiscountPercentage) : 0;
+    
+    // تجهيز عناوين جذابة بناءً على الداتا
+    var pageTitle = isArabic 
+        ? $"سياسة الخصومات - وفر حتى {maxDiscount:0}%" 
+        : $"Discount Policy - Save up to {maxDiscount:0}%";
+
+    var metaDesc = isArabic
+        ? $"اكتشف شرائح الخصومات على الكميات من مانو يونيفورم. خصومات حصرية تصل إلى {maxDiscount:0}% للشركات والمصانع. اطلب عرض سعر الآن."
+        : $"Explore our bulk discount tiers at Mano Uniform. Exclusive savings up to {maxDiscount:0}% for B2B orders. Get a quote today.";
+
+    ViewData["Title"] = pageTitle;
+}
+
+@section Head {
+    <meta name="description" content="@metaDesc" />
+    
+    <meta property="og:title" content="@pageTitle" />
+    <meta property="og:description" content="@metaDesc" />
+    <meta property="og:type" content="website" />
 }
 
 @section Styles {
     <style>
         .tier-card {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .tier-card:hover {
             transform: translateY(-8px);
@@ -20,16 +41,14 @@
             animation: pulse 2s infinite;
         }
         @@keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.05); }
         }
     </style>
 }
 
-<!-- Hero Section -->
 <section class="py-10 md:py-14 bg-gradient-to-br from-gray-100 via-gray-50 to-white relative overflow-hidden">
-    <!-- Background Pattern -->
-    <div class="absolute inset-0 opacity-40">
+    <div class="absolute inset-0 opacity-40 pointer-events-none">
         <div class="absolute top-10 @(isArabic ? "left-10" : "right-10") w-32 h-32 bg-gray-200 rounded-full blur-3xl"></div>
         <div class="absolute bottom-10 @(isArabic ? "right-20" : "left-20") w-40 h-40 bg-gray-300 rounded-full blur-3xl"></div>
     </div>
@@ -47,7 +66,6 @@
     </div>
 </section>
 
-<!-- Tiers Grid -->
 <section class="py-12 md:py-16">
     <div class="container mx-auto px-4">
         @if (Model.Tiers.Any())
@@ -60,32 +78,28 @@
                          data-aos="fade-up"
                          data-aos-delay="@(Model.Tiers.IndexOf(tier) * 100)">
                         
-                        <!-- Promo Badge -->
                         @if (!string.IsNullOrEmpty(tier.PromoText))
                         {
-                            <div class="promo-badge absolute top-4 @(isArabic ? "left-4" : "right-4") flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
-                                 style="background-color: @(tier.ColorCode)20; color: @tier.ColorCode;">
+                            <div class="promo-badge absolute top-4 @(isArabic ? "left-4" : "right-4") flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm"
+                                 style="background-color: @(tier.ColorCode); color: white;">
                                 <i class="ph-fill ph-crown text-sm"></i>
                                 @tier.PromoText
                             </div>
                         }
 
-                        <!-- Tier Name -->
                         <h3 class="text-xl md:text-2xl font-bold text-gray-900 mt-8 mb-6">
                             @tier.Name
                         </h3>
 
-                        <!-- Discount Percentage -->
                         <div class="flex items-baseline gap-2 mb-4">
-                            <span class="text-4xl md:text-5xl font-extrabold text-gray-900">
+                            <span class="text-4xl md:text-5xl font-extrabold text-gray-900" style="color: @tier.ColorCode">
                                 @((int)tier.DiscountPercentage)%
                             </span>
-                            <span class="text-lg font-bold text-gray-500">@L["Discount"]</span>
+                            <span class="text-lg font-bold text-gray-400">@L["Discount"]</span>
                         </div>
 
-                        <!-- Quantity Range -->
-                        <div class="mb-6">
-                            <p class="text-gray-500 text-sm mb-1">@L["ForOrdersBetween"]</p>
+                        <div class="mb-6 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                            <p class="text-gray-500 text-xs mb-1 uppercase tracking-wide">@L["ForOrdersBetween"]</p>
                             <p class="text-lg font-bold text-gray-800">
                                 @tier.MinQuantity.ToString("N0")
                                 @if (tier.MaxQuantity.HasValue)
@@ -96,11 +110,10 @@
                                 {
                                     <span>+</span>
                                 }
-                                <span class="text-gray-500 font-normal">@L["Pieces"]</span>
+                                <span class="text-gray-500 font-normal text-sm"> @L["Pieces"]</span>
                             </p>
                         </div>
 
-                        <!-- Benefits List -->
                         @if (tier.Benefits.Any())
                         {
                             <div class="space-y-3 pt-4 border-t border-gray-100">
@@ -108,7 +121,7 @@
                                 {
                                     <div class="flex items-center gap-3">
                                         <span class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
-                                            <i class="ph-bold ph-check text-green-600 text-xs"></i>
+                                            <i class="ph-bold ph-check text-green-600 text-[10px]"></i>
                                         </span>
                                         <span class="text-gray-700 text-sm">@benefit</span>
                                     </div>
@@ -121,7 +134,6 @@
         }
         else
         {
-            <!-- Empty State -->
             <div class="text-center py-16">
                 <i class="ph ph-percent text-6xl text-gray-300 mb-4"></i>
                 <p class="text-gray-500 text-lg">@L["NoDiscountTiers"]</p>
@@ -130,28 +142,43 @@
     </div>
 </section>
 
-<!-- CTA Section -->
-<section class="py-12 md:py-16 bg-gray-50">
+<section class="py-12 md:py-16 bg-gray-50 border-t border-gray-100">
     <div class="container mx-auto px-4">
-        <div class="max-w-2xl mx-auto text-center" data-aos="fade-up">
+        <div class="max-w-2xl mx-auto text-center" data-aos="zoom-in">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                 @L["ReadyToOrder"]
             </h2>
-            <p class="text-gray-600 mb-6">
+            <p class="text-gray-600 mb-8">
                 @L["ContactUsForOrder"]
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="https://wa.me/@ViewData["WhatsApp"]" target="_blank"
-                   class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow-lg shadow-green-100 transition-all hover:-translate-y-1">
-                    <i class="ph-fill ph-whatsapp-logo text-xl"></i>
-                    @L["WhatsAppContact"]
-                </a>
+                @if (ViewData["WhatsApp"] != null)
+                {
+                    <a href="https://wa.me/@ViewData["WhatsApp"]" target="_blank"
+                       class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold rounded-full shadow-lg shadow-green-200 transition-all hover:-translate-y-1">
+                        <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
+                        @L["WhatsAppContact"]
+                    </a>
+                }
+                
                 <a href="/Products"
-                   class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white font-bold rounded-xl shadow-lg transition-all hover:-translate-y-1">
-                    <i class="ph ph-shopping-bag text-xl"></i>
+                   class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gray-900 hover:bg-black text-white font-bold rounded-full shadow-lg transition-all hover:-translate-y-1">
+                    <i class="ph ph-shopping-bag text-2xl"></i>
                     @L["Products"]
                 </a>
             </div>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        // Initialize AOS if not already initialized
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 800,
+                once: true
+            });
+        }
+    </script>
+}

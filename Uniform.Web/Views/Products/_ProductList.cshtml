@@ -1,66 +1,67 @@
-@model IEnumerable<UniformPro.Web.ViewModels.ProductListViewModel>
+@model UniformPro.Web.ViewModels.ProductIndexViewModel
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
 @{
-    var isArabic = ViewData["IsArabic"] as bool? ?? true;
-    int currentPage = ViewBag.CurrentPage ?? 1;
-    int pageSize = ViewBag.PageSize ?? 12;
-    int totalProducts = ViewBag.TotalProducts ?? 0;
-    int totalPages = ViewBag.TotalPages ?? 1;
-    var selectedCategory = ViewBag.SelectedCategory;
-    var sortOrder = ViewBag.SortOrder;
+    var isArabic = Model.IsArabic;
 }
 
 <div class="container">
-    @if (!Model.Any())
+    @if (!Model.Products.Any())
     {
-        <div class="text-center py-5">
-            <i class="ph ph-package display-1 text-muted mb-3"></i>
-            <p class="text-muted">@L["NoProducts"]</p>
+        <div class="text-center py-12 md:py-20">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 mb-4">
+                <i class="ph ph-package text-3xl text-gray-400"></i>
+            </div>
+            <p class="text-gray-500 text-lg">@L["NoProducts"]</p>
         </div>
     }
     else
     {
-        <div id="productsGrid" class="cols-4">
-            @foreach (var product in Model)
+        <!-- Grid Container -->
+        <!-- Note: The parent 'productsGrid' logic might be in Index, but typically we want the grid classes here if this partial REPLACES the container. 
+             However, in Index.cshtml I wrote: <div id="productsContainer"> <partial ... /> </div>
+             So this partial should probably contain the #productsGrid div so that view classes work? 
+             Actually, the JS toggles classes on 'productsGrid'. If I replace the inner HTML of 'productsContainer', I must ensure 'productsGrid' is inside.
+        -->
+        <div id="productsGrid" class="grid grid-cols-4 gap-6"> 
+            @foreach (var product in Model.Products)
             {
                 <div>
-                    <div class="product-card" onclick="location.href='/Products/Details/@product.Id'">
+                    <div class="product-card group relative" onclick="location.href='/Products/Details/@product.Id'">
                         <!-- Image -->
-                        <div class="product-image-container">
+                        <div class="product-image-container relative overflow-hidden bg-gray-100 aspect-[3/4] rounded-lg mb-3">
                             @if (!string.IsNullOrEmpty(product.MainImagePath))
                             {
                                 <img src="~/uploads/products/@product.MainImagePath" 
                                      alt="@(isArabic ? product.NameAr : product.NameEn)"
-                                     class="product-image">
+                                     class="product-image w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                             }
                             else
                             {
-                                <div class="d-flex align-items-center justify-content-center h-100 text-muted">
-                                    <i class="ph ph-image display-4"></i>
+                                <div class="flex items-center justify-center w-full h-full text-gray-300">
+                                    <i class="ph ph-image text-4xl"></i>
                                 </div>
                             }
                             
-                            <!-- Floating Add to Cart Button -->
-                            <button type="button" class="btn-add-cart-fab" 
+                            <!-- Floating Add to Cart Button (Mobile friendly) -->
+                            <button type="button" class="btn-add-cart-fab absolute bottom-3 right-3 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center shadow-lg hover:bg-gray-800 transition-transform active:scale-95" 
                                     onclick="event.stopPropagation(); addToCart(@product.Id, '@(isArabic ? product.NameAr.Replace("'", "\\'") : product.NameEn.Replace("'", "\\'"))', '@(product.MainImagePath ?? "")')">
-                                <i class="ph ph-handbag"></i>
+                                <i class="ph ph-handbag text-lg"></i>
                             </button>
                         </div>
                         
                         <!-- Info -->
-                        <div class="product-info">
-                            <a href="/Products/Details/@product.Id" class="text-decoration-none">
-                                <h3 class="product-name hover:text-primary transition-colors">@(isArabic ? product.NameAr : product.NameEn)</h3>
-                            </a>
+                        <div class="product-info text-start">
+                             <h3 class="product-name font-medium text-gray-900 group-hover:text-black truncate">
+                                @(isArabic ? product.NameAr : product.NameEn)
+                             </h3>
                             @{
                                 var material = isArabic ? product.MaterialDetailsAr : product.MaterialDetailsEn;
                             }
                             @if (!string.IsNullOrEmpty(material))
                             {
-                                <p class="text-muted mb-1" style="font-size: 12px;">@material</p>
+                                <p class="text-xs text-gray-500 mt-1 truncate">@material</p>
                             }
-
                         </div>
                     </div>
                 </div>
@@ -68,22 +69,28 @@
         </div>
         
         <!-- Pagination -->
-        @if (totalPages > 1)
+        @if (Model.TotalPages > 1)
         {
-            <div class="pagination-minimal" id="paginationContainer">
-                @if (currentPage > 1)
+            <div class="pagination-minimal flex justify-center items-center gap-2 mt-12 mb-8">
+                @if (Model.CurrentPage > 1)
                 {
-                    <a href="javascript:void(0)" onclick="loadProducts(@(selectedCategory?.ToString() ?? "null"), '@sortOrder', @(currentPage - 1))">
-                        <i class="ph ph-arrow-@(isArabic ? "right" : "left") me-1"></i> @L["Previous"]
+                    <a href="/Products?category=@Model.SelectedCategoryId&page=@(Model.CurrentPage - 1)" 
+                       onclick="event.preventDefault(); loadProducts(@(Model.SelectedCategoryId?.ToString() ?? "null"), @(Model.CurrentPage - 1))"
+                       class="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-black hover:text-white hover:border-black transition-colors flex items-center gap-2">
+                        <i class="ph ph-arrow-@(isArabic ? "right" : "left")"></i> @L["Previous"]
                     </a>
                 }
                 
-                <span>@L["Page"] @currentPage @L["Of"] @totalPages</span>
+                <span class="text-sm text-gray-500 px-2">
+                    @L["Page"] @Model.CurrentPage @L["Of"] @Model.TotalPages
+                </span>
                 
-                @if (currentPage < totalPages)
+                @if (Model.CurrentPage < Model.TotalPages)
                 {
-                    <a href="javascript:void(0)" onclick="loadProducts(@(selectedCategory?.ToString() ?? "null"), '@sortOrder', @(currentPage + 1))">
-                        @L["Next"] <i class="ph ph-arrow-@(isArabic ? "left" : "right") ms-1"></i>
+                    <a href="/Products?category=@Model.SelectedCategoryId&page=@(Model.CurrentPage + 1)" 
+                       onclick="event.preventDefault(); loadProducts(@(Model.SelectedCategoryId?.ToString() ?? "null"), @(Model.CurrentPage + 1))"
+                       class="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-black hover:text-white hover:border-black transition-colors flex items-center gap-2">
+                        @L["Next"] <i class="ph ph-arrow-@(isArabic ? "left" : "right")"></i>
                     </a>
                 }
             </div>

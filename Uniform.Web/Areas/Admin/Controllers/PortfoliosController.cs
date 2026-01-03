@@ -79,6 +79,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                     DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn),
                     CategoryId = model.CategoryId,
                     ShowOnHome = model.ShowOnHome,
+                    IsActive = model.IsActive,
                     DisplayOrder = model.DisplayOrder,
                     MetaDescription = model.MetaDescription,
                     MetaKeywords = model.MetaKeywords,
@@ -160,6 +161,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 DescriptionEn = portfolio.DescriptionEn,
                 CategoryId = portfolio.CategoryId,
                 ShowOnHome = portfolio.ShowOnHome,
+                IsActive = portfolio.IsActive,
                 DisplayOrder = portfolio.DisplayOrder,
                 CurrentCoverImagePath = portfolio.CoverImagePath,
                 CurrentMedia = portfolio.PortfolioMedias.ToList(),
@@ -208,6 +210,7 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 portfolio.DescriptionEn = _sanitizer.Sanitize(model.DescriptionEn);
                 portfolio.CategoryId = model.CategoryId;
                 portfolio.ShowOnHome = model.ShowOnHome;
+                portfolio.IsActive = model.IsActive;
                 portfolio.DisplayOrder = model.DisplayOrder;
                 portfolio.MetaDescription = model.MetaDescription;
                 portfolio.MetaKeywords = model.MetaKeywords;

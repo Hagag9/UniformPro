@@ -2,13 +2,38 @@
 @using UniformPro.Core.Helpers
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
+@model UniformPro.Web.ViewModels.HomeViewModel
 @{
     Layout = "_FrontLayout";
     ViewData["Title"] = "الرئيسية";
     var isArabic = ViewData["IsArabic"] as bool? ?? true;
-    var heroItems = ViewBag.HeroItems as List<HeroItem> ?? new List<HeroItem>();
+    var heroItems = Model.HeroItems?.ToList() ?? new List<HeroItem>();
     var hasHero = heroItems.Any();
     var isCarousel = heroItems.Count > 1;
+}
+
+@section Head {
+    @{
+        var socialLinks = new List<string>();
+        if (!string.IsNullOrEmpty(Model.SiteSettings.FacebookUrl)) { socialLinks.Add(Model.SiteSettings.FacebookUrl); }
+        if (!string.IsNullOrEmpty(Model.SiteSettings.InstagramUrl)) { socialLinks.Add(Model.SiteSettings.InstagramUrl); }
+        if (!string.IsNullOrEmpty(Model.SiteSettings.TikTokUrl)) { socialLinks.Add(Model.SiteSettings.TikTokUrl); }
+        if (!string.IsNullOrEmpty(Model.SiteSettings.YoutubeUrl)) { socialLinks.Add(Model.SiteSettings.YoutubeUrl); }
+    }
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "LocalBusiness",
+      "name": "@(isArabic ? Model.SiteSettings.WebsiteNameAr : Model.SiteSettings.WebsiteNameEn)",
+      "image": "@Url.Content($"~/uploads/sitesettings/{Model.SiteSettings.LogoPath}")",
+      "telephone": "@Model.SiteSettings.PhoneNumber",
+      "address": {
+        "@@type": "PostalAddress",
+        "streetAddress": "@(isArabic ? Model.SiteSettings.AddressAr : Model.SiteSettings.AddressEn)"
+      },
+      "sameAs": @Html.Raw(Json.Serialize(socialLinks))
+    }
+    </script>
 }
 
 @section Styles {
@@ -116,11 +141,15 @@
                 }
                 <img src="~/uploads/hero/@item.ImagePath" 
                      alt="@(isArabic ? item.TitleAr : item.TitleEn)" 
-                     class="w-full h-full object-cover">
+                     class="w-full h-full object-cover"
+                     loading="eager" fetchpriority="high">
             </picture>
 
             <!-- Overlay -->
-            <div class="absolute inset-0 bg-black/50 z-10"></div>
+            @if (item.HasOverlay)
+            {
+                <div class="absolute inset-0 bg-black/50 z-10"></div>
+            }
 
             <!-- Content -->
             <div class="hero-content absolute inset-0 z-20 flex items-center justify-center">
@@ -150,8 +179,10 @@
             <!-- ===== CAROUSEL MODE (2+ صور) ===== -->
             <div id="heroCarouselWrapper" class="absolute inset-0 z-0 overflow-hidden">
                 <div id="heroCarousel" class="hero-carousel h-full">
+                    @{ int slideIndex = 0; }
                     @foreach (var item in heroItems)
                     {
+                        var isFirstSlide = slideIndex == 0;
                         <div class="hero-slide">
                             <picture>
                                 @if (!string.IsNullOrEmpty(item.MobileImagePath))
@@ -159,11 +190,17 @@
                                     <source media="(max-width: 768px)" srcset="~/uploads/hero/@item.MobileImagePath">
                                 }
                                 <img src="~/uploads/hero/@item.ImagePath" 
-                                     alt="@(isArabic ? item.TitleAr : item.TitleEn)">
+                                     alt="@(isArabic ? item.TitleAr : item.TitleEn)"
+                                     loading="@(isFirstSlide ? "eager" : "lazy")"
+                                     fetchpriority="@(isFirstSlide ? "high" : "auto")">
                             </picture>
+                        @{ slideIndex++; }
 
                             <!-- Per-slide Overlay -->
-                            <div class="absolute inset-0 bg-black/50"></div>
+                            @if (item.HasOverlay)
+                            {
+                                <div class="absolute inset-0 bg-black/50"></div>
+                            }
 
                             <!-- Per-slide Content -->
                             <div class="absolute inset-0 flex items-center justify-center">
@@ -218,7 +255,7 @@ else
 }
 
 @{
-    var latestProducts = ViewBag.LatestProducts as List<UniformPro.Core.Entities.Product> ?? new List<UniformPro.Core.Entities.Product>();
+    var latestProducts = Model.LatestProducts?.ToList() ?? new List<UniformPro.Core.Entities.Product>();
 }
 
 @if (latestProducts.Any())
@@ -274,7 +311,7 @@ else
 }
 
 @{
-    var homePortfolios = ViewBag.HomePortfolios as List<UniformPro.Web.ViewModels.PortfolioCardViewModel> ?? new List<UniformPro.Web.ViewModels.PortfolioCardViewModel>();
+    var homePortfolios = Model.Portfolios?.ToList() ?? new List<UniformPro.Web.ViewModels.PortfolioCardViewModel>();
 }
 
 @if (homePortfolios.Any())
@@ -397,7 +434,7 @@ else
 </section>
 
 @{
-    var testimonials = ViewBag.Testimonials as List<UniformPro.Core.Entities.Testimonial> ?? new List<UniformPro.Core.Entities.Testimonial>();
+    var testimonials = Model.Testimonials?.ToList() ?? new List<UniformPro.Core.Entities.Testimonial>();
 }
 
 @if (testimonials.Any())
@@ -455,7 +492,7 @@ else
                                          <video src="~/uploads/testimonials/videos/@item.VideoPath" 
                                                 class="w-full h-full object-cover" 
                                                 controls="@(hasCover ? null : "controls")" 
-                                                preload="metadata"
+                                                preload="none"
                                                 poster="@(!string.IsNullOrEmpty(item.ImagePath) ? Url.Content($"~/uploads/testimonials/images/{item.ImagePath}") : "")"></video>
                                      </div>
                                 }
@@ -527,245 +564,233 @@ else
     </section>
 }
 
-@if (isCarousel)
-{
-    @section Scripts {
-        <script>
-            // Slider Arrow Logic
-            function initSliderArrow(sliderId) {
-                const slider = document.getElementById(sliderId);
-                if (!slider) return;
+@section Scripts {
+    <script>
+        // Slider Arrow Logic
+        function initSliderArrow(sliderId) {
+            const slider = document.getElementById(sliderId);
+            if (!slider) return;
 
-                const arrow = slider.parentElement.querySelector('.slider-arrow');
-                if (!arrow) return;
+            const arrow = slider.parentElement.querySelector('.slider-arrow');
+            if (!arrow) return;
 
-                function checkScroll() {
-                    const isEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10; // 10px buffer
-                    const hasOverflow = slider.scrollWidth > slider.clientWidth;
-                    
-                    if (!isEnd && hasOverflow) {
-                        arrow.classList.remove('hidden');
+            function checkScroll() {
+                const isEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10; // 10px buffer
+                const hasOverflow = slider.scrollWidth > slider.clientWidth;
+                
+                if (!isEnd && hasOverflow) {
+                    arrow.classList.remove('hidden');
+                } else {
+                    arrow.classList.add('hidden');
+                }
+            }
+
+            slider.addEventListener('scroll', checkScroll);
+            window.addEventListener('resize', checkScroll);
+            
+            // Initial check
+            checkScroll();
+        }
+
+        function scrollSlider(sliderId, direction = 'right') {
+            const slider = document.getElementById(sliderId);
+            if (slider) {
+                // Update scroll amount for 5 items (approx 5 per screen)
+                const itemsPerScreen = window.innerWidth >= 768 ? 5 : 2;
+                const scrollAmount = slider.clientWidth / itemsPerScreen; 
+                
+                if (direction === 'left') {
+                    slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                } else {
+                    // Check if end
+                    if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
+                        slider.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back
                     } else {
-                        arrow.classList.add('hidden');
-                    }
-                }
-
-                slider.addEventListener('scroll', checkScroll);
-                window.addEventListener('resize', checkScroll);
-                
-                // Initial check
-                checkScroll();
-            }
-
-            function scrollSlider(sliderId, direction = 'right') {
-                const slider = document.getElementById(sliderId);
-                if (slider) {
-                    // Update scroll amount for 5 items (approx 5 per screen)
-                    const itemsPerScreen = window.innerWidth >= 768 ? 5 : 2;
-                    const scrollAmount = slider.clientWidth / itemsPerScreen; 
-                    
-                    if (direction === 'left') {
-                        slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-                    } else {
-                        // Check if end
-                        if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
-                            slider.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back
-                        } else {
-                            slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-                        }
+                        slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
                     }
                 }
             }
+        }
 
-            // Auto Play Logic
-            function initAutoPlay(sliderId, intervalTime = 3000) {
-                const slider = document.getElementById(sliderId);
-                if (!slider) return;
-                
-                let autoPlayInterval;
+        // Auto Play Logic
+        function initAutoPlay(sliderId, intervalTime = 3000) {
+            const slider = document.getElementById(sliderId);
+            if (!slider) return;
+            
+            let autoPlayInterval;
 
-                function start() {
-                    stop();
-                    autoPlayInterval = setInterval(() => {
-                        // Only scroll if not hovered (handled by container hover check? simpler to check hover state)
-                         if (!slider.parentElement.matches(':hover')) {
-                            scrollSlider(sliderId, 'right');
-                        }
-                    }, intervalTime);
-                }
-
-                function stop() {
-                    clearInterval(autoPlayInterval);
-                }
-
-                // Pause on interaction
-                slider.parentElement.addEventListener('mouseenter', stop);
-                slider.parentElement.addEventListener('mouseleave', start);
-                slider.addEventListener('touchstart', stop);
-                slider.addEventListener('touchend', start);
-
-                start();
-            }
-
-            // Mouse Drag Logic with Click Prevention
-            function enableMouseDrag(sliderId) {
-                const slider = document.getElementById(sliderId);
-                if (!slider) return;
-
-                let isDown = false;
-                let startX;
-                let scrollLeft;
-                let isDragging = false;
-
-                slider.addEventListener('mousedown', (e) => {
-                    isDown = true;
-                    isDragging = false;
-                    slider.classList.add('cursor-grabbing');
-                    slider.classList.remove('cursor-grab');
-                    startX = e.pageX - slider.offsetLeft;
-                    scrollLeft = slider.scrollLeft;
-                    // Disable snap for smooth drag
-                    slider.style.scrollSnapType = 'none'; 
-                });
-
-                slider.addEventListener('mouseleave', () => {
-                    isDown = false;
-                    slider.classList.remove('cursor-grabbing');
-                    slider.classList.add('cursor-grab');
-                    slider.classList.remove('active');
-                    if(slider.style.scrollSnapType === 'none') slider.style.scrollSnapType = '';
-                });
-
-                slider.addEventListener('mouseup', () => {
-                    isDown = false;
-                    slider.classList.remove('cursor-grabbing');
-                    slider.classList.add('cursor-grab');
-                    if(slider.style.scrollSnapType === 'none') slider.style.scrollSnapType = '';
-                    
-                    // Reset dragging flag after a tick to allow click handlers to check it
-                    setTimeout(() => { isDragging = false; }, 50);
-                });
-
-                slider.addEventListener('mousemove', (e) => {
-                    if (!isDown) return;
-                    e.preventDefault();
-                    const x = e.pageX - slider.offsetLeft;
-                    const walk = (x - startX) * 1.5; 
-                    if (Math.abs(x - startX) > 5) isDragging = true;
-                    slider.scrollLeft = scrollLeft - walk;
-                });
-
-                // Prevent click if dragging was detected
-                const preventClick = (e) => {
-                    // Check our local flag or class
-                    if (isDragging) {
-                        e.preventDefault();
-                        e.stopPropagation();
+            function start() {
+                stop();
+                autoPlayInterval = setInterval(() => {
+                    // Only scroll if not hovered
+                     if (!slider.parentElement.matches(':hover')) {
+                        scrollSlider(sliderId, 'right');
                     }
-                };
-
-                // Attach to links and clickable elements
-                const clickables = slider.querySelectorAll('a, button, .cursor-pointer, video');
-                clickables.forEach(el => {
-                    el.addEventListener('click', preventClick, true); // Capture phase
-                });
-                
-                // Expose isDragging check for inline handlers if needed
-                slider.dataset.isDragging = "false";
-                slider.addEventListener('mousemove', () => {
-                     if(isDragging) slider.dataset.isDragging = "true";
-                });
-                slider.addEventListener('mouseup', () => {
-                     setTimeout(() => slider.dataset.isDragging = "false", 50);
-                });
+                }, intervalTime);
             }
 
-            // Local Video Play Logic (Global)
-            function playLocalVideo(container) {
-                // Check if dragging (prevent play)
-                const slider = container.closest('.overflow-x-auto');
-                if(slider && slider.dataset.isDragging === "true") return;
-
-                const video = container.querySelector('video');
-                const cover = container.querySelector('.cover-img');
-                const overlay = container.querySelector('.play-overlay');
-                
-                if(video) {
-                    if(cover) cover.classList.add('opacity-0', 'pointer-events-none');
-                    if(overlay) overlay.classList.add('opacity-0', 'hidden'); 
-                    video.controls = true;
-                    video.play();
-                    // Remove handler so subsequent clicks interact with video controls
-                    container.onclick = null;
-                }
+            function stop() {
+                clearInterval(autoPlayInterval);
             }
 
-            // Init sliders on load
-            document.addEventListener('DOMContentLoaded', () => {
-                initSliderArrow('latestProductsSlider');
-                initSliderArrow('portfolioSlider');
-                // Removed initSliderArrow(happyCustomers) as it uses custom arrows now
-                
-                enableMouseDrag('latestProductsSlider');
-                enableMouseDrag('portfolioSlider');
-                enableMouseDrag('happyCustomersSlider');
+            // Pause on interaction
+            slider.parentElement.addEventListener('mouseenter', stop);
+            slider.parentElement.addEventListener('mouseleave', start);
+            slider.addEventListener('touchstart', stop);
+            slider.addEventListener('touchend', start);
 
-                // Start AutoPlay
-                initAutoPlay('happyCustomersSlider', 3000);
+            start();
+        }
+
+        // Mouse Drag Logic with Click Prevention
+        function enableMouseDrag(sliderId) {
+            const slider = document.getElementById(sliderId);
+            if (!slider) return;
+
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            let isDragging = false;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                isDragging = false;
+                slider.classList.add('cursor-grabbing');
+                slider.classList.remove('cursor-grab');
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+                slider.style.scrollSnapType = 'none'; 
             });
 
-            // Simple Carousel Logic
-            (function() {
-                const carousel = document.getElementById('heroCarousel');
-                const dots = document.querySelectorAll('.hero-dot');
-                const slideCount = @heroItems.Count;
-                let currentSlide = 0;
-                let autoPlayInterval;
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.classList.remove('cursor-grabbing');
+                slider.classList.add('cursor-grab');
+                slider.classList.remove('active');
+                if(slider.style.scrollSnapType === 'none') slider.style.scrollSnapType = '';
+            });
 
-                function goToSlide(index) {
-                    currentSlide = index;
-                    carousel.style.transform = `translateX(-${index * 100}%)`;
-                    
-                    // Update dots
-                    dots.forEach((dot, i) => {
-                        dot.classList.toggle('active', i === index);
-                    });
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.classList.remove('cursor-grabbing');
+                slider.classList.add('cursor-grab');
+                if(slider.style.scrollSnapType === 'none') slider.style.scrollSnapType = '';
+                setTimeout(() => { isDragging = false; }, 50);
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 1.5; 
+                if (Math.abs(x - startX) > 5) isDragging = true;
+                slider.scrollLeft = scrollLeft - walk;
+            });
+
+            const preventClick = (e) => {
+                if (isDragging) {
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
+            };
 
-                function nextSlide() {
-                    currentSlide = (currentSlide + 1) % slideCount;
-                    goToSlide(currentSlide);
-                }
+            const clickables = slider.querySelectorAll('a, button, .cursor-pointer, video');
+            clickables.forEach(el => {
+                el.addEventListener('click', preventClick, true);
+            });
+            
+            slider.dataset.isDragging = "false";
+            slider.addEventListener('mousemove', () => {
+                 if(isDragging) slider.dataset.isDragging = "true";
+            });
+            slider.addEventListener('mouseup', () => {
+                 setTimeout(() => slider.dataset.isDragging = "false", 50);
+            });
+        }
 
-                // Auto-play every 5 seconds
-                function startAutoPlay() {
-                    autoPlayInterval = setInterval(nextSlide, 5000);
-                }
+        function playCardYoutube(el, url) {
+            if (el.closest('.cursor-grabbing')) return; 
+            el.innerHTML = `<iframe src="${url}?autoplay=1" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        }
+        
+        // Local Video Play Logic
+        function playLocalVideo(container) {
+            const slider = container.closest('.overflow-x-auto');
+            if(slider && slider.dataset.isDragging === "true") return;
 
-                function stopAutoPlay() {
-                    clearInterval(autoPlayInterval);
-                }
+            const video = container.querySelector('video');
+            const cover = container.querySelector('.cover-img');
+            const overlay = container.querySelector('.play-overlay');
+            
+            if(video) {
+                if(cover) cover.classList.add('opacity-0', 'pointer-events-none');
+                if(overlay) overlay.classList.add('opacity-0', 'hidden'); 
+                video.controls = true;
+                video.play();
+                container.onclick = null;
+            }
+        }
 
-                // Expose goToSlide globally
-                window.goToSlide = function(index) {
-                    stopAutoPlay();
-                    goToSlide(index);
-                    startAutoPlay();
-                };
+        // Init sliders on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initSliderArrow('latestProductsSlider');
+            initSliderArrow('portfolioSlider');
+            
+            enableMouseDrag('latestProductsSlider');
+            enableMouseDrag('portfolioSlider');
+            enableMouseDrag('happyCustomersSlider');
 
-                // Start auto-play on load
+            initAutoPlay('happyCustomersSlider', 3000);
+        });
+
+        // Hero Carousel Logic (Only runs if element exists)
+        (function() {
+            const carousel = document.getElementById('heroCarousel');
+            // If no carousel (single image), exit immediately
+            if (!carousel) return;
+
+            const dots = document.querySelectorAll('.hero-dot');
+            // Use safe count from rendered HTML or default to 0
+            const slideCount = dots.length > 0 ? dots.length : 0; 
+            if(slideCount <= 1) return;
+
+            let currentSlide = 0;
+            let autoPlayInterval;
+
+            function goToSlide(index) {
+                currentSlide = index;
+                carousel.style.transform = `translateX(-${index * 100}%)`;
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slideCount;
+                goToSlide(currentSlide);
+            }
+
+            function startAutoPlay() {
+                autoPlayInterval = setInterval(nextSlide, 5000);
+            }
+
+            function stopAutoPlay() {
+                clearInterval(autoPlayInterval);
+            }
+
+            window.goToSlide = function(index) {
+                stopAutoPlay();
+                goToSlide(index);
                 startAutoPlay();
+            };
 
-                // Pause on hover (optional UX improvement)
-                const wrapper = document.getElementById('heroCarouselWrapper');
+            startAutoPlay();
+
+            const wrapper = document.getElementById('heroCarouselWrapper');
+            if(wrapper) {
                 wrapper.addEventListener('mouseenter', stopAutoPlay);
                 wrapper.addEventListener('mouseleave', startAutoPlay);
-            })();
-            function playCardYoutube(el, url) {
-                // Prevent drag click propagation
-                if (el.closest('.cursor-grabbing')) return; 
-                el.innerHTML = `<iframe src="${url}?autoplay=1" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             }
-        </script>
-    }
+        })();
+    </script>
 }

@@ -37,6 +37,8 @@ namespace UniformPro.Web.Controllers
                 ViewData["AddressEn"] = settings.AddressEn;
                 ViewData["SiteNameAr"] = settings.WebsiteNameAr;
                 ViewData["SiteNameEn"] = settings.WebsiteNameEn;
+                ViewData["LogoPath"] = settings.LogoPath;
+                ViewData["MapUrl"] = settings.MapLocationUrl;
             }
 
             // Add culture info for Layout

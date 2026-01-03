@@ -57,6 +57,18 @@
                     </div>
                 </div>
 
+                <div class="flex items-center gap-6 pt-2">
+                    <div class="flex items-center">
+                        <input asp-for="IsActive" type="checkbox" class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                        <label asp-for="IsActive" class="mr-2 text-sm font-bold text-gray-700 select-none cursor-pointer">تفعيل الشريحة (Active)</label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input asp-for="HasOverlay" type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                        <label asp-for="HasOverlay" class="mr-2 text-sm font-bold text-gray-700 select-none cursor-pointer">إضافة طبقة شفافة (Overlay)</label>
+                    </div>
+                </div>
+
                 <div class="pt-4 flex justify-end">
                     <button type="submit" class="bg-primary hover:bg-green-700 text-white px-6 py-2 rounded-md font-medium shadow-sm transition-colors">حفظ الشريحة</button>
                 </div>

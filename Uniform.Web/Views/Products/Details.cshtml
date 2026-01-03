@@ -18,6 +18,69 @@
         : $"Hello, I want to inquire about the product: {productName}");
 }
 
+@section Head {
+    @{
+        // SEO Logic
+        var rawDesc = !string.IsNullOrEmpty(Model.MetaDescription) 
+            ? Model.MetaDescription 
+            : (description ?? "");
+            
+        // Clean HTML tags and truncate if needed
+        var plainDesc = System.Text.RegularExpressions.Regex.Replace(rawDesc, "<.*?>", " ").Trim();
+        if (string.IsNullOrEmpty(Model.MetaDescription) && plainDesc.Length > 150)
+        {
+            plainDesc = plainDesc.Substring(0, 150) + "...";
+        }
+
+        var metaKeys = Model.MetaKeywords;
+        var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+        var ogImage = !string.IsNullOrEmpty(Model.MainImagePath) ? $"{baseUrl}/uploads/products/{Model.MainImagePath}" : "";
+        var pageUrl = $"{baseUrl}{Context.Request.Path}";
+    }
+
+    <meta name="description" content="@plainDesc" />
+    <meta name="keywords" content="@metaKeys" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="@productName" />
+    <meta property="og:description" content="@plainDesc" />
+    @if (!string.IsNullOrEmpty(ogImage))
+    {
+        <meta property="og:image" content="@ogImage" />
+    }
+    <meta property="og:url" content="@pageUrl" />
+    <meta property="og:type" content="product" />
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org/",
+      "@@type": "Product",
+      "name": "@productName",
+      "image": [
+        "@ogImage"
+        @foreach(var img in Model.ProductImages) {
+            @:, "@($"{baseUrl}/uploads/products/gallery/{img.ImagePath}")"
+        }
+       ],
+      "description": "@plainDesc",
+      "sku": "@Model.Id",
+      "brand": {
+        "@@type": "Brand",
+        "name": "UniformPro" 
+      },
+      "offers": {
+        "@@type": "Offer",
+        "url": "@pageUrl",
+        "priceCurrency": "EGP", 
+        "price": "0", 
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition"
+      }
+    }
+    </script>
+}
+
 <!-- Breadcrumb -->
 <section class="bg-gray-50 py-4 border-b">
     <div class="container mx-auto px-4">
@@ -40,16 +103,22 @@
             <!-- Image Gallery -->
             <div class="space-y-4" data-aos="fade-left">
                 <!-- Main Image -->
-                <div id="main-image-container" class="aspect-[3/4] bg-white rounded-2xl overflow-hidden border border-gray-200">
+                <!-- Main Image -->
+                <div id="main-image-container" class="bg-white rounded-2xl overflow-hidden border border-gray-200 relative lg:max-w-md lg:mx-auto">
+                    <!-- Loading Spinner -->
+                    <div id="image-spinner" class="absolute inset-0 bg-white/80 z-10 flex items-center justify-center hidden transition-opacity duration-200">
+                        <i class="ph ph-spinner animate-spin text-4xl text-gray-400"></i>
+                    </div>
+
                     @if (!string.IsNullOrEmpty(Model.MainImagePath))
                     {
                         <img id="main-image" src="~/uploads/products/@Model.MainImagePath"
                              alt="@productName"
-                             class="w-full h-full object-contain cursor-zoom-in zoomable" />
+                             class="w-full h-auto object-contain cursor-zoom-in zoomable" />
                     }
                     else
                     {
-                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                        <div class="w-full h-96 flex items-center justify-center text-gray-400">
                             <i class="ph ph-image text-6xl"></i>
                         </div>
                     }
@@ -58,7 +127,7 @@
                 <!-- Thumbnails -->
                 @if (Model.ProductImages.Any())
                 {
-                    <div class="flex gap-3 overflow-x-auto pb-2">
+                    <div class="flex gap-3 overflow-x-auto pb-2 lg:max-w-md lg:mx-auto">
                         <!-- Main image thumbnail -->
                         @if (!string.IsNullOrEmpty(Model.MainImagePath))
                         {
@@ -129,21 +198,19 @@
                                 <div class="flex flex-wrap gap-2">
                                     @foreach (var size in sizes)
                                     {
-                                        <button type="button" 
-                                                class="size-chip w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-sm font-bold text-gray-600 transition-all hover:border-black hover:text-black"
-                                                onclick="selectSize(this, '@size')">
+                                        <!-- UX Improvement: Sizes as Badges, not clickable buttons -->
+                                        <span class="inline-flex items-center justify-center min-w-[2.5rem] h-10 px-3 rounded-lg bg-gray-50 border border-gray-200 text-sm font-bold text-gray-600 select-none">
                                             @size
-                                        </button>
+                                        </span>
                                     }
                                 </div>
-                                <input type="hidden" id="selectedSize" name="selectedSize" />
                             </div>
                         }
                     }
                     @if (!string.IsNullOrEmpty(materialDetails))
                     {
-                        <div class="flex items-start gap-3 text-gray-700">
-                            <i class="ph ph-t-shirt text-xl text-gray-500 mt-1"></i>
+                        <div class="flex items-center gap-3 text-gray-700">
+                            <i class="ph ph-t-shirt text-xl text-gray-500"></i>
                             <span>@L["Material"]: <strong>@materialDetails</strong></span>
                         </div>
                     }
@@ -263,11 +330,11 @@
     </div>
 
     <!-- Navigation Buttons -->
-    <button onclick="event.stopPropagation(); prevImage()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-4 z-50">
+    <button onclick="event.stopPropagation(); prevImage()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-4 z-50 hidden md:block">
         <i class="ph ph-caret-@(isArabic ? "right" : "left") text-4xl"></i>
     </button>
     
-    <button onclick="event.stopPropagation(); nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-4 z-50">
+    <button onclick="event.stopPropagation(); nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-4 z-50 hidden md:block">
         <i class="ph ph-caret-@(isArabic ? "left" : "right") text-4xl"></i>
     </button>
 
@@ -278,6 +345,11 @@
         <!-- Counter -->
         <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 font-medium bg-black/50 px-3 py-1 rounded-full text-sm">
             <span id="currentIndex">1</span> / <span id="totalImages">1</span>
+        </div>
+        
+        <!-- Mobile Swipe Hint (Optional) -->
+        <div class="absolute bottom-16 left-1/2 -translate-x-1/2 text-white/50 text-xs md:hidden">
+            <i class="ph ph-hand-swipe text-lg"></i>
         </div>
     </div>
 </div>
@@ -298,9 +370,13 @@
         let currentLightboxIndex = 0;
 
         function changeMainImage(src, btn) {
-            document.getElementById('main-image').src = src;
+            const spinner = document.getElementById('image-spinner');
+            const mainImg = document.getElementById('main-image');
             
-            // Handle Active State
+            // Show spinner
+            if(spinner) spinner.classList.remove('hidden');
+            
+            // Handle Active State for buttons
             document.querySelectorAll('.thumbnail-btn').forEach(b => {
                 b.classList.remove('border-gray-800');
                 b.classList.add('border-gray-200');
@@ -310,17 +386,23 @@
                 btn.classList.remove('border-gray-200');
                 btn.classList.add('border-gray-800');
             }
+            
+            // Smooth Loading
+            const tempImg = new Image();
+            tempImg.onload = function() {
+                mainImg.src = src;
+                if(spinner) spinner.classList.add('hidden');
+            };
+            tempImg.src = src;
         }
         
         function openLightbox() {
             if (galleryImages.length === 0) return;
 
             const modal = document.getElementById('lightboxModal');
-            const lightboxImg = document.getElementById('lightboxImage');
             
             // Find index of currently displayed main image
             const currentSrc = document.getElementById('main-image').getAttribute('src');
-            // We need to match relative path mainly
             let index = galleryImages.findIndex(img => currentSrc.endsWith(img) || img.endsWith(currentSrc));
             if (index === -1) index = 0;
             
@@ -378,36 +460,42 @@
                 mainImg.style.cursor = 'zoom-in';
             }
         });
-        
-        // Size Selection
-        function selectSize(btn, size) {
-            // Reset all
-            document.querySelectorAll('.size-chip').forEach(c => {
-                c.classList.remove('bg-black', 'text-white', 'border-black');
-                c.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
-            });
-            
-            // Activate clicked
-            btn.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
-            btn.classList.add('bg-black', 'text-white', 'border-black');
-            
-            // Set value
-            var input = document.getElementById('selectedSize');
-            if(input) input.value = size;
-        }
 
         // Keyboard Navigation
         document.addEventListener('keydown', function(e) {
             if (!document.getElementById('lightboxModal').classList.contains('hidden')) {
                 if (e.key === 'Escape') closeLightbox();
                 if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-                    // Check direction based on language? Usually Right is Next regardless, but for UX:
-                    // RTL: Right Arrow -> Next? Or Left Arrow -> Next?
-                    // Standard web gallery: Right Key = Next Image sequence.
                     if (e.key === 'ArrowRight') @(isArabic ? "prevImage()" : "nextImage()"); 
                     if (e.key === 'ArrowLeft') @(isArabic ? "nextImage()" : "prevImage()");
                 }
             }
         });
+        
+        // Mobile Swipe Logic for Lightbox
+        const lightboxModal = document.getElementById('lightboxModal');
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        lightboxModal.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true }); // passive for better performance
+
+        lightboxModal.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50; // min distance to be considered a swipe
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Swiped Left -> Next
+                @(isArabic ? "prevImage()" : "nextImage()");
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                // Swiped Right -> Prev
+                @(isArabic ? "nextImage()" : "prevImage()");
+            }
+        }
     </script>
 }

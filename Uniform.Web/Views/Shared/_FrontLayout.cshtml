@@ -125,6 +125,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     @await RenderSectionAsync("Styles", required: false)
+    @await RenderSectionAsync("Head", required: false)
 </head>
 <body class="bg-white text-gray-800 antialiased pt-16 md:pt-20 flex flex-col min-h-screen overflow-x-hidden">
 
@@ -155,8 +156,16 @@
     <nav id="mobile-menu" class="fixed top-0 @(isArabic ? "right-0 translate-x-full" : "left-0 -translate-x-full") h-full w-72 bg-white z-[60] shadow-xl flex flex-col transition-transform duration-300">
         <div class="flex items-center justify-between p-4 border-b">
             <!-- Sidebar Header: Logo -->
+            <!-- Sidebar Header: Logo -->
              <a href="/" class="flex items-center gap-2">
-                <img src="/images/Logo-color.svg" class="h-8 w-auto" alt="@siteName" />
+                @if (ViewData["LogoPath"] != null)
+                {
+                    <img src="~/uploads/sitesettings/@ViewData["LogoPath"]" class="h-8 w-auto" alt="@siteName" />
+                }
+                else
+                {
+                    <img src="/images/Logo-color.svg" class="h-8 w-auto" alt="@siteName" />
+                }
                 <span class="text-sm font-bold text-gray-800">@siteName</span>
             </a>
             <button onclick="toggleMobileMenu()" class="p-2 text-gray-500 hover:text-gray-800 transition-colors">
@@ -266,7 +275,14 @@
                 <!-- Company Info -->
                 <div class="space-y-4">
                     <a href="/" class="flex items-center gap-3">
-                        <img src="/images/Logo-color.png" class="h-9 w-auto" alt="@siteName" />
+                        @if (ViewData["LogoPath"] != null)
+                        {
+                            <img src="~/uploads/sitesettings/@ViewData["LogoPath"]" class="h-9 w-auto" alt="@siteName" />
+                        }
+                        else
+                        {
+                            <img src="/images/Logo-color.png" class="h-9 w-auto" alt="@siteName" />
+                        }
                         <span class="text-lg font-bold text-white">@siteName</span>
                     </a>
                     <p class="text-gray-400 text-sm leading-relaxed">
@@ -313,23 +329,13 @@
                             </div>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i class="ph-fill ph-envelope text-primary text-lg"></i>
-                             <a href="mailto:@ViewData["Email"]" class="text-gray-400 hover:text-white transition-colors text-sm">@ViewData["Email"]</a>
-                        </li>
-                         <li class="flex items-center gap-3">
                             <i class="ph-fill ph-whatsapp-logo text-primary text-lg"></i>
                              <a href="https://wa.me/@ViewData["WhatsApp"]" target="_blank" class="text-gray-400 hover:text-white transition-colors text-sm" dir="ltr">@ViewData["WhatsApp"]</a>
                         </li>
                     </ul>
-                </div>
 
-                <!-- Follow Us -->
-                 <div>
-                    <h3 class="text-white font-bold text-base mb-4 relative inline-block">
-                        @L["FollowUs"]
-                        <span class="absolute bottom-0 @(isArabic ? "right-0" : "left-0") w-1/2 h-0.5 bg-primary rounded-full"></span>
-                    </h3>
-                    <div class="flex gap-3 flex-wrap">
+                    <!-- Social Media (Moved here) -->
+                    <div class="flex gap-3 flex-wrap mt-6">
                         @if (ViewData["Facebook"] != null)
                         {
                             <a href="@ViewData["Facebook"]" target="_blank" class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 hover:bg-[#1877F2] hover:text-white transition-all transform hover:-translate-y-1">
@@ -355,6 +361,33 @@
                             </a>
                         }
                     </div>
+                </div>
+
+                <!-- Follow Us -->
+                <!-- Our Office (Map) -->
+                 <div>
+                    <h3 class="text-white font-bold text-base mb-4 relative inline-block">
+                        @(isArabic ? "مكتبنا" : "Our Office")
+                        <span class="absolute bottom-0 @(isArabic ? "right-0" : "left-0") w-1/2 h-0.5 bg-primary rounded-full"></span>
+                    </h3>
+                    
+                    @if (ViewData["MapUrl"] != null && !string.IsNullOrEmpty(ViewData["MapUrl"].ToString()))
+                    {
+                        <div class="rounded-lg overflow-hidden border border-gray-700 shadow-md">
+                            <iframe src="@ViewData["MapUrl"]" 
+                                    class="w-full h-48 border-0" 
+                                    allowfullscreen="" 
+                                    loading="lazy" 
+                                    referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="h-48 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-sm border border-gray-700">
+                           @(isArabic ? "لا يوجد خريطة متاحة" : "No map available")
+                        </div>
+                    }
                 </div>
 
             </div>

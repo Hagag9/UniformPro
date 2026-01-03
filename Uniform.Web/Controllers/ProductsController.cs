@@ -9,29 +9,23 @@ namespace UniformPro.Web.Controllers
         public ProductsController(ApplicationDbContext context) : base(context) { }
 
         // GET: /Products?category=1&search=shirt&sort=newest&page=1&pageSize=12
-        public async Task<IActionResult> Index(int? category, string? search, string? sort, int page = 1, int pageSize = 12)
+        // GET: /Products?category=1&search=shirt&page=1
+        public async Task<IActionResult> Index(int? category, string? search, int page = 1)
         {
+            int pageSize = 12;
             if (page < 1) page = 1;
-            if (pageSize < 1) pageSize = 12;
 
             var isArabic = ViewData["IsArabic"] as bool? ?? true;
             ViewData["Title"] = isArabic ? "المنتجات" : "Products";
 
-            // Load categories for sidebar - Removed unnecessary Include(Products) for performance
+            // Load categories for sidebar
             var categories = await _context.Categories
                 .AsNoTracking()
                 .Where(c => c.IsActive)
                 .OrderBy(c => c.NameAr)
                 .ToListAsync();
 
-            ViewBag.Categories = categories;
-            ViewBag.SelectedCategory = category;
-            ViewBag.SearchTerm = search;
-            ViewBag.SortOrder = sort;
-            ViewBag.CurrentPage = page;
-            ViewBag.PageSize = pageSize;
-
-            // Build query with AsNoTracking for performance
+            // Build query
             var productsQuery = _context.Products
                 .AsNoTracking()
                 .AsQueryable();
@@ -52,18 +46,12 @@ namespace UniformPro.Web.Controllers
                     p.NameEn.Contains(search));
             }
 
-            // Apply Sorting
-            productsQuery = sort switch
-            {
-                "price_asc" => productsQuery.OrderBy(p => p.StartPrice),
-                "price_desc" => productsQuery.OrderByDescending(p => p.StartPrice),
-                _ => productsQuery.OrderByDescending(p => p.CreatedAt) // Default: Newest
-            };
+            // Default Sorting: Newest (Sort feature removed)
+            productsQuery = productsQuery.OrderByDescending(p => p.CreatedAt);
 
             // Get total count for pagination
             var totalProducts = await productsQuery.CountAsync();
-            ViewBag.TotalProducts = totalProducts;
-            ViewBag.TotalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
+            var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
 
             // Apply pagination and projection to ViewModel
             var products = await productsQuery
@@ -81,12 +69,25 @@ namespace UniformPro.Web.Controllers
                 })
                 .ToListAsync();
 
+            // Prepare ViewModel
+            var model = new UniformPro.Web.ViewModels.ProductIndexViewModel
+            {
+                Products = products,
+                Categories = categories,
+                CurrentPage = page,
+                TotalPages = totalPages,
+                TotalProducts = totalProducts,
+                SelectedCategoryId = category,
+                SearchTerm = search,
+                IsArabic = isArabic
+            };
+
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                return PartialView("_ProductList", products);
+                return PartialView("_ProductList", model);
             }
 
-            return View(products);
+            return View(model);
         }
 
         // GET: /Products/Details/5
