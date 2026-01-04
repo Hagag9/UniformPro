@@ -366,4 +366,110 @@
   <data name="FromReviews" xml:space="preserve">
     <value>from our trusted reviews</value>
   </data>
+  <data name="AdminLogin" xml:space="preserve">
+    <value>Admin Login</value>
+  </data>
+  <data name="OurOffice" xml:space="preserve">
+    <value>Our Office</value>
+  </data>
+  <data name="NoMapAvailable" xml:space="preserve">
+    <value>No map available</value>
+  </data>
+  <data name="LanguageSwitchLabel" xml:space="preserve">
+    <value>عربي</value>
+  </data>
+  <data name="SiteNameDefault" xml:space="preserve">
+    <value>Mano Uniform</value>
+  </data>
+  <data name="VerifiedCustomer" xml:space="preserve">
+    <value>Verified Customer</value>
+  </data>
+  <data name="AboutPageTitle" xml:space="preserve">
+    <value>About Mano Uniform</value>
+  </data>
+  <data name="NoContent" xml:space="preserve">
+    <value>No content added yet</value>
+  </data>
+  <data name="ContactDesc" xml:space="preserve">
+    <value>Great vision without great people is irrelevant. Let's work together.</value>
+  </data>
+  <data name="MessageSent" xml:space="preserve">
+    <value>Message Sent Successfully!</value>
+  </data>
+  <data name="MessageSentDesc" xml:space="preserve">
+    <value>Thank you for contacting us. Our team will review your message and get back to you as soon as possible.</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Back to Home</value>
+  </data>
+  <data name="EnterYourName" xml:space="preserve">
+    <value>Enter your Full Name</value>
+  </data>
+  <data name="CompanyNamePlaceholder" xml:space="preserve">
+    <value>Company Name (Optional)</value>
+  </data>
+  <data name="MessagePlaceholder" xml:space="preserve">
+    <value>Enter your message here...</value>
+  </data>
+  <data name="SubmitMessage" xml:space="preserve">
+    <value>Submit Message</value>
+  </data>
+  <data name="DiscountPolicyTitle" xml:space="preserve">
+    <value>Discount Policy - Save up to {0}%</value>
+  </data>
+  <data name="DiscountPolicyMetaDesc" xml:space="preserve">
+    <value>Explore our bulk discount tiers at Mano Uniform. Exclusive savings up to {0}% for B2B orders. Get a quote today.</value>
+  </data>
+  <data name="PageNotFoundTitle" xml:space="preserve">
+    <value>Page Not Found</value>
+  </data>
+  <data name="PageNotFoundHeader" xml:space="preserve">
+    <value>Sorry, this page does not exist</value>
+  </data>
+  <data name="PageNotFoundDesc" xml:space="preserve">
+    <value>The link you followed may be broken, or the page may have been removed.</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Go Back</value>
+  </data>
+  <data name="ServerErrorTitle" xml:space="preserve">
+    <value>Server Error</value>
+  </data>
+  <data name="ServerErrorHeader" xml:space="preserve">
+    <value>Unexpected Error Occurred</value>
+  </data>
+  <data name="ServerErrorDesc" xml:space="preserve">
+    <value>We are currently facing a technical issue. Our team is working on it, please try again later.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="ProjectVideo" xml:space="preserve">
+    <value>Project Video</value>
+  </data>
+  <data name="SwipeToNavigate" xml:space="preserve">
+    <value>Swipe to navigate</value>
+  </data>
+  <data name="ImageAlt" xml:space="preserve">
+    <value>Image</value>
+  </data>
+
+  <data name="WhatsAppProductInquiry" xml:space="preserve">
+    <value>Hello, I want to inquire about the product: {0}</value>
+  </data>
+  <data name="BrowseCategories" xml:space="preserve">
+    <value>BROWSE</value>
+  </data>
+  <data name="OneColumn" xml:space="preserve">
+    <value>1 Column</value>
+  </data>
+  <data name="TwoColumns" xml:space="preserve">
+    <value>2 Columns</value>
+  </data>
+  <data name="FourColumns" xml:space="preserve">
+    <value>4 Columns</value>
+  </data>
+  <data name="SixColumns" xml:space="preserve">
+    <value>6 Columns</value>
+  </data>
 </root>

@@ -10,13 +10,9 @@
     var maxDiscount = Model.Tiers.Any() ? Model.Tiers.Max(x => x.DiscountPercentage) : 0;
     
     // تجهيز عناوين جذابة بناءً على الداتا
-    var pageTitle = isArabic 
-        ? $"سياسة الخصومات - وفر حتى {maxDiscount:0}%" 
-        : $"Discount Policy - Save up to {maxDiscount:0}%";
+    var pageTitle = string.Format(L["DiscountPolicyTitle"], maxDiscount);
 
-    var metaDesc = isArabic
-        ? $"اكتشف شرائح الخصومات على الكميات من مانو يونيفورم. خصومات حصرية تصل إلى {maxDiscount:0}% للشركات والمصانع. اطلب عرض سعر الآن."
-        : $"Explore our bulk discount tiers at Mano Uniform. Exclusive savings up to {maxDiscount:0}% for B2B orders. Get a quote today.";
+    var metaDesc = string.Format(L["DiscountPolicyMetaDesc"], maxDiscount);
 
     ViewData["Title"] = pageTitle;
 }

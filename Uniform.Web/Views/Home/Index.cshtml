@@ -5,7 +5,7 @@
 @model UniformPro.Web.ViewModels.HomeViewModel
 @{
     Layout = "_FrontLayout";
-    ViewData["Title"] = "الرئيسية";
+    ViewData["Title"] = L["Home"];
     var isArabic = ViewData["IsArabic"] as bool? ?? true;
     var heroItems = Model.HeroItems?.ToList() ?? new List<HeroItem>();
     var hasHero = heroItems.Any();
@@ -450,14 +450,14 @@ else
                 <p class="text-gray-500 text-sm md:text-base">@L["FromReviews"]</p>
             </div>
 
-            <!-- Testimonials Slider Wrapper (5 Cards Centered) -->
-            <div class="relative group/t-slider max-w-[85%] xl:max-w-6xl mx-auto">
+            <!-- Testimonials Slider Wrapper (3 Cards Centered on Desktop) -->
+            <div class="relative group/t-slider max-w-[85%] xl:max-w-3xl mx-auto">
                 
                 <div id="happyCustomersSlider" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 hide-scrollbar cursor-grab active:cursor-grabbing scroll-smooth @(testimonials.Count < 5 ? "md:justify-center" : "")" style="scroll-padding-left: 0;">
                     @foreach (var item in testimonials)
                     {
-                        <!-- Card: Video Based (5 items desktop) -->
-                        <div class="w-[calc(50%-0.5rem)] md:w-[calc(20%-0.8rem)] flex-shrink-0 snap-center bg-white rounded-xl shadow-sm border border-gray-100 overflow-visible flex flex-col hover:shadow-md transition-shadow select-none h-auto mt-4 mb-2">
+                        <!-- Card: Video Based (3 items desktop) -->
+                        <div class="w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.75rem)] flex-shrink-0 snap-center bg-white rounded-xl shadow-sm border border-gray-100 overflow-visible flex flex-col hover:shadow-md transition-shadow select-none h-auto mt-4 mb-2">
                             
                             <!-- Video Container (Top) - Aspect 4/5 -->
                             <div class="aspect-[4/5] bg-black relative group video-container rounded-t-xl overflow-hidden">
@@ -534,7 +534,7 @@ else
                                 <!-- Client Name & Verified -->
                                 <div class="flex items-center gap-1.5 mb-2">
                                     <h4 class="text-sm font-bold text-gray-900 truncate max-w-[120px]" title="@item.ClientName">@item.ClientName</h4>
-                                    <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5" title="Verified Customer">
+                                    <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5" title="@L["VerifiedCustomer"]">
                                         <i class="ph-fill ph-check-circle"></i>
                                     </span>
                                 </div>
@@ -550,7 +550,7 @@ else
                 </div>
                 
                 <!-- Bottom Controls (Arrows) -->
-                <div class="flex justify-center items-center gap-6 mt-6">
+                <div class="flex justify-center items-center gap-6 mt-6" dir="ltr">
                     <button onclick="scrollSlider('happyCustomersSlider', 'left')" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-black hover:text-black transition-colors">
                         <i class="ph-bold ph-caret-left text-xl"></i>
                     </button>
@@ -595,16 +595,25 @@ else
         function scrollSlider(sliderId, direction = 'right') {
             const slider = document.getElementById(sliderId);
             if (slider) {
-                // Update scroll amount for 5 items (approx 5 per screen)
-                const itemsPerScreen = window.innerWidth >= 768 ? 5 : 2;
+                // Update scroll amount for 3 items (approx 3 per screen)
+                const itemsPerScreen = window.innerWidth >= 768 ? 3 : 2;
                 const scrollAmount = slider.clientWidth / itemsPerScreen; 
+                const isRTL = document.documentElement.dir === 'rtl';
+
+                // Check if end
+                // RTL scrollLeft is negative/0 depending on browser, Abs covers offset
+                const reachedEnd = Math.abs(slider.scrollLeft) + slider.clientWidth >= slider.scrollWidth - 10;
                 
                 if (direction === 'left') {
-                    slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                    if (isRTL && reachedEnd) {
+                        slider.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back to Start (Right)
+                    } else {
+                        slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                    }
                 } else {
-                    // Check if end
-                    if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
-                        slider.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back
+                    // direction === 'right'
+                    if (!isRTL && reachedEnd) {
+                        slider.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back to Start (Left)
                     } else {
                         slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
                     }
@@ -618,13 +627,15 @@ else
             if (!slider) return;
             
             let autoPlayInterval;
+            const isRTL = document.documentElement.dir === 'rtl';
 
             function start() {
                 stop();
                 autoPlayInterval = setInterval(() => {
                     // Only scroll if not hovered
                      if (!slider.parentElement.matches(':hover')) {
-                        scrollSlider(sliderId, 'right');
+                        // In RTL, 'Next' is Left. In LTR, 'Next' is Right.
+                        scrollSlider(sliderId, isRTL ? 'left' : 'right');
                     }
                 }, intervalTime);
             }

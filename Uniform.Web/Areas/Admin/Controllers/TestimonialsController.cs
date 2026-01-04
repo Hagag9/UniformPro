@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using UniformPro.Core.Entities;
 using UniformPro.Infrastructure.Data;
 using UniformPro.Web.Services;
+using Microsoft.AspNetCore.OutputCaching; // Added
 using UniformPro.Web.ViewModels;
 using Microsoft.Extensions.Logging;
 
@@ -17,12 +18,14 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
         private readonly ILogger<TestimonialsController> _logger;
+        private readonly IOutputCacheStore _cacheStore; // Added
 
-        public TestimonialsController(ApplicationDbContext context, IFileService fileService, ILogger<TestimonialsController> logger)
+        public TestimonialsController(ApplicationDbContext context, IFileService fileService, ILogger<TestimonialsController> logger, IOutputCacheStore cacheStore)
         {
             _context = context;
             _fileService = fileService;
             _logger = logger;
+            _cacheStore = cacheStore;
         }
 
         public async Task<IActionResult> Index()
@@ -116,6 +119,10 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
                     _context.Add(testimonial);
                     await _context.SaveChangesAsync();
+
+                    // Evict Home Cache
+                    await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+
                     TempData["SuccessMessage"] = "تم إضافة التقييم بنجاح";
                     return RedirectToAction(nameof(Index));
                 }
@@ -254,6 +261,10 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
                     _context.Update(item);
                     await _context.SaveChangesAsync();
+
+                    // Evict Home Cache
+                    await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+
                     TempData["SuccessMessage"] = "تم التحديث بنجاح";
                     return RedirectToAction(nameof(Index));
                 }
@@ -281,6 +292,9 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
                     _context.Testimonials.Remove(item);
                     await _context.SaveChangesAsync();
+                    
+                    // Evict Home Cache
+                    await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
                 }
             }
             catch (Exception ex)

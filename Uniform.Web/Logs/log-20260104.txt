@@ -10,3 +10,904 @@
 2026-01-04 00:47:07.011 +02:00 [INF] HTTP GET / responded 200 in 13216.6579 ms
 2026-01-04 00:48:08.690 +02:00 [INF] HTTP GET / responded 200 in 16.3031 ms
 2026-01-04 00:48:24.318 +02:00 [INF] HTTP GET / responded 200 in 2.1543 ms
+2026-01-04 01:05:35.869 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 01:05:41.110 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 01:05:41.584 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 01:05:41.604 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 01:05:53.884 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 01:05:53.893 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 01:05:54.175 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 01:05:54.644 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 01:06:10.780 +02:00 [INF] HTTP GET / responded 200 in 16874.5654 ms
+2026-01-04 01:07:01.057 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 137.5566 ms
+2026-01-04 01:07:01.355 +02:00 [INF] HTTP GET / responded 200 in 10.2409 ms
+2026-01-04 01:07:08.525 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 20.9024 ms
+2026-01-04 01:07:08.871 +02:00 [INF] HTTP GET / responded 200 in 3.8594 ms
+2026-01-04 01:07:30.417 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 3.0643 ms
+2026-01-04 01:07:30.577 +02:00 [INF] HTTP GET / responded 200 in 1.5177 ms
+2026-01-04 01:08:05.440 +02:00 [INF] HTTP GET / responded 200 in 6483.1872 ms
+2026-01-04 01:08:16.459 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.0836 ms
+2026-01-04 01:08:16.474 +02:00 [INF] HTTP GET / responded 200 in 1.1647 ms
+2026-01-04 01:08:27.799 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.2544 ms
+2026-01-04 01:08:27.827 +02:00 [INF] HTTP GET / responded 200 in 1.1050 ms
+2026-01-04 01:17:55.906 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 01:18:01.024 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 01:18:01.326 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 01:18:01.361 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 01:19:02.000 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 01:19:02.008 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 01:19:02.280 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 01:19:02.719 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 01:19:04.506 +02:00 [INF] HTTP GET / responded 200 in 2488.5765 ms
+2026-01-04 01:19:08.959 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 72.1002 ms
+2026-01-04 01:19:09.366 +02:00 [INF] HTTP GET / responded 200 in 218.7483 ms
+2026-01-04 01:19:13.862 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 9.8817 ms
+2026-01-04 01:19:14.042 +02:00 [INF] HTTP GET / responded 200 in 8.4083 ms
+2026-01-04 01:19:22.084 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.5329 ms
+2026-01-04 01:19:22.280 +02:00 [INF] HTTP GET / responded 200 in 1.6923 ms
+2026-01-04 01:24:01.522 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 10097.7703 ms
+2026-01-04 01:24:03.391 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/8 responded 200 in 1149.8626 ms
+2026-01-04 01:24:03.858 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/8 responded 200 in 15.8626 ms
+2026-01-04 01:24:06.231 +02:00 [INF] HTTP GET /Admin responded 200 in 279.6205 ms
+2026-01-04 01:24:10.062 +02:00 [INF] HTTP GET /Admin/Settings responded 200 in 190.2647 ms
+2026-01-04 01:24:12.601 +02:00 [INF] HTTP GET /Admin/Settings responded 200 in 29.6818 ms
+2026-01-04 01:24:13.094 +02:00 [INF] HTTP GET /Admin/Settings responded 200 in 9.1481 ms
+2026-01-04 01:24:13.145 +02:00 [INF] HTTP GET /Admin/Settings responded 200 in 3.5985 ms
+2026-01-04 01:24:19.183 +02:00 [INF] HTTP POST /Admin/Settings/Update responded 302 in 414.6487 ms
+2026-01-04 01:24:19.360 +02:00 [INF] HTTP GET /Admin/Settings responded 200 in 35.2482 ms
+2026-01-04 01:24:26.017 +02:00 [INF] HTTP GET / responded 200 in 43.7667 ms
+2026-01-04 02:17:09.952 +02:00 [INF] HTTP GET /Admin/Products responded 302 in 27.0541 ms
+2026-01-04 02:17:10.121 +02:00 [INF] HTTP GET /Account/Login responded 404 in 1.9116 ms
+2026-01-04 02:17:10.150 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Account/Login' but it does not exist.
+2026-01-04 02:17:16.196 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 5883.8382 ms
+2026-01-04 02:17:19.425 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 4.7730 ms
+2026-01-04 02:17:19.617 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 0.8195 ms
+2026-01-04 02:17:19.949 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 2.3925 ms
+2026-01-04 02:17:19.996 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 0.8203 ms
+2026-01-04 02:17:57.383 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 3.2509 ms
+2026-01-04 02:17:57.823 +02:00 [INF] HTTP GET /Products responded 200 in 150.4700 ms
+2026-01-04 02:18:01.082 +02:00 [INF] HTTP GET /Admin responded 200 in 117.7220 ms
+2026-01-04 02:18:08.460 +02:00 [INF] HTTP GET /Admin/ContactMessages responded 200 in 106.0487 ms
+2026-01-04 02:18:11.011 +02:00 [INF] HTTP GET /Admin/Products responded 302 in 8.1749 ms
+2026-01-04 02:18:11.056 +02:00 [INF] HTTP GET /Admin/ContactMessages responded 200 in 7.4163 ms
+2026-01-04 02:18:11.315 +02:00 [INF] HTTP GET /Account/Login responded 404 in 0.4445 ms
+2026-01-04 02:18:11.319 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Account/Login' but it does not exist.
+2026-01-04 02:18:11.462 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 1.0863 ms
+2026-01-04 02:18:11.847 +02:00 [INF] HTTP GET /Admin/ContactMessages responded 200 in 11.9478 ms
+2026-01-04 02:18:11.874 +02:00 [INF] HTTP GET /Admin/ContactMessages responded 200 in 8.0333 ms
+2026-01-04 02:18:17.082 +02:00 [INF] HTTP GET /Admin/Categories responded 200 in 68.5571 ms
+2026-01-04 02:18:20.142 +02:00 [INF] HTTP GET /Admin/DiscountTiers responded 200 in 110.1854 ms
+2026-01-04 02:18:22.451 +02:00 [INF] HTTP GET /Admin/DiscountTiers responded 200 in 16.3530 ms
+2026-01-04 02:18:22.997 +02:00 [INF] HTTP GET /Admin/DiscountTiers responded 200 in 13.0552 ms
+2026-01-04 02:18:23.001 +02:00 [INF] HTTP GET /Admin/DiscountTiers responded 200 in 6.4127 ms
+2026-01-04 02:18:23.222 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 9.1831 ms
+2026-01-04 02:18:26.756 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 133.1203 ms
+2026-01-04 02:18:29.856 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 68.6031 ms
+2026-01-04 02:18:32.233 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 9.5409 ms
+2026-01-04 02:18:32.961 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 8.6365 ms
+2026-01-04 02:18:32.966 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 10.6069 ms
+2026-01-04 02:18:41.827 +02:00 [INF] HTTP GET /Admin/Settings responded 200 in 12.8869 ms
+2026-01-04 02:18:48.236 +02:00 [INF] HTTP GET / responded 200 in 47.6939 ms
+2026-01-04 02:18:53.260 +02:00 [INF] HTTP GET /Admin/Products responded 302 in 6.2470 ms
+2026-01-04 02:18:53.610 +02:00 [INF] HTTP GET /Account/Login responded 404 in 0.4434 ms
+2026-01-04 02:18:53.622 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Account/Login' but it does not exist.
+2026-01-04 02:18:53.769 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 11.0492 ms
+2026-01-04 02:20:46.348 +02:00 [INF] HTTP GET /Admin/Profile responded 404 in 75.0762 ms
+2026-01-04 02:20:46.358 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Admin/Profile' but it does not exist.
+2026-01-04 02:20:46.533 +02:00 [INF] HTTP GET /Admin/Error/NotFound responded 200 in 26.1531 ms
+2026-01-04 02:20:49.305 +02:00 [INF] HTTP GET /Admin/Error/NotFound responded 200 in 8.4061 ms
+2026-01-04 02:20:49.830 +02:00 [INF] HTTP GET /Admin/Error/NotFound responded 200 in 3.6793 ms
+2026-01-04 02:20:49.863 +02:00 [INF] HTTP GET /Admin/Error/NotFound responded 200 in 1.6960 ms
+2026-01-04 02:21:03.663 +02:00 [INF] HTTP GET /Admin/Profile responded 404 in 17.8383 ms
+2026-01-04 02:21:03.674 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Admin/Profile' but it does not exist.
+2026-01-04 02:21:03.813 +02:00 [INF] HTTP GET /Admin/Error/NotFound responded 200 in 3.3870 ms
+2026-01-04 02:21:47.133 +02:00 [INF] HTTP GET /Admin/Profile responded 404 in 0.9059 ms
+2026-01-04 02:21:47.136 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Admin/Profile' but it does not exist.
+2026-01-04 02:21:47.324 +02:00 [INF] HTTP GET /Admin/Error/NotFound responded 200 in 1.8106 ms
+2026-01-04 02:22:03.319 +02:00 [INF] HTTP GET /Admin/Products responded 302 in 1.2950 ms
+2026-01-04 02:22:03.491 +02:00 [INF] HTTP GET /Account/Login responded 404 in 0.8520 ms
+2026-01-04 02:22:03.503 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Account/Login' but it does not exist.
+2026-01-04 02:22:03.714 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 11.9243 ms
+2026-01-04 02:22:12.514 +02:00 [INF] HTTP GET /Admin/Home/Logout responded 302 in 32.4100 ms
+2026-01-04 02:22:12.870 +02:00 [INF] HTTP GET /Identity/Account/Login responded 200 in 188.7133 ms
+2026-01-04 02:22:22.778 +02:00 [INF] User logged in.
+2026-01-04 02:22:22.778 +02:00 [INF] User logged in.
+2026-01-04 02:22:22.784 +02:00 [INF] HTTP POST /Identity/Account/Login responded 302 in 2572.4606 ms
+2026-01-04 02:22:22.784 +02:00 [INF] HTTP POST /Identity/Account/Login responded 302 in 5747.6105 ms
+2026-01-04 02:22:23.012 +02:00 [INF] HTTP GET /Admin responded 200 in 30.3022 ms
+2026-01-04 02:22:26.264 +02:00 [INF] HTTP GET /Admin/Profile responded 200 in 212.8045 ms
+2026-01-04 02:22:41.881 +02:00 [INF] HTTP GET /Admin/Products responded 200 in 89.2355 ms
+2026-01-04 02:22:42.834 +02:00 [INF] HTTP GET /Admin/Products responded 302 in 0.2877 ms
+2026-01-04 02:22:42.966 +02:00 [INF] HTTP GET /Account/Login responded 404 in 0.3089 ms
+2026-01-04 02:22:42.969 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Account/Login' but it does not exist.
+2026-01-04 02:22:43.075 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 1.7474 ms
+2026-01-04 02:22:47.417 +02:00 [INF] HTTP GET /Admin/Products/Create responded 200 in 143.7903 ms
+2026-01-04 02:22:47.810 +02:00 [INF] HTTP GET /Admin/Products/Create responded 200 in 13.3830 ms
+2026-01-04 02:26:00.127 +02:00 [INF] HTTP POST /Admin/Products/Create responded 302 in 5244.2209 ms
+2026-01-04 02:26:00.416 +02:00 [INF] HTTP GET /Admin/Products responded 200 in 15.1757 ms
+2026-01-04 02:26:04.724 +02:00 [INF] HTTP GET /Admin/Products/Edit/11 responded 200 in 73.6218 ms
+2026-01-04 02:26:05.104 +02:00 [INF] HTTP GET /Admin/Products/Edit/11 responded 200 in 9.1774 ms
+2026-01-04 02:26:07.516 +02:00 [INF] HTTP GET /Admin/Products/Edit/11 responded 302 in 0.4882 ms
+2026-01-04 02:26:07.638 +02:00 [INF] HTTP GET /Account/Login responded 404 in 0.4799 ms
+2026-01-04 02:26:07.650 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Account/Login' but it does not exist.
+2026-01-04 02:26:07.825 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 63.3723 ms
+2026-01-04 02:26:08.605 +02:00 [INF] HTTP POST /Admin/Products/Edit/11 responded 302 in 103.2582 ms
+2026-01-04 02:26:08.935 +02:00 [INF] HTTP GET /Admin/Products responded 200 in 5.0658 ms
+2026-01-04 02:26:13.382 +02:00 [INF] HTTP GET /Admin/Products/Edit/8 responded 200 in 15.0030 ms
+2026-01-04 02:26:13.746 +02:00 [INF] HTTP GET /Admin/Products/Edit/8 responded 200 in 17.8995 ms
+2026-01-04 02:26:15.883 +02:00 [INF] HTTP GET /Admin/Products/Edit/8 responded 302 in 0.4613 ms
+2026-01-04 02:26:16.021 +02:00 [INF] HTTP GET /Account/Login responded 404 in 0.4684 ms
+2026-01-04 02:26:16.032 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Account/Login' but it does not exist.
+2026-01-04 02:26:16.142 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 2.3625 ms
+2026-01-04 02:26:19.397 +02:00 [INF] HTTP POST /Admin/Products/Edit/8 responded 302 in 271.9759 ms
+2026-01-04 02:26:19.556 +02:00 [INF] HTTP GET /Admin/Products responded 200 in 6.6843 ms
+2026-01-04 02:26:21.643 +02:00 [INF] HTTP GET /Admin/Products/Create responded 200 in 11.0556 ms
+2026-01-04 02:26:21.967 +02:00 [INF] HTTP GET /Admin/Products/Create responded 200 in 10.3166 ms
+2026-01-04 02:27:45.962 +02:00 [INF] HTTP POST /Admin/Products/Create responded 302 in 1885.9556 ms
+2026-01-04 02:27:46.142 +02:00 [INF] HTTP GET /Admin/Products responded 200 in 12.1328 ms
+2026-01-04 02:27:49.008 +02:00 [INF] HTTP GET /Admin/Products/Edit/12 responded 200 in 12.1543 ms
+2026-01-04 02:27:49.294 +02:00 [INF] HTTP GET /Admin/Products/Edit/12 responded 200 in 5.2894 ms
+2026-01-04 02:27:51.801 +02:00 [INF] HTTP GET /Admin/Products/Edit/12 responded 302 in 0.5783 ms
+2026-01-04 02:27:51.913 +02:00 [INF] HTTP GET /Account/Login responded 404 in 0.4677 ms
+2026-01-04 02:27:51.927 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Account/Login' but it does not exist.
+2026-01-04 02:27:52.036 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 3.7302 ms
+2026-01-04 02:27:52.756 +02:00 [INF] HTTP POST /Admin/Products/Edit/12 responded 302 in 18.2690 ms
+2026-01-04 02:27:52.914 +02:00 [INF] HTTP GET /Admin/Products responded 200 in 13.4813 ms
+2026-01-04 02:27:56.795 +02:00 [INF] HTTP GET / responded 200 in 46.7161 ms
+2026-01-04 02:28:40.918 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 37.7424 ms
+2026-01-04 02:28:44.855 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/8 responded 200 in 26.0469 ms
+2026-01-04 02:28:45.201 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/8 responded 200 in 6.1095 ms
+2026-01-04 02:28:49.812 +02:00 [INF] HTTP POST /Admin/Portfolios/Edit/8 responded 302 in 109.9489 ms
+2026-01-04 02:28:49.962 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 10.7910 ms
+2026-01-04 02:28:51.608 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 75.1124 ms
+2026-01-04 02:28:52.046 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 19.0047 ms
+2026-01-04 02:28:52.576 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 10.1019 ms
+2026-01-04 02:28:52.892 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 9.0413 ms
+2026-01-04 02:28:52.962 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 3.7296 ms
+2026-01-04 02:30:19.409 +02:00 [INF] HTTP POST /Admin/Portfolios/Create responded 302 in 5907.9765 ms
+2026-01-04 02:30:19.573 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 4.5877 ms
+2026-01-04 02:30:23.991 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/9 responded 200 in 13.7647 ms
+2026-01-04 02:30:24.304 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/9 responded 200 in 9.1653 ms
+2026-01-04 02:30:26.797 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/9 responded 200 in 13.3260 ms
+2026-01-04 02:30:27.176 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/9 responded 200 in 12.4710 ms
+2026-01-04 02:30:27.228 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/9 responded 200 in 6.2559 ms
+2026-01-04 02:30:31.274 +02:00 [INF] HTTP POST /Admin/Portfolios/Edit/9 responded 302 in 14.0590 ms
+2026-01-04 02:30:31.428 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 10.5825 ms
+2026-01-04 02:30:38.160 +02:00 [INF] HTTP GET / responded 200 in 30.1072 ms
+2026-01-04 02:32:35.583 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 12.7690 ms
+2026-01-04 02:32:36.047 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 3.6155 ms
+2026-01-04 02:35:00.343 +02:00 [INF] HTTP POST /Admin/Portfolios/Create responded 302 in 11364.5955 ms
+2026-01-04 02:35:00.544 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 6.5067 ms
+2026-01-04 02:35:03.467 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 9.1667 ms
+2026-01-04 02:35:03.774 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 7.6534 ms
+2026-01-04 02:36:33.651 +02:00 [INF] HTTP POST /Admin/Portfolios/Create responded 302 in 4415.2379 ms
+2026-01-04 02:36:33.926 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 12.0414 ms
+2026-01-04 02:36:43.648 +02:00 [INF] HTTP GET / responded 200 in 23.6550 ms
+2026-01-04 02:36:55.188 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/11 responded 200 in 12.7606 ms
+2026-01-04 02:36:55.499 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/11 responded 200 in 11.1960 ms
+2026-01-04 02:36:57.874 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/11 responded 200 in 10.4372 ms
+2026-01-04 02:36:58.251 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/11 responded 200 in 13.2222 ms
+2026-01-04 02:36:58.394 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/11 responded 200 in 7.1265 ms
+2026-01-04 02:36:58.535 +02:00 [INF] HTTP POST /Admin/Portfolios/Edit/11 responded 302 in 12.4483 ms
+2026-01-04 02:36:58.692 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 10.8413 ms
+2026-01-04 02:37:01.262 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/10 responded 200 in 4.5792 ms
+2026-01-04 02:37:01.910 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/10 responded 200 in 11.4213 ms
+2026-01-04 02:37:03.999 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/10 responded 200 in 10.8063 ms
+2026-01-04 02:37:04.515 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/10 responded 200 in 10.3026 ms
+2026-01-04 02:37:04.572 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/10 responded 200 in 12.1820 ms
+2026-01-04 02:37:05.012 +02:00 [INF] HTTP POST /Admin/Portfolios/Edit/10 responded 302 in 14.9967 ms
+2026-01-04 02:37:05.169 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 10.7273 ms
+2026-01-04 02:37:11.980 +02:00 [INF] HTTP GET / responded 200 in 24.1341 ms
+2026-01-04 02:37:24.784 +02:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-01-04 02:37:24.920 +02:00 [INF] HTTP GET /Portfolio/Details/8 responded 200 in 177.3107 ms
+2026-01-04 02:37:29.259 +02:00 [INF] HTTP GET /Portfolio/Details/9 responded 200 in 17.0396 ms
+2026-01-04 02:37:30.361 +02:00 [INF] HTTP GET /Portfolio/Details/9 responded 200 in 2.2494 ms
+2026-01-04 02:37:30.709 +02:00 [INF] HTTP GET /Portfolio/Details/9 responded 200 in 1.7934 ms
+2026-01-04 02:37:30.801 +02:00 [INF] HTTP GET /Portfolio/Details/9 responded 200 in 1.5609 ms
+2026-01-04 02:37:56.985 +02:00 [INF] HTTP GET /Portfolio/Details/10 responded 200 in 14.7495 ms
+2026-01-04 02:37:59.703 +02:00 [INF] HTTP GET /Portfolio/Details/10 responded 200 in 1.9130 ms
+2026-01-04 02:38:00.249 +02:00 [INF] HTTP GET /Portfolio/Details/10 responded 200 in 2.2735 ms
+2026-01-04 02:38:00.261 +02:00 [INF] HTTP GET /Portfolio/Details/10 responded 200 in 0.8591 ms
+2026-01-04 02:38:14.524 +02:00 [INF] HTTP GET /Portfolio/Details/11 responded 200 in 5.4541 ms
+2026-01-04 02:38:17.317 +02:00 [INF] HTTP GET /Portfolio/Details/11 responded 200 in 1.6233 ms
+2026-01-04 02:38:17.693 +02:00 [INF] HTTP GET /Portfolio/Details/11 responded 200 in 2.1554 ms
+2026-01-04 02:38:17.873 +02:00 [INF] HTTP GET /Portfolio/Details/11 responded 200 in 0.6450 ms
+2026-01-04 02:38:34.310 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 02:38:34.403 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 162.5205 ms
+2026-01-04 02:39:45.733 +02:00 [INF] HTTP GET /DiscountPolicy responded 200 in 137.4529 ms
+2026-01-04 02:40:02.569 +02:00 [INF] HTTP GET /Products/Details/12 responded 200 in 20.5257 ms
+2026-01-04 02:44:53.123 +02:00 [INF] HTTP GET /Testimonials responded 200 in 84.5586 ms
+2026-01-04 02:46:47.278 +02:00 [INF] HTTP GET /Products responded 200 in 17.3614 ms
+2026-01-04 02:46:57.841 +02:00 [INF] HTTP GET /Products responded 200 in 31.4816 ms
+2026-01-04 02:47:02.725 +02:00 [INF] HTTP GET /Products responded 200 in 6.8590 ms
+2026-01-04 02:47:57.399 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 114.5427 ms
+2026-01-04 02:47:57.621 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 3.9376 ms
+2026-01-04 02:48:16.541 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 33.3212 ms
+2026-01-04 02:48:19.801 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 2.3266 ms
+2026-01-04 02:48:20.215 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 2.0715 ms
+2026-01-04 02:48:20.340 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 1.7736 ms
+2026-01-04 02:49:34.600 +02:00 [INF] HTTP GET / responded 200 in 4.0521 ms
+2026-01-04 02:49:52.157 +02:00 [INF] HTTP GET /Portfolio responded 200 in 106.2804 ms
+2026-01-04 02:50:09.733 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.7648 ms
+2026-01-04 02:50:09.959 +02:00 [INF] HTTP GET /Portfolio responded 200 in 31.7478 ms
+2026-01-04 02:50:27.906 +02:00 [INF] HTTP GET /Portfolio/Details/9 responded 200 in 17.1566 ms
+2026-01-04 02:51:04.487 +02:00 [INF] HTTP GET / responded 200 in 28.2317 ms
+2026-01-04 11:56:54.794 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 32971.2182 ms
+2026-01-04 11:59:53.008 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 237.8186 ms
+2026-01-04 11:59:53.470 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 3.1074 ms
+2026-01-04 12:04:09.726 +02:00 [INF] HTTP POST /Admin/Portfolios/Create responded 302 in 22332.9830 ms
+2026-01-04 12:04:10.075 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 97.4065 ms
+2026-01-04 12:04:14.208 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/12 responded 200 in 120.6997 ms
+2026-01-04 12:04:14.511 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/12 responded 200 in 11.9503 ms
+2026-01-04 12:04:16.918 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/12 responded 200 in 10.6712 ms
+2026-01-04 12:04:17.564 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/12 responded 200 in 79.6898 ms
+2026-01-04 12:04:17.588 +02:00 [INF] HTTP GET /Admin/Portfolios/Edit/12 responded 200 in 9.5358 ms
+2026-01-04 12:04:17.979 +02:00 [INF] HTTP POST /Admin/Portfolios/Edit/12 responded 302 in 92.3321 ms
+2026-01-04 12:04:18.185 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 49.6979 ms
+2026-01-04 12:04:25.780 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 53.1382 ms
+2026-01-04 12:04:26.498 +02:00 [INF] HTTP GET / responded 200 in 568.3636 ms
+2026-01-04 12:05:01.969 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 130.0241 ms
+2026-01-04 12:05:08.214 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/3 responded 200 in 2820.8271 ms
+2026-01-04 12:05:08.832 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/3 responded 200 in 14.7248 ms
+2026-01-04 12:05:20.414 +02:00 [INF] HTTP GET /Admin/Testimonials/Create responded 200 in 89.3306 ms
+2026-01-04 12:05:20.749 +02:00 [INF] HTTP GET /Admin/Testimonials/Create responded 200 in 19.4900 ms
+2026-01-04 12:09:11.543 +02:00 [INF] HTTP POST /Admin/Testimonials/Create responded 302 in 5082.5982 ms
+2026-01-04 12:09:11.880 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 16.6405 ms
+2026-01-04 12:09:17.460 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/3 responded 200 in 15.4606 ms
+2026-01-04 12:09:17.703 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/3 responded 200 in 9.7580 ms
+2026-01-04 12:09:47.724 +02:00 [INF] HTTP POST /Admin/Testimonials/Edit/3 responded 302 in 558.8344 ms
+2026-01-04 12:09:47.977 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 7.7121 ms
+2026-01-04 12:09:56.472 +02:00 [INF] HTTP GET / responded 200 in 55.4149 ms
+2026-01-04 12:10:06.359 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/5 responded 200 in 16.5554 ms
+2026-01-04 12:10:06.637 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/5 responded 200 in 5.2724 ms
+2026-01-04 12:10:09.389 +02:00 [INF] HTTP POST /Admin/Testimonials/Edit/5 responded 302 in 16.1578 ms
+2026-01-04 12:10:09.569 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 8.9076 ms
+2026-01-04 12:10:40.105 +02:00 [INF] HTTP GET / responded 200 in 3.6922 ms
+2026-01-04 12:10:51.326 +02:00 [INF] HTTP GET / responded 200 in 2.5111 ms
+2026-01-04 12:11:01.179 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/5 responded 200 in 11.7548 ms
+2026-01-04 12:11:01.384 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/5 responded 200 in 10.4237 ms
+2026-01-04 12:11:04.525 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/4 responded 200 in 10.1135 ms
+2026-01-04 12:11:04.908 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/4 responded 200 in 10.2881 ms
+2026-01-04 12:11:07.475 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/3 responded 200 in 13.5504 ms
+2026-01-04 12:11:07.900 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/3 responded 200 in 10.5055 ms
+2026-01-04 12:11:18.074 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/4 responded 200 in 10.7440 ms
+2026-01-04 12:11:18.423 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/4 responded 200 in 49.7261 ms
+2026-01-04 12:11:22.158 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/5 responded 200 in 11.3141 ms
+2026-01-04 12:11:22.561 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/5 responded 200 in 10.0316 ms
+2026-01-04 12:11:31.434 +02:00 [INF] HTTP GET / responded 200 in 4.7906 ms
+2026-01-04 12:11:42.115 +02:00 [INF] HTTP GET /Testimonials responded 200 in 82.4328 ms
+2026-01-04 12:12:03.120 +02:00 [INF] HTTP GET / responded 200 in 0.9337 ms
+2026-01-04 12:12:54.305 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/5 responded 200 in 13.8126 ms
+2026-01-04 12:12:54.834 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/5 responded 200 in 4.5828 ms
+2026-01-04 12:13:00.455 +02:00 [INF] HTTP POST /Admin/Testimonials/Edit/5 responded 302 in 58.0924 ms
+2026-01-04 12:13:00.650 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 9.3296 ms
+2026-01-04 12:13:06.904 +02:00 [INF] HTTP GET / responded 200 in 2.7092 ms
+2026-01-04 12:13:16.045 +02:00 [INF] HTTP GET / responded 200 in 3.9851 ms
+2026-01-04 12:13:35.144 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/4 responded 200 in 10.6862 ms
+2026-01-04 12:13:35.470 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/4 responded 200 in 9.9633 ms
+2026-01-04 12:13:40.303 +02:00 [INF] HTTP POST /Admin/Testimonials/Edit/4 responded 302 in 44.6343 ms
+2026-01-04 12:13:40.462 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 9.2562 ms
+2026-01-04 12:13:47.237 +02:00 [INF] HTTP GET / responded 200 in 6.8985 ms
+2026-01-04 12:28:39.685 +02:00 [INF] HTTP GET / responded 200 in 48.2509 ms
+2026-01-04 12:29:08.356 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/5 responded 200 in 9481.5706 ms
+2026-01-04 12:29:09.034 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/5 responded 200 in 11.0138 ms
+2026-01-04 12:29:21.022 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 17.2207 ms
+2026-01-04 12:29:25.803 +02:00 [INF] HTTP GET / responded 200 in 2.8836 ms
+2026-01-04 12:29:33.151 +02:00 [INF] HTTP GET /DiscountPolicy responded 200 in 161.2166 ms
+2026-01-04 12:29:37.836 +02:00 [INF] HTTP GET /Testimonials responded 200 in 17.7516 ms
+2026-01-04 12:32:49.429 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 12:32:54.588 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 12:32:55.168 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 12:32:55.205 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 12:33:34.393 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 12:33:34.407 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 12:33:34.721 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 12:33:35.578 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 12:33:39.011 +02:00 [INF] HTTP GET / responded 200 in 4588.4026 ms
+2026-01-04 12:34:37.889 +02:00 [INF] HTTP GET / responded 200 in 164.0511 ms
+2026-01-04 12:34:59.550 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/4 responded 200 in 935.0309 ms
+2026-01-04 12:35:01.139 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/4 responded 200 in 67.8016 ms
+2026-01-04 12:35:04.549 +02:00 [INF] HTTP POST /Admin/Testimonials/Edit/4 responded 302 in 587.5102 ms
+2026-01-04 12:35:05.104 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 90.0243 ms
+2026-01-04 12:35:12.765 +02:00 [INF] HTTP GET / responded 200 in 27.5095 ms
+2026-01-04 12:35:24.169 +02:00 [INF] HTTP GET / responded 200 in 3.9012 ms
+2026-01-04 12:35:38.387 +02:00 [INF] HTTP GET / responded 200 in 5.3016 ms
+2026-01-04 12:38:21.073 +02:00 [INF] HTTP GET / responded 200 in 2.5823 ms
+2026-01-04 12:39:02.468 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 19.1562 ms
+2026-01-04 12:39:02.676 +02:00 [INF] HTTP GET / responded 200 in 154.9529 ms
+2026-01-04 12:39:18.367 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 5.9807 ms
+2026-01-04 12:39:19.640 +02:00 [INF] HTTP GET / responded 200 in 20.8855 ms
+2026-01-04 12:39:29.091 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 4.4872 ms
+2026-01-04 12:39:29.292 +02:00 [INF] HTTP GET / responded 200 in 3.6361 ms
+2026-01-04 12:39:51.297 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.8569 ms
+2026-01-04 12:39:51.312 +02:00 [INF] HTTP GET / responded 200 in 4.8866 ms
+2026-01-04 12:40:24.709 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.0010 ms
+2026-01-04 12:40:24.737 +02:00 [INF] HTTP GET / responded 200 in 2.2501 ms
+2026-01-04 12:40:47.408 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 0.9839 ms
+2026-01-04 12:40:47.666 +02:00 [INF] HTTP GET / responded 200 in 9.5233 ms
+2026-01-04 12:42:44.582 +02:00 [INF] HTTP GET /Testimonials responded 200 in 1001.1112 ms
+2026-01-04 12:43:04.315 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.0775 ms
+2026-01-04 12:43:04.328 +02:00 [INF] HTTP GET /Testimonials responded 200 in 1.4072 ms
+2026-01-04 12:43:09.070 +02:00 [INF] HTTP GET / responded 200 in 1.8727 ms
+2026-01-04 12:43:16.128 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.2929 ms
+2026-01-04 12:43:16.145 +02:00 [INF] HTTP GET / responded 200 in 5.4426 ms
+2026-01-04 12:47:32.569 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 12:47:37.712 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 12:47:38.110 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 12:47:38.150 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 12:48:58.657 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 12:48:58.664 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 12:48:58.951 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 12:48:59.452 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 12:49:00.140 +02:00 [INF] HTTP GET / responded 200 in 1466.5463 ms
+2026-01-04 12:49:14.646 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 104.2439 ms
+2026-01-04 12:49:15.079 +02:00 [INF] HTTP GET / responded 200 in 221.4141 ms
+2026-01-04 12:49:39.279 +02:00 [INF] HTTP GET / responded 200 in 9.3965 ms
+2026-01-04 12:50:03.428 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 9.9437 ms
+2026-01-04 12:50:03.645 +02:00 [INF] HTTP GET / responded 200 in 2.2801 ms
+2026-01-04 12:50:48.320 +02:00 [INF] HTTP GET / responded 200 in 114.0379 ms
+2026-01-04 12:51:56.699 +02:00 [INF] HTTP GET /Admin responded 200 in 513.9255 ms
+2026-01-04 12:52:02.241 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 245.3767 ms
+2026-01-04 12:52:07.135 +02:00 [INF] HTTP GET /Admin/Testimonials/Create responded 200 in 634.2387 ms
+2026-01-04 12:52:07.993 +02:00 [INF] HTTP GET /Admin/Testimonials/Create responded 200 in 14.6291 ms
+2026-01-04 12:53:22.739 +02:00 [INF] HTTP POST /Admin/Testimonials/Create responded 302 in 9475.5534 ms
+2026-01-04 12:53:23.087 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 23.4595 ms
+2026-01-04 12:53:33.752 +02:00 [INF] HTTP GET / responded 200 in 5.2279 ms
+2026-01-04 12:53:56.112 +02:00 [INF] HTTP GET / responded 200 in 5.0030 ms
+2026-01-04 12:54:04.363 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 4.2813 ms
+2026-01-04 12:54:04.681 +02:00 [INF] HTTP GET / responded 200 in 3.2501 ms
+2026-01-04 12:54:23.981 +02:00 [INF] HTTP GET / responded 200 in 1.5549 ms
+2026-01-04 12:54:38.515 +02:00 [INF] HTTP GET / responded 200 in 1.7168 ms
+2026-01-04 12:54:54.362 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/6 responded 200 in 332.5094 ms
+2026-01-04 12:54:55.719 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/6 responded 200 in 25.1040 ms
+2026-01-04 12:54:58.595 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/6 responded 200 in 26.2070 ms
+2026-01-04 12:54:59.847 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/6 responded 200 in 26.4085 ms
+2026-01-04 12:54:59.886 +02:00 [INF] HTTP GET /Admin/Testimonials/Edit/6 responded 200 in 19.3364 ms
+2026-01-04 12:55:06.751 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 26.2705 ms
+2026-01-04 12:55:13.996 +02:00 [INF] HTTP GET / responded 200 in 1.7262 ms
+2026-01-04 12:55:28.540 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 3.2357 ms
+2026-01-04 12:55:28.797 +02:00 [INF] HTTP GET / responded 200 in 4.4724 ms
+2026-01-04 12:55:45.652 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 0.8692 ms
+2026-01-04 12:55:45.768 +02:00 [INF] HTTP GET / responded 200 in 64.8496 ms
+2026-01-04 12:56:09.146 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 0.8788 ms
+2026-01-04 12:56:09.159 +02:00 [INF] HTTP GET / responded 200 in 4.4811 ms
+2026-01-04 13:00:27.135 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 13:00:32.259 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 13:00:32.633 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:00:32.658 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 13:00:41.013 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 13:00:41.024 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 13:00:41.718 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:00:42.153 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:00:42.652 +02:00 [INF] HTTP GET / responded 200 in 1617.7813 ms
+2026-01-04 13:00:54.373 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 100.4645 ms
+2026-01-04 13:00:54.861 +02:00 [INF] HTTP GET / responded 200 in 232.9362 ms
+2026-01-04 13:01:02.087 +02:00 [INF] HTTP GET / responded 200 in 33.0411 ms
+2026-01-04 13:01:26.989 +02:00 [INF] HTTP GET / responded 200 in 163.3665 ms
+2026-01-04 13:01:34.688 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 5.7069 ms
+2026-01-04 13:01:35.403 +02:00 [INF] HTTP GET / responded 200 in 83.8007 ms
+2026-01-04 13:01:51.760 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.4281 ms
+2026-01-04 13:01:52.418 +02:00 [INF] HTTP GET / responded 200 in 83.4876 ms
+2026-01-04 13:02:06.302 +02:00 [INF] HTTP GET /Admin/Testimonials/Create responded 200 in 692.4283 ms
+2026-01-04 13:02:07.623 +02:00 [INF] HTTP GET /Admin/Testimonials/Create responded 200 in 34.0344 ms
+2026-01-04 13:03:54.624 +02:00 [INF] HTTP POST /Admin/Testimonials/Create responded 302 in 4790.1685 ms
+2026-01-04 13:03:55.165 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 122.5342 ms
+2026-01-04 13:04:00.390 +02:00 [INF] HTTP GET / responded 200 in 115.5565 ms
+2026-01-04 13:04:06.013 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.1300 ms
+2026-01-04 13:04:06.275 +02:00 [INF] HTTP GET / responded 200 in 237.9516 ms
+2026-01-04 13:05:11.540 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.0268 ms
+2026-01-04 13:05:11.562 +02:00 [INF] HTTP GET / responded 200 in 2.0150 ms
+2026-01-04 13:05:24.120 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 0.9994 ms
+2026-01-04 13:05:24.131 +02:00 [INF] HTTP GET / responded 200 in 2.3205 ms
+2026-01-04 13:05:54.090 +02:00 [INF] HTTP GET / responded 200 in 119.9155 ms
+2026-01-04 13:06:06.250 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 3.6281 ms
+2026-01-04 13:06:06.605 +02:00 [INF] HTTP GET / responded 200 in 168.0996 ms
+2026-01-04 13:06:23.835 +02:00 [INF] HTTP GET / responded 200 in 4.9524 ms
+2026-01-04 13:06:53.804 +02:00 [INF] HTTP GET / responded 200 in 4.7035 ms
+2026-01-04 13:07:38.656 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 5.2988 ms
+2026-01-04 13:07:38.963 +02:00 [INF] HTTP GET / responded 200 in 3.9346 ms
+2026-01-04 13:18:16.272 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 13:18:21.723 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 13:18:22.007 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:18:22.027 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 13:18:35.079 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 13:18:35.087 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 13:18:35.522 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:18:35.857 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:18:36.739 +02:00 [INF] HTTP GET / responded 200 in 1640.2557 ms
+2026-01-04 13:18:50.178 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 91.7553 ms
+2026-01-04 13:18:50.695 +02:00 [INF] HTTP GET / responded 200 in 293.1130 ms
+2026-01-04 13:19:46.430 +02:00 [INF] HTTP GET / responded 200 in 50.8016 ms
+2026-01-04 13:20:34.176 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 5.9811 ms
+2026-01-04 13:20:34.311 +02:00 [INF] HTTP GET / responded 200 in 27.8610 ms
+2026-01-04 13:27:03.097 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 13:27:08.210 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 13:27:08.485 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:27:08.506 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 13:28:23.765 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 13:28:23.773 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 13:28:24.061 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:28:24.490 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:28:25.117 +02:00 [INF] HTTP GET / responded 200 in 1334.7397 ms
+2026-01-04 13:28:39.781 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 111.3612 ms
+2026-01-04 13:28:40.049 +02:00 [INF] HTTP GET / responded 200 in 224.4742 ms
+2026-01-04 13:30:31.668 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 10.9326 ms
+2026-01-04 13:30:31.712 +02:00 [INF] HTTP GET / responded 200 in 21.1942 ms
+2026-01-04 13:31:41.802 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 4.9107 ms
+2026-01-04 13:31:41.864 +02:00 [INF] HTTP GET / responded 200 in 5.1499 ms
+2026-01-04 13:31:48.318 +02:00 [INF] HTTP GET / responded 200 in 612.8387 ms
+2026-01-04 13:32:13.066 +02:00 [INF] HTTP GET / responded 200 in 56.2624 ms
+2026-01-04 13:33:06.201 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.0006 ms
+2026-01-04 13:33:06.219 +02:00 [INF] HTTP GET / responded 200 in 2.8058 ms
+2026-01-04 13:39:02.126 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 13:39:07.230 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 13:39:07.739 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:39:07.762 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 13:39:38.116 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 13:39:38.127 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 13:39:38.832 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:39:40.250 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:39:42.819 +02:00 [INF] HTTP GET / responded 200 in 4676.1284 ms
+2026-01-04 13:40:38.353 +02:00 [INF] HTTP GET / responded 200 in 7433.8885 ms
+2026-01-04 13:55:15.890 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 13:55:21.195 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 13:55:21.464 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:55:21.493 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 13:55:35.391 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 13:55:35.399 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 13:55:35.715 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:55:36.115 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 13:55:37.318 +02:00 [INF] HTTP GET / responded 200 in 1905.1470 ms
+2026-01-04 13:55:47.401 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 70.4020 ms
+2026-01-04 13:55:48.084 +02:00 [INF] HTTP GET / responded 200 in 483.2415 ms
+2026-01-04 13:56:02.905 +02:00 [INF] HTTP GET / responded 200 in 14.8128 ms
+2026-01-04 13:56:16.224 +02:00 [INF] HTTP GET / responded 200 in 32.1846 ms
+2026-01-04 13:57:12.565 +02:00 [INF] HTTP GET / responded 200 in 2.4484 ms
+2026-01-04 13:57:45.167 +02:00 [INF] HTTP GET /Portfolio responded 200 in 206.7800 ms
+2026-01-04 13:58:12.120 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 4.8182 ms
+2026-01-04 13:58:12.360 +02:00 [INF] HTTP GET /Portfolio responded 200 in 30.8287 ms
+2026-01-04 13:58:35.134 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.4059 ms
+2026-01-04 13:58:35.370 +02:00 [INF] HTTP GET /Portfolio responded 200 in 2.3420 ms
+2026-01-04 13:58:39.258 +02:00 [INF] HTTP GET / responded 200 in 2.2980 ms
+2026-01-04 14:03:46.881 +02:00 [INF] HTTP GET /Portfolio responded 200 in 3.3566 ms
+2026-01-04 14:04:06.660 +02:00 [INF] HTTP GET /Portfolio responded 200 in 399.1376 ms
+2026-01-04 14:04:10.719 +02:00 [INF] HTTP GET /Portfolio responded 200 in 105.1241 ms
+2026-01-04 14:04:44.640 +02:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-01-04 14:04:45.593 +02:00 [INF] HTTP GET /DiscountPolicy responded 200 in 12752.2753 ms
+2026-01-04 14:04:48.662 +02:00 [INF] HTTP GET /Portfolio/Details/9 responded 200 in 32012.9613 ms
+2026-01-04 14:05:14.782 +02:00 [INF] HTTP GET /Portfolio responded 200 in 3.7508 ms
+2026-01-04 14:05:19.167 +02:00 [INF] HTTP GET /Portfolio/Details/8 responded 200 in 216.1599 ms
+2026-01-04 14:07:34.945 +02:00 [INF] HTTP GET /Testimonials responded 200 in 294.6669 ms
+2026-01-04 14:07:58.476 +02:00 [INF] HTTP GET /Testimonials responded 200 in 5.5890 ms
+2026-01-04 14:08:06.557 +02:00 [INF] HTTP GET /Home/About responded 200 in 91.8412 ms
+2026-01-04 14:08:50.347 +02:00 [INF] HTTP GET /Products responded 200 in 637.3535 ms
+2026-01-04 14:09:31.980 +02:00 [INF] HTTP GET / responded 200 in 4.6559 ms
+2026-01-04 14:09:45.792 +02:00 [INF] HTTP GET /Products responded 200 in 3.5787 ms
+2026-01-04 14:09:51.260 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 5.3924 ms
+2026-01-04 14:09:51.598 +02:00 [INF] HTTP GET /Products responded 200 in 104.8645 ms
+2026-01-04 14:09:58.348 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.5977 ms
+2026-01-04 14:09:58.572 +02:00 [INF] HTTP GET /Products responded 200 in 2.9244 ms
+2026-01-04 14:10:02.436 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 14:10:03.157 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 965.7449 ms
+2026-01-04 14:12:17.055 +02:00 [INF] HTTP GET / responded 200 in 5.0258 ms
+2026-01-04 14:12:26.733 +02:00 [INF] HTTP GET /Admin responded 200 in 438.9702 ms
+2026-01-04 14:12:45.514 +02:00 [INF] HTTP GET /Admin/Products responded 302 in 60.9767 ms
+2026-01-04 14:12:46.032 +02:00 [INF] HTTP GET /Account/Login responded 404 in 5.3879 ms
+2026-01-04 14:12:46.067 +02:00 [WRN] ⚠️ 404 Not Found: User tried to access '/Account/Login' but it does not exist.
+2026-01-04 14:12:46.403 +02:00 [INF] HTTP GET /Error/NotFound responded 200 in 29.7705 ms
+2026-01-04 14:13:00.675 +02:00 [INF] HTTP GET /Admin responded 200 in 52.1762 ms
+2026-01-04 14:13:08.579 +02:00 [INF] HTTP GET /Admin/Portfolios responded 200 in 925.9090 ms
+2026-01-04 14:13:16.039 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 164.2762 ms
+2026-01-04 14:13:16.701 +02:00 [INF] HTTP GET /Admin/Portfolios/Create responded 200 in 7.6169 ms
+2026-01-04 14:13:25.344 +02:00 [INF] HTTP GET / responded 200 in 2.0212 ms
+2026-01-04 14:13:25.936 +02:00 [INF] HTTP GET /Admin/Testimonials responded 200 in 124.4736 ms
+2026-01-04 14:13:39.216 +02:00 [INF] HTTP GET /Admin/Settings responded 200 in 121.5452 ms
+2026-01-04 14:13:40.574 +02:00 [INF] HTTP GET /Portfolio/Details/8 responded 200 in 59.4340 ms
+2026-01-04 14:13:46.996 +02:00 [INF] HTTP GET /Admin/Home/Logout responded 302 in 115.3987 ms
+2026-01-04 14:13:47.614 +02:00 [INF] HTTP GET /Identity/Account/Login responded 200 in 95.6826 ms
+2026-01-04 14:14:03.686 +02:00 [INF] HTTP GET / responded 200 in 5.2881 ms
+2026-01-04 14:34:38.563 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 14:34:43.727 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 14:34:43.986 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 14:34:44.017 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 14:34:50.385 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 14:34:50.392 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 14:34:50.900 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 14:34:51.229 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 14:34:53.677 +02:00 [INF] HTTP GET / responded 200 in 3274.2366 ms
+2026-01-04 14:34:59.640 +02:00 [INF] HTTP GET /Home/About responded 200 in 97.6614 ms
+2026-01-04 14:35:05.231 +02:00 [INF] HTTP GET /Contact responded 200 in 176.4482 ms
+2026-01-04 14:35:07.963 +02:00 [INF] HTTP GET /Contact responded 200 in 143.3510 ms
+2026-01-04 14:35:08.654 +02:00 [INF] HTTP GET /Contact responded 200 in 28.8238 ms
+2026-01-04 14:35:08.854 +02:00 [INF] HTTP GET /Contact responded 200 in 12.6781 ms
+2026-01-04 14:35:12.439 +02:00 [INF] HTTP GET /Portfolio responded 200 in 81.5630 ms
+2026-01-04 14:35:14.808 +02:00 [INF] HTTP GET / responded 200 in 62.4171 ms
+2026-01-04 14:35:21.113 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 56.0110 ms
+2026-01-04 14:35:21.355 +02:00 [INF] HTTP GET / responded 200 in 30.5292 ms
+2026-01-04 14:43:04.864 +02:00 [INF] HTTP GET /Portfolio responded 200 in 6838.7528 ms
+2026-01-04 14:51:17.709 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 14:51:22.836 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 14:51:23.287 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 14:51:23.394 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 14:55:39.479 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 14:55:39.488 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 14:55:39.790 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 14:55:40.196 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 14:55:41.453 +02:00 [INF] HTTP GET / responded 200 in 1955.8809 ms
+2026-01-04 14:55:49.247 +02:00 [INF] HTTP GET /Products responded 200 in 272.3698 ms
+2026-01-04 14:56:18.643 +02:00 [INF] HTTP GET /Portfolio responded 200 in 172.3698 ms
+2026-01-04 14:56:34.984 +02:00 [INF] HTTP GET /Products responded 200 in 18.7331 ms
+2026-01-04 14:56:37.973 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 14:56:38.172 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 476.5134 ms
+2026-01-04 14:56:59.328 +02:00 [INF] HTTP GET /Products responded 200 in 4.6625 ms
+2026-01-04 14:57:04.950 +02:00 [INF] HTTP GET /Products/Details/12 responded 200 in 28.3530 ms
+2026-01-04 14:57:21.637 +02:00 [INF] HTTP GET /Products responded 200 in 3.5180 ms
+2026-01-04 14:57:24.879 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 3.5669 ms
+2026-01-04 14:57:36.825 +02:00 [INF] HTTP GET / responded 200 in 4.3473 ms
+2026-01-04 14:57:42.833 +02:00 [INF] HTTP GET /Products responded 200 in 1.4166 ms
+2026-01-04 14:57:45.259 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 143.2261 ms
+2026-01-04 14:59:24.846 +02:00 [INF] HTTP GET /Products responded 200 in 330.3446 ms
+2026-01-04 14:59:53.668 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 607.7254 ms
+2026-01-04 15:00:02.212 +02:00 [INF] HTTP GET / responded 200 in 130.0141 ms
+2026-01-04 15:00:05.935 +02:00 [INF] HTTP GET /Products responded 200 in 1.3487 ms
+2026-01-04 15:01:42.150 +02:00 [INF] HTTP GET /Products responded 200 in 60.7723 ms
+2026-01-04 15:01:44.152 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 148.5165 ms
+2026-01-04 15:02:42.396 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 439.5102 ms
+2026-01-04 15:02:42.780 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 1.2434 ms
+2026-01-04 15:04:17.362 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 1.2868 ms
+2026-01-04 15:09:54.576 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 15:09:59.675 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 15:10:00.347 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 15:10:00.373 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 15:10:18.985 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 15:10:18.994 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 15:10:19.402 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 15:10:19.721 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 15:10:20.146 +02:00 [INF] HTTP GET / responded 200 in 1142.4207 ms
+2026-01-04 15:10:28.333 +02:00 [INF] HTTP GET /Products responded 200 in 175.6957 ms
+2026-01-04 15:10:31.997 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 15:10:32.167 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 338.5360 ms
+2026-01-04 15:10:44.918 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 24.6197 ms
+2026-01-04 15:10:45.246 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 13.6506 ms
+2026-01-04 15:10:51.579 +02:00 [INF] HTTP GET /Products responded 200 in 171.1863 ms
+2026-01-04 15:10:52.876 +02:00 [INF] HTTP GET /Products/Details/12 responded 200 in 48.1879 ms
+2026-01-04 15:14:07.688 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 15:14:12.845 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 15:14:13.166 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 15:14:13.193 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 15:14:24.240 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 15:14:24.248 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 15:14:24.624 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 15:14:25.142 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 15:14:25.672 +02:00 [INF] HTTP GET / responded 200 in 1413.4696 ms
+2026-01-04 15:14:30.297 +02:00 [INF] HTTP GET /Products responded 200 in 196.3404 ms
+2026-01-04 15:14:31.939 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 15:14:32.131 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 374.1549 ms
+2026-01-04 15:14:50.648 +02:00 [INF] HTTP GET /Products responded 200 in 9.3871 ms
+2026-01-04 15:14:53.180 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 104.2156 ms
+2026-01-04 15:15:03.143 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 62.6306 ms
+2026-01-04 15:15:03.348 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 1.7653 ms
+2026-01-04 15:15:10.058 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 3.1122 ms
+2026-01-04 15:15:30.299 +02:00 [INF] HTTP GET /Products responded 200 in 182.6901 ms
+2026-01-04 15:15:40.409 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.8342 ms
+2026-01-04 15:15:40.695 +02:00 [INF] HTTP GET /Products responded 200 in 1.4060 ms
+2026-01-04 15:15:56.791 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 1.5650 ms
+2026-01-04 15:56:18.346 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 15:56:23.445 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 15:56:23.701 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 15:56:23.734 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 15:57:14.867 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 15:57:14.873 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 15:57:15.390 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 15:57:15.757 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 15:57:17.522 +02:00 [INF] HTTP GET / responded 200 in 2639.7609 ms
+2026-01-04 15:57:23.116 +02:00 [INF] HTTP GET /Products responded 200 in 129.6646 ms
+2026-01-04 15:57:24.488 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 15:57:24.630 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 305.6664 ms
+2026-01-04 15:57:30.072 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 47.7509 ms
+2026-01-04 16:09:09.868 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 16:09:14.961 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 16:09:15.211 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:09:15.231 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 16:10:27.180 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 16:10:27.197 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 16:10:27.503 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:10:27.966 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:10:36.736 +02:00 [INF] HTTP GET / responded 200 in 9524.1595 ms
+2026-01-04 16:10:44.216 +02:00 [INF] HTTP GET /Products responded 200 in 1125.4835 ms
+2026-01-04 16:10:46.664 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 16:10:47.006 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 770.1384 ms
+2026-01-04 16:11:17.281 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 63.3520 ms
+2026-01-04 16:11:17.463 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 10.1378 ms
+2026-01-04 16:11:21.325 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 2.9301 ms
+2026-01-04 16:11:23.478 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 1.1406 ms
+2026-01-04 16:13:02.277 +02:00 [INF] HTTP GET /Portfolio responded 200 in 33273.8896 ms
+2026-01-04 16:13:02.278 +02:00 [INF] HTTP GET /Portfolio responded 200 in 535.0233 ms
+2026-01-04 16:13:02.413 +02:00 [INF] HTTP GET /Portfolio responded 200 in 9308.7970 ms
+2026-01-04 16:13:03.083 +02:00 [INF] HTTP GET / responded 200 in 55.9344 ms
+2026-01-04 16:13:05.787 +02:00 [INF] HTTP GET /Portfolio responded 200 in 1.1932 ms
+2026-01-04 16:13:09.021 +02:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-01-04 16:13:10.495 +02:00 [INF] HTTP GET /Portfolio/Details/8 responded 200 in 1740.4177 ms
+2026-01-04 16:13:36.558 +02:00 [INF] HTTP GET /Products responded 200 in 120.6682 ms
+2026-01-04 16:13:38.067 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 1.1082 ms
+2026-01-04 16:20:29.841 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 16:20:35.127 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 16:20:35.448 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:20:35.477 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 16:25:58.300 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 16:25:58.351 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 16:25:58.713 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:25:59.225 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:26:08.048 +02:00 [INF] HTTP GET / responded 200 in 9677.9745 ms
+2026-01-04 16:26:12.330 +02:00 [INF] HTTP GET /Products responded 200 in 268.1939 ms
+2026-01-04 16:26:14.105 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 16:26:14.445 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 553.6938 ms
+2026-01-04 16:26:33.047 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 46.8659 ms
+2026-01-04 16:26:33.201 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 15.9634 ms
+2026-01-04 16:26:42.074 +02:00 [INF] HTTP GET /Products responded 200 in 352.1905 ms
+2026-01-04 16:26:44.049 +02:00 [INF] HTTP GET /Products/Details/12 responded 200 in 29.7743 ms
+2026-01-04 16:26:59.189 +02:00 [INF] HTTP GET /Products responded 200 in 1.5250 ms
+2026-01-04 16:27:01.256 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 30.7669 ms
+2026-01-04 16:27:16.545 +02:00 [INF] HTTP GET /Products responded 200 in 1.4362 ms
+2026-01-04 16:27:18.781 +02:00 [INF] HTTP GET /Products/Details/8 responded 200 in 121.3872 ms
+2026-01-04 16:27:30.370 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 4.0434 ms
+2026-01-04 16:27:42.617 +02:00 [INF] HTTP GET /Products responded 200 in 2.6917 ms
+2026-01-04 16:27:44.508 +02:00 [INF] HTTP GET /Products/Details/8 responded 200 in 13.6706 ms
+2026-01-04 16:31:35.515 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 16:31:40.591 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 16:31:40.840 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:31:40.855 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 16:32:00.801 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 16:32:00.805 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 16:32:00.948 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:32:01.397 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:32:02.337 +02:00 [INF] HTTP GET / responded 200 in 1524.7147 ms
+2026-01-04 16:32:42.313 +02:00 [INF] HTTP GET / responded 200 in 25.6532 ms
+2026-01-04 16:32:44.833 +02:00 [INF] HTTP GET / responded 200 in 4.8449 ms
+2026-01-04 16:32:50.481 +02:00 [INF] HTTP GET /Products responded 200 in 144.3882 ms
+2026-01-04 16:32:51.928 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 16:32:52.110 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 308.3545 ms
+2026-01-04 16:34:39.362 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 16:34:44.467 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 16:34:44.803 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:34:44.832 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 16:34:51.007 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 16:34:51.013 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 16:34:51.303 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:34:51.698 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:34:52.283 +02:00 [INF] HTTP GET / responded 200 in 1259.6104 ms
+2026-01-04 16:34:55.189 +02:00 [INF] HTTP GET /Products responded 200 in 147.0542 ms
+2026-01-04 16:34:56.609 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 16:34:56.778 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 338.5655 ms
+2026-01-04 16:35:02.015 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 25.1076 ms
+2026-01-04 16:36:24.441 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 4.0891 ms
+2026-01-04 16:51:08.953 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 16:51:14.115 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 16:51:14.593 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:51:14.622 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 16:52:24.227 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 16:52:24.236 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 16:52:24.523 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:52:25.024 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 16:52:25.459 +02:00 [INF] HTTP GET / responded 200 in 1211.6893 ms
+2026-01-04 16:52:30.061 +02:00 [INF] HTTP GET /Products responded 200 in 213.6203 ms
+2026-01-04 16:52:31.918 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 16:52:32.087 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 374.8981 ms
+2026-01-04 16:52:40.107 +02:00 [INF] HTTP GET /Products/Details/12 responded 200 in 27.5387 ms
+2026-01-04 16:52:51.053 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 23.1376 ms
+2026-01-04 16:52:55.909 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 51.7995 ms
+2026-01-04 16:52:56.075 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 22.6369 ms
+2026-01-04 16:53:01.904 +02:00 [INF] HTTP GET /Products responded 200 in 104.9189 ms
+2026-01-04 16:53:04.341 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 2.8820 ms
+2026-01-04 16:53:11.532 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.4000 ms
+2026-01-04 16:53:11.797 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 1.5470 ms
+2026-01-04 16:53:15.773 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.0218 ms
+2026-01-04 16:53:15.920 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 2.5178 ms
+2026-01-04 16:53:34.704 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 3.0662 ms
+2026-01-04 16:53:34.985 +02:00 [INF] HTTP GET /Products/Details/3 responded 200 in 1.5239 ms
+2026-01-04 16:53:40.898 +02:00 [INF] HTTP GET / responded 200 in 39.5513 ms
+2026-01-04 16:53:47.453 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.5194 ms
+2026-01-04 16:53:47.903 +02:00 [INF] HTTP GET / responded 200 in 5.0028 ms
+2026-01-04 16:53:52.252 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.8473 ms
+2026-01-04 16:53:52.614 +02:00 [INF] HTTP GET / responded 200 in 2.2215 ms
+2026-01-04 16:53:57.319 +02:00 [INF] HTTP GET /Products responded 200 in 1.4135 ms
+2026-01-04 16:53:59.790 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.5329 ms
+2026-01-04 16:53:59.938 +02:00 [INF] HTTP GET /Products responded 200 in 1.2857 ms
+2026-01-04 16:54:04.515 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.0233 ms
+2026-01-04 16:54:04.662 +02:00 [INF] HTTP GET /Products responded 200 in 0.9861 ms
+2026-01-04 16:54:07.116 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 1.1560 ms
+2026-01-04 16:54:12.757 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 1.2391 ms
+2026-01-04 16:54:12.890 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 1.0921 ms
+2026-01-04 16:58:35.426 +02:00 [INF] HTTP GET / responded 200 in 3.5372 ms
+2026-01-04 16:58:40.370 +02:00 [INF] HTTP GET /Products responded 200 in 266.4474 ms
+2026-01-04 16:58:41.429 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 50.5136 ms
+2026-01-04 16:58:45.703 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.7018 ms
+2026-01-04 16:58:45.878 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 2.0871 ms
+2026-01-04 16:58:48.898 +02:00 [INF] HTTP GET / responded 200 in 3.8704 ms
+2026-01-04 17:00:44.939 +02:00 [INF] HTTP GET /Portfolio responded 200 in 158.5717 ms
+2026-01-04 17:00:50.546 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 3.5997 ms
+2026-01-04 17:00:50.797 +02:00 [INF] HTTP GET /Portfolio responded 200 in 19.5716 ms
+2026-01-04 17:00:53.869 +02:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-01-04 17:00:54.060 +02:00 [INF] HTTP GET /Portfolio/Details/8 responded 200 in 241.7315 ms
+2026-01-04 17:00:58.730 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 3.6881 ms
+2026-01-04 17:00:58.880 +02:00 [INF] HTTP GET /Portfolio/Details/8 responded 200 in 2.5874 ms
+2026-01-04 17:01:05.473 +02:00 [INF] HTTP GET / responded 200 in 1.6594 ms
+2026-01-04 17:06:13.872 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 17:06:18.961 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 17:06:19.548 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:06:19.582 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 17:06:39.465 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 17:06:44.591 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 17:06:44.935 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:06:44.982 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 17:08:35.432 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 17:08:35.438 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 17:08:35.744 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:08:36.299 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:08:37.317 +02:00 [INF] HTTP GET / responded 200 in 1865.7029 ms
+2026-01-04 17:08:39.777 +02:00 [INF] HTTP GET /Products responded 200 in 264.6524 ms
+2026-01-04 17:08:41.727 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 17:08:41.985 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 512.6197 ms
+2026-01-04 17:08:44.504 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 27.9726 ms
+2026-01-04 17:08:44.730 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 88.1909 ms
+2026-01-04 17:08:49.439 +02:00 [INF] HTTP GET /Portfolio responded 200 in 132.0633 ms
+2026-01-04 17:08:51.416 +02:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-01-04 17:08:51.669 +02:00 [INF] HTTP GET /Portfolio/Details/8 responded 200 in 300.9182 ms
+2026-01-04 17:08:55.518 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 2.5171 ms
+2026-01-04 17:08:55.704 +02:00 [INF] HTTP GET /Portfolio/Details/8 responded 200 in 41.9899 ms
+2026-01-04 17:10:14.897 +02:00 [INF] HTTP GET / responded 200 in 15.9437 ms
+2026-01-04 17:13:31.374 +02:00 [INF] HTTP GET /Admin responded 200 in 556.7033 ms
+2026-01-04 17:14:06.630 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 162.8588 ms
+2026-01-04 17:21:10.132 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 17:21:15.258 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 17:21:15.769 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:21:15.807 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 17:21:30.774 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 17:21:30.783 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 17:21:31.455 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 666.1828 ms
+2026-01-04 17:21:40.596 +02:00 [INF] HTTP POST /Admin/HeroItems/UpdateOrder responded 200 in 543.6090 ms
+2026-01-04 17:21:43.693 +02:00 [INF] HTTP POST /Admin/HeroItems/UpdateOrder responded 200 in 50.4039 ms
+2026-01-04 17:21:47.703 +02:00 [INF] HTTP POST /Admin/HeroItems/UpdateOrder responded 200 in 30.4187 ms
+2026-01-04 17:21:56.438 +02:00 [INF] HTTP POST /Admin/HeroItems/UpdateOrder responded 200 in 33.8087 ms
+2026-01-04 17:22:04.901 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 37.8766 ms
+2026-01-04 17:22:14.691 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 11.1189 ms
+2026-01-04 17:22:19.947 +02:00 [INF] HTTP POST /Admin/HeroItems/UpdateOrder responded 200 in 141.0104 ms
+2026-01-04 17:23:46.835 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:23:47.590 +02:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-01-04 17:23:59.063 +02:00 [INF] HTTP GET /Products/Details/11 responded 200 in 12253.8318 ms
+2026-01-04 17:24:08.971 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:24:09.117 +02:00 [INF] HTTP GET / responded 200 in 338.8262 ms
+2026-01-04 17:24:21.670 +02:00 [INF] HTTP GET /Products responded 200 in 1384.5933 ms
+2026-01-04 17:24:41.886 +02:00 [INF] HTTP GET /Admin responded 200 in 253.5662 ms
+2026-01-04 17:24:46.764 +02:00 [INF] HTTP GET /Admin/DiscountTiers responded 200 in 336.1381 ms
+2026-01-04 17:24:55.217 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 106.6548 ms
+2026-01-04 17:34:59.514 +02:00 [ERR] An error occurred using the connection to database 'UniformProDb' on server '(localdb)\mssqllocaldb'.
+2026-01-04 17:34:59.832 +02:00 [ERR] An exception occurred while iterating over the results of a query for context type 'UniformPro.Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=43506; handshake=75; 
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+   at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+   at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+   at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCert)
+   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, Boolean ignoreSniOpenTimeout, Int64 timerExpire, SqlConnectionString connectionOptions, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean ignoreSniOpenTimeout, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:c1a5ed09-a5ab-4742-85ce-09a40d256f35
+Error Number:-2,State:0,Class:11
+Microsoft.Data.SqlClient.SqlException (0x80131904): Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=43506; handshake=75; 
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+   at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+   at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+   at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCert)
+   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, Boolean ignoreSniOpenTimeout, Int64 timerExpire, SqlConnectionString connectionOptions, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean ignoreSniOpenTimeout, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:c1a5ed09-a5ab-4742-85ce-09a40d256f35
+Error Number:-2,State:0,Class:11
+2026-01-04 17:35:00.018 +02:00 [ERR] حدث خطأ أثناء تهيئة البيانات الافتراضية.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Connection Timeout Expired.  The timeout period elapsed while attempting to consume the pre-login handshake acknowledgement.  This could be because the pre-login handshake failed or the server was unable to respond back in time.  The duration spent while attempting to connect to this server was - [Pre-Login] initialization=43506; handshake=75; 
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParserStateObject.ThrowExceptionAndWarning(Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniError(TdsParserStateObject stateObj, UInt32 error)
+   at Microsoft.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+   at Microsoft.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+   at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired, Boolean tlsFirst, String serverCert)
+   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, Boolean ignoreSniOpenTimeout, Int64 timerExpire, SqlConnectionString connectionOptions, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean ignoreSniOpenTimeout, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.FindByEmailAsync(String email)
+   at Program.<Main>$(String[] args) in E:\UniformPro\Uniform.Web\Program.cs:line 202
+ClientConnectionId:c1a5ed09-a5ab-4742-85ce-09a40d256f35
+Error Number:-2,State:0,Class:11
+2026-01-04 17:35:09.055 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 17:35:14.058 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 17:35:17.101 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:35:17.149 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 17:37:15.861 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 17:37:15.875 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 17:37:16.653 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:37:17.908 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:37:33.894 +02:00 [INF] HTTP GET / responded 200 in 18008.1056 ms
+2026-01-04 17:37:47.463 +02:00 [INF] HTTP GET /Products responded 200 in 1921.5082 ms
+2026-01-04 17:51:55.285 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 17:52:00.491 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 17:52:00.809 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:52:00.835 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 17:52:16.263 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 17:52:16.271 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 17:52:17.854 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 1574.5226 ms
+2026-01-04 17:54:44.306 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:55:08.967 +02:00 [INF] HTTP GET /Products responded 200 in 24730.7413 ms
+2026-01-04 17:55:39.593 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 17:56:02.257 +02:00 [INF] HTTP GET / responded 200 in 24390.4405 ms
+2026-01-04 17:56:24.345 +02:00 [INF] HTTP GET /Products responded 200 in 389.2593 ms
+2026-01-04 17:56:32.341 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 147.4720 ms
+2026-01-04 17:56:32.566 +02:00 [INF] HTTP GET /Products responded 200 in 83.3577 ms
+2026-01-04 18:04:01.720 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 18:04:06.835 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 18:04:07.300 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 18:04:07.319 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 18:04:19.423 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 18:04:19.432 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 18:04:19.952 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 18:04:25.998 +02:00 [INF] HTTP GET /Products responded 200 in 6553.5908 ms
+2026-01-04 18:04:50.346 +02:00 [INF] HTTP GET /Products responded 200 in 119.6159 ms

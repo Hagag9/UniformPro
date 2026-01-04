@@ -6,11 +6,24 @@
 }
 
 <!-- Page Title -->
-<div class="container py-8 md:py-12">
-    <h1 class="text-3xl md:text-4xl font-light text-center mb-2 tracking-wide text-gray-900">
-        @ViewData["Title"]
-    </h1>
-    <div class="w-16 h-0.5 bg-gray-900 mx-auto mb-8"></div>
+<!-- Page Header -->
+<section class="relative w-full bg-gray-50 border-b border-gray-200 overflow-hidden mb-8">
+    <!-- Polka Dots Pattern Background -->
+    <div class="absolute inset-0 opacity-[0.6]"
+         style="background-image: radial-gradient(#d1d5db 2px, transparent 2px); background-size: 24px 24px;">
+    </div>
+    
+    <!-- Content -->
+    <div class="container mx-auto px-4 py-12 md:py-16 relative z-10 text-center">
+        <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+            @ViewData["Title"]
+        </h1>
+        <div class="w-20 h-1 bg-gray-900 mx-auto rounded-full"></div>
+    </div>
+</section>
+
+<!-- Filter Bar & Tools (Main Content Start) -->
+<div class="container px-4">
 
     <!-- Filter Bar & Tools -->
     <div class="flex flex-row justify-between items-center gap-4 mb-8">
@@ -19,7 +32,7 @@
         <div class="relative w-auto">
             <button id="browseBtn" onclick="toggleCategories()" 
                     class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 rounded-lg transition-colors duration-200 border border-gray-200">
-                <span>@(isArabic ? "التصنيفات" : "BROWSE")</span>
+                <span>@L["BrowseCategories"]</span>
                 <i class="ph ph-caret-down text-gray-400"></i>
             </button>
             
@@ -49,23 +62,23 @@
             <div class="flex items-center gap-1 bg-gray-50 p-1 rounded-lg border border-gray-100 view-toggle-container">
                 <button onclick="setView('cols-1')" data-view="cols-1" 
                         class="p-1.5 text-gray-400 hover:text-black rounded transition-colors"
-                        title="@(isArabic ? "عمود واحد" : "1 Column")">
+                        title="@L["OneColumn"]">
                     <i class="ph ph-square text-lg"></i>
                 </button>
                 <button onclick="setView('cols-2')" data-view="cols-2" 
                         class="p-1.5 text-gray-400 hover:text-black rounded transition-colors"
-                        title="@(isArabic ? "٢ أعمدة" : "2 Columns")">
+                        title="@L["TwoColumns"]">
                     <i class="ph ph-columns text-lg"></i>
                 </button>
                 <!-- Hidden on Mobile -->
                 <button onclick="setView('cols-4')" data-view="cols-4" 
                         class="hidden md:block p-1.5 text-gray-400 hover:text-black rounded transition-colors view-btn-desktop-only"
-                        title="@(isArabic ? "٤ أعمدة" : "4 Columns")">
+                        title="@L["FourColumns"]">
                     <i class="ph ph-squares-four text-lg"></i>
                 </button>
                 <button onclick="setView('cols-6')" data-view="cols-6" 
                         class="hidden md:block p-1.5 text-gray-400 hover:text-black rounded transition-colors view-btn-desktop-only"
-                        title="@(isArabic ? "٦ أعمدة" : "6 Columns")">
+                        title="@L["SixColumns"]">
                     <i class="ph ph-grid-nine text-lg"></i>
                 </button>
             </div>

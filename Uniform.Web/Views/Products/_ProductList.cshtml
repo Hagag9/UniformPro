@@ -27,7 +27,7 @@
             @foreach (var product in Model.Products)
             {
                 <div>
-                    <div class="product-card group relative" onclick="location.href='/Products/Details/@product.Id'">
+                    <div class="product-card group relative cursor-pointer" onclick="location.href='/Products/Details/@product.Id'">
                         <!-- Image -->
                         <div class="product-image-container relative overflow-hidden bg-gray-100 aspect-[3/4] rounded-lg mb-3">
                             @if (!string.IsNullOrEmpty(product.MainImagePath))
@@ -51,7 +51,7 @@
                         </div>
                         
                         <!-- Info -->
-                        <div class="product-info text-start">
+                        <div class="product-info text-center">
                              <h3 class="product-name font-medium text-gray-900 group-hover:text-black truncate">
                                 @(isArabic ? product.NameAr : product.NameEn)
                              </h3>

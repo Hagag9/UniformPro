@@ -10,7 +10,7 @@
     var lang = ViewData["Lang"]?.ToString() ?? "ar";
     var dir = ViewData["Dir"]?.ToString() ?? "rtl";
     var siteName = isArabic ? ViewData["SiteNameAr"]?.ToString() : ViewData["SiteNameEn"]?.ToString();
-    siteName = siteName ?? "مانو يونيفورم";
+    siteName = siteName ?? L["SiteNameDefault"];
 
     // Fetch Categories for Sidebar
     var sidebarCategories = await _context.Categories.Where(c => c.IsActive).ToListAsync();
@@ -254,10 +254,10 @@
                 <a href="/Language/Switch?culture=@(isArabic ? "en" : "ar")&returnUrl=@Context.Request.Path"
                    class="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md text-xs font-bold text-gray-700 transition-all">
                     <i class="ph ph-globe text-sm"></i>
-                    @(isArabic ? "EN" : "عربي")
+                    @L["LanguageSwitchLabel"]
                 </a>
 
-                <a href="/Admin" class="text-gray-400 hover:text-gray-600" title="@(isArabic ? "دخول المشرفين" : "Admin Login")">
+                <a href="/Admin" class="text-gray-400 hover:text-gray-600" title="@L["AdminLogin"]">
                     <i class="ph ph-lock-key text-xl"></i>
                 </a>
             </div>
@@ -367,7 +367,7 @@
                 <!-- Our Office (Map) -->
                  <div>
                     <h3 class="text-white font-bold text-base mb-4 relative inline-block">
-                        @(isArabic ? "مكتبنا" : "Our Office")
+                        @L["OurOffice"]
                         <span class="absolute bottom-0 @(isArabic ? "right-0" : "left-0") w-1/2 h-0.5 bg-primary rounded-full"></span>
                     </h3>
                     
@@ -385,7 +385,7 @@
                     else
                     {
                         <div class="h-48 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-sm border border-gray-700">
-                           @(isArabic ? "لا يوجد خريطة متاحة" : "No map available")
+                           @L["NoMapAvailable"]
                         </div>
                     }
                 </div>
@@ -398,7 +398,7 @@
                 </p>
                 <div class="flex items-center gap-1 text-xs text-gray-500">
                     <span>@L["DesignedBy"]</span>
-                    <a href="https://www.linkedin.com/in/ahagag/" class="text-primary hover:text-white font-bold transition-colors">@Ahmed Hagag</a>
+                    <a href="https://www.linkedin.com/in/ahagag/" class="text-primary hover:text-white font-bold transition-colors">@@Ahmed Hagag</a>
                 </div>
             </div>
         </div>
@@ -548,7 +548,7 @@
                 if (items.length === 0) return;
 
                 const isArabic = document.documentElement.lang === 'ar';
-                const intro = isArabic ? 'مرحبًا، أريد الاستفسار عن المنتجات التالية:' : 'Hello, I would like to inquire about the following products:';
+                const intro = '@L["InquiryMessage"]';
                 const baseUrl = window.location.origin;
 
                 let message = intro + '\n\n';

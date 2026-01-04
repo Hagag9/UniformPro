@@ -32,6 +32,7 @@ namespace UniformPro.Web.Controllers
              return View(items);
         }
 
+        [OutputCache(PolicyName = "PortfolioDetails")]
         public async Task<IActionResult> Details(int id)
         {
              var isArabic = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");

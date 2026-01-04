@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using UniformPro.Core.Entities;
 using UniformPro.Infrastructure.Data;
 using UniformPro.Web.Services;
+using Microsoft.AspNetCore.OutputCaching; // Added
 using Microsoft.Extensions.Logging;
 
 namespace UniformPro.Web.Areas.Admin.Controllers
@@ -16,12 +17,14 @@ namespace UniformPro.Web.Areas.Admin.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
         private readonly ILogger<HeroItemsController> _logger;
+        private readonly IOutputCacheStore _cacheStore; // Added
 
-        public HeroItemsController(ApplicationDbContext context, IFileService fileService, ILogger<HeroItemsController> logger)
+        public HeroItemsController(ApplicationDbContext context, IFileService fileService, ILogger<HeroItemsController> logger, IOutputCacheStore cacheStore)
         {
             _context = context;
             _fileService = fileService;
             _logger = logger;
+            _cacheStore = cacheStore;
         }
 
         public async Task<IActionResult> Index()
@@ -66,6 +69,10 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
                         _context.Add(heroItem);
                         await _context.SaveChangesAsync();
+                        
+                        // Evict Home Cache
+                        await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+
                         return RedirectToAction(nameof(Index));
                     }
                     catch (ArgumentException ex)
@@ -104,6 +111,9 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                     
                     _context.HeroItems.Remove(item);
                     await _context.SaveChangesAsync();
+
+                    // Evict Home Cache
+                    await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
                 }
             }
             catch (Exception ex)
@@ -169,6 +179,10 @@ namespace UniformPro.Web.Areas.Admin.Controllers
 
                         _context.Update(heroItem);
                         await _context.SaveChangesAsync();
+
+                        // Evict Home Cache
+                        await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+
                         TempData["Success"] = "تم تحديث الشريحة بنجاح";
                     }
                     catch (ArgumentException ex)
@@ -218,6 +232,10 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                 }
 
                 await _context.SaveChangesAsync();
+                
+                // Evict Home Cache
+                await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+
                 return Ok();
             }
             catch (Exception ex)

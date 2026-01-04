@@ -5,7 +5,7 @@
 @{
     Layout = "_FrontLayout";
     var isArabic = ViewData["IsArabic"] as bool? ?? true;
-    ViewData["Title"] = isArabic ? "من نحن" : "About Us";
+    ViewData["Title"] = L["AboutUs"];
 }
 
 @section Styles {
@@ -51,7 +51,7 @@
 <section class="py-10 md:py-16 bg-gray-50 border-b">
     <div class="container mx-auto px-4">
         <h1 class="dutch-title text-center text-xl md:text-3xl lg:text-4xl">
-            @(isArabic ? "عن مانو يونيفورم" : "About Mano Uniform")
+            @L["AboutPageTitle"]
         </h1>
     </div>
 </section>
@@ -69,7 +69,7 @@
             }
             else
             {
-                <p class="text-center text-gray-400">@(isArabic ? "لم يتم إضافة محتوى بعد" : "No content added yet")</p>
+                <p class="text-center text-gray-400">@L["NoContent"]</p>
             }
         </div>
     </div>

@@ -13,9 +13,10 @@
     var materialDetails = isArabic ? Model.MaterialDetailsAr : Model.MaterialDetailsEn;
 
     // Build WhatsApp message
-    var whatsappMessage = System.Net.WebUtility.UrlEncode(isArabic 
-        ? $"مرحباً، أريد الاستفسار عن المنتج: {productName}" 
-        : $"Hello, I want to inquire about the product: {productName}");
+    // Build WhatsApp message
+    var whatsappMessage = System.Net.WebUtility.UrlEncode(
+        string.Format(L["WhatsAppProductInquiry"], productName)
+    );
 }
 
 @section Head {
@@ -101,7 +102,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
 
             <!-- Image Gallery -->
-            <div class="space-y-4" data-aos="fade-left">
+            <div class="space-y-4" data-aos="fade-up">
                 <!-- Main Image -->
                 <!-- Main Image -->
                 <div id="main-image-container" class="bg-white rounded-2xl overflow-hidden border border-gray-200 relative lg:max-w-md lg:mx-auto">
@@ -148,7 +149,7 @@
             </div>
 
             <!-- Product Info -->
-            <div data-aos="fade-right">
+            <div data-aos="fade-up">
                 <!-- Category -->
                 <a href="/Products?category=@Model.CategoryId" class="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium mb-3 hover:bg-gray-200 transition-colors">
                     @categoryName
@@ -281,7 +282,8 @@
                     <div>
                         <p class="font-bold text-gray-800">@L["FastShipping"]</p>
                     </div>
-                </div>
+                    </div>
+            </div>
             </div>
             </div>
         </div>

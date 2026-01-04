@@ -1,5 +1,8 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
 @{
-    ViewData["Title"] = "خطأ في الخادم";
+    ViewData["Title"] = L["ServerErrorTitle"];
     Layout = "~/Views/Shared/_FrontLayout.cshtml";
 }
 
@@ -18,21 +21,19 @@
             <i class="ph-duotone ph-bug text-9xl text-red-500 relative z-10 drop-shadow-sm animate-pulse"></i>
         </div>
 
-        <h1 class="text-4xl font-black text-gray-900 mb-2 tracking-tight">حدث خطأ غير متوقع</h1>
+        <h1 class="text-4xl font-black text-gray-900 mb-2 tracking-tight">@L["ServerErrorHeader"]</h1>
         <p class="text-gray-500 text-lg mb-10 leading-relaxed">
-            نواجه مشكلة تقنية بسيطة في معالجة طلبك حالياً.
-            <br>
-            فريقنا يعمل على إصلاحها، يرجى المحاولة مرة أخرى لاحقاً.
+            @L["ServerErrorDesc"]
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="javascript:location.reload()" class="group inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-gray-400 text-gray-700 px-8 py-3.5 rounded-xl font-bold transition-all hover:bg-gray-50">
                 <i class="ph-bold ph-arrow-clockwise text-lg group-hover:rotate-180 transition-transform duration-500"></i>
-                إعادة المحاولة
+                @L["Retry"]
             </a>
             <a href="/" class="group inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-black text-white px-8 py-3.5 rounded-xl font-bold transition-all transform hover:-translate-y-1 hover:shadow-lg">
                 <i class="ph-bold ph-house text-lg"></i>
-                الرئيسية
+                @L["Home"]
             </a>
         </div>
     </div>

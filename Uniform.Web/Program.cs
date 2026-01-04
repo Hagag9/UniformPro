@@ -59,19 +59,38 @@ builder.Services.AddOutputCache(options => // 3. Output Cache
     // Base Policy: Default 1 min
     options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromMinutes(1)));
 
-    // HomePage Policy: 1 hour, Tag "home_data" for eviction
+    // HomePage Policy: 1 hour, Tag "home_data", Vary by Culture
     options.AddPolicy("HomePage", builder => 
-        builder.Expire(TimeSpan.FromHours(1)).Tag("home_data"));
+        builder.Expire(TimeSpan.FromHours(1))
+               .Tag("home_data")
+               .VaryByValue(context => new KeyValuePair<string, string>("culture", context.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ar")));
 
-    // Products Policy: 5 mins, Vary by query keys, Tag "products_data"
+    // Products Policy: 5 mins, Vary by query keys & Culture, Tag "products_data"
     options.AddPolicy("Products", builder => 
         builder.Expire(TimeSpan.FromMinutes(5))
                .SetVaryByQuery("category", "search", "page")
-               .Tag("products_data")); // Added tag for eviction
+               .Tag("products_data")
+               .VaryByValue(context => new KeyValuePair<string, string>("culture", context.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ar")));
 
-    // Portfolios Policy: 30 mins, Tag "portfolio_data"
+    // Portfolios Policy: 30 mins, Tag "portfolio_data", Vary by Culture
     options.AddPolicy("Portfolios", builder => 
-        builder.Expire(TimeSpan.FromMinutes(30)).Tag("portfolio_data"));
+        builder.Expire(TimeSpan.FromMinutes(30))
+               .Tag("portfolio_data")
+               .VaryByValue(context => new KeyValuePair<string, string>("culture", context.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ar")));
+
+    // ProductDetails Policy: 5 mins, Tag "products_data", Vary by Id & Culture
+    options.AddPolicy("ProductDetails", builder => 
+        builder.Expire(TimeSpan.FromMinutes(5))
+               .Tag("products_data") // So it clears when product is edited
+               .SetVaryByRouteValue("id")
+               .VaryByValue(context => new KeyValuePair<string, string>("culture", context.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ar")));
+
+    // PortfolioDetails Policy: 5 mins, Tag "portfolio_data", Vary by Id & Culture
+    options.AddPolicy("PortfolioDetails", builder => 
+        builder.Expire(TimeSpan.FromMinutes(5))
+               .Tag("portfolio_data") 
+               .SetVaryByRouteValue("id")
+               .VaryByValue(context => new KeyValuePair<string, string>("culture", context.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ar")));
 });
 // --------------------------------------
 builder.Services.Configure<RequestLocalizationOptions>(options =>

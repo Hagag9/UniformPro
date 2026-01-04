@@ -1,5 +1,8 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
 @{
-    ViewData["Title"] = "الصفحة غير موجودة";
+    ViewData["Title"] = L["PageNotFoundTitle"];
     Layout = "~/Views/Shared/_FrontLayout.cshtml";
 }
 
@@ -19,21 +22,21 @@
         </div>
 
         <h1 class="text-6xl font-black text-gray-900 mb-2 tracking-tight">404</h1>
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">عذراً، هذه الصفحة غير موجودة</h2>
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">@L["PageNotFoundHeader"]</h2>
         
         <p class="text-gray-500 text-lg mb-10 leading-relaxed">
-            يبدو أن الرابط الذي تحاول الوصول إليه غير صحيح، أو أن الصفحة قد تم نقلها أو حذفها نهائياً.
+            @L["PageNotFoundDesc"]
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="/" class="group inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-black text-white px-8 py-3.5 rounded-xl font-bold transition-all transform hover:-translate-y-1 hover:shadow-lg">
                 <i class="ph-bold ph-house text-lg group-hover:scale-110 transition-transform"></i>
-                العودة للرئيسية
+                @L["BackToHome"]
             </a>
             
             <button onclick="history.back()" class="group inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-100 hover:border-gray-300 text-gray-700 px-8 py-3.5 rounded-xl font-bold transition-all hover:bg-gray-50">
                 <i class="ph-bold ph-arrow-right rtl:rotate-180 text-lg"></i>
-                رجوع للصفحة السابقة
+                @L["GoBack"]
             </button>
         </div>
     </div>

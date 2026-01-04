@@ -96,7 +96,8 @@ namespace UniformPro.Web.Controllers
         // GET: /Products/Details/5
         // GET: /Products/Details/5
         // GET: /Products/Details/5
-        [OutputCache(Duration = 300, VaryByRouteValueNames = new[] { "id" })]
+        // GET: /Products/Details/5
+        [OutputCache(PolicyName = "ProductDetails")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();

@@ -258,4 +258,110 @@
   <data name="FastShipping" xml:space="preserve">
     <value>Fast &amp; Safe Shipping</value>
   </data>
+  <data name="AdminLogin" xml:space="preserve">
+    <value>دخول المشرفين</value>
+  </data>
+  <data name="OurOffice" xml:space="preserve">
+    <value>مكتبنا</value>
+  </data>
+  <data name="NoMapAvailable" xml:space="preserve">
+    <value>لا يوجد خريطة متاحة</value>
+  </data>
+  <data name="LanguageSwitchLabel" xml:space="preserve">
+    <value>EN</value>
+  </data>
+  <data name="SiteNameDefault" xml:space="preserve">
+    <value>مانو يونيفورم</value>
+  </data>
+  <data name="VerifiedCustomer" xml:space="preserve">
+    <value>عميل موثوق</value>
+  </data>
+  <data name="AboutPageTitle" xml:space="preserve">
+    <value>عن مانو يونيفورم</value>
+  </data>
+  <data name="NoContent" xml:space="preserve">
+    <value>لم يتم إضافة محتوى بعد</value>
+  </data>
+  <data name="ContactDesc" xml:space="preserve">
+    <value>يسعدنا تواصلكم معنا. نحن هنا للإجابة على جميع استفساراتكم.</value>
+  </data>
+  <data name="MessageSent" xml:space="preserve">
+    <value>تم استلام رسالتك بنجاح!</value>
+  </data>
+  <data name="MessageSentDesc" xml:space="preserve">
+    <value>شكراً لتواصلك معنا. سيقوم فريقنا بمراجعة رسالتك والرد عليك في أقرب وقت ممكن.</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>العودة للرئيسية</value>
+  </data>
+  <data name="EnterYourName" xml:space="preserve">
+    <value>ادخل اسمك بالكامل</value>
+  </data>
+  <data name="CompanyNamePlaceholder" xml:space="preserve">
+    <value>اسم الشركة (اختياري)</value>
+  </data>
+  <data name="MessagePlaceholder" xml:space="preserve">
+    <value>اكتب رسالتك هنا...</value>
+  </data>
+  <data name="SubmitMessage" xml:space="preserve">
+    <value>إرسال الرسالة</value>
+  </data>
+  <data name="DiscountPolicyTitle" xml:space="preserve">
+    <value>سياسة الخصومات - وفر حتى {0}%</value>
+  </data>
+  <data name="DiscountPolicyMetaDesc" xml:space="preserve">
+    <value>اكتشف شرائح الخصومات على الكميات من مانو يونيفورم. خصومات حصرية تصل إلى {0}% للشركات والمصانع. اطلب عرض سعر الآن.</value>
+  </data>
+  <data name="PageNotFoundTitle" xml:space="preserve">
+    <value>الصفحة غير موجودة</value>
+  </data>
+  <data name="PageNotFoundHeader" xml:space="preserve">
+    <value>عذراً، هذه الصفحة غير موجودة</value>
+  </data>
+  <data name="PageNotFoundDesc" xml:space="preserve">
+    <value>يبدو أن الرابط الذي تحاول الوصول إليه غير صحيح، أو أن الصفحة قد تم نقلها أو حذفها نهائياً.</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>رجوع للصفحة السابقة</value>
+  </data>
+  <data name="ServerErrorTitle" xml:space="preserve">
+    <value>خطأ في الخادم</value>
+  </data>
+  <data name="ServerErrorHeader" xml:space="preserve">
+    <value>حدث خطأ غير متوقع</value>
+  </data>
+  <data name="ServerErrorDesc" xml:space="preserve">
+    <value>نواجه مشكلة تقنية بسيطة في معالجة طلبك حالياً. فريقنا يعمل على إصلاحها، يرجى المحاولة مرة أخرى لاحقاً.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>إعادة المحاولة</value>
+  </data>
+  <data name="ProjectVideo" xml:space="preserve">
+    <value>فيديو المشروع</value>
+  </data>
+  <data name="SwipeToNavigate" xml:space="preserve">
+    <value>اسحب للتنقل</value>
+  </data>
+  <data name="ImageAlt" xml:space="preserve">
+    <value>صورة</value>
+  </data>
+
+  <data name="WhatsAppProductInquiry" xml:space="preserve">
+    <value>مرحباً، أريد الاستفسار عن المنتج: {0}</value>
+  </data>
+  <data name="BrowseCategories" xml:space="preserve">
+    <value>التصنيفات</value>
+  </data>
+  <data name="OneColumn" xml:space="preserve">
+    <value>عمود واحد</value>
+  </data>
+  <data name="TwoColumns" xml:space="preserve">
+    <value>٢ أعمدة</value>
+  </data>
+  <data name="FourColumns" xml:space="preserve">
+    <value>٤ أعمدة</value>
+  </data>
+  <data name="SixColumns" xml:space="preserve">
+    <value>٦ أعمدة</value>
+  </data>
 </root>

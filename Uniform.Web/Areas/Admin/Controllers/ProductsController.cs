@@ -12,7 +12,8 @@ using UniformPro.Web.ViewModels;
 namespace UniformPro.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;

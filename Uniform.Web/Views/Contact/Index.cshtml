@@ -32,17 +32,10 @@
 
                 <div class="relative z-10">
                     <h1 class="text-3xl md:text-4xl font-bold mb-4 font-serif">
-                        @if (isArabic)
-                        {
-                            <span>تواصل معنا</span>
-                        }
-                        else
-                        {
-                            <span>Contact Us</span>
-                        }
+                        @L["ContactUs"]
                     </h1>
                     <p class="text-gray-400 text-base mb-8 leading-relaxed">
-                        @(isArabic ? "يسعدنا تواصلكم معنا. نحن هنا للإجابة على جميع استفساراتكم." : "Great vision without great people is irrelevant. Let's work together.")
+                        @L["ContactDesc"]
                     </p>
 
                     <div class="space-y-5">
@@ -109,13 +102,13 @@
                             <i class="ph-fill ph-check-circle text-4xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-3">
-                            @(isArabic ? "تم استلام رسالتك بنجاح!" : "Message Sent Successfully!")
+                            @L["MessageSent"]
                         </h3>
                         <p class="text-gray-600 mb-6 max-w-sm mx-auto text-sm">
-                            @(isArabic ? "شكراً لتواصلك معنا. سيقوم فريقنا بمراجعة رسالتك والرد عليك في أقرب وقت ممكن." : "Thank you for contacting us. Our team will review your message and get back to you as soon as possible.")
+                            @L["MessageSentDesc"]
                         </p>
                         <a href="/" class="px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-bold text-sm">
-                            @(isArabic ? "العودة للرئيسية" : "Back to Home")
+                            @L["BackToHome"]
                         </a>
                     </div>
                 }
@@ -128,7 +121,7 @@
                             <!-- Name -->
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 mb-1.5">@L["YourName"] <span class="text-red-500">*</span></label>
-                                <input asp-for="FullName" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none text-sm" placeholder="@(isArabic ? "ادخل اسمك بالكامل" : "Enter your Full Name")" />
+                                <input asp-for="FullName" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none text-sm" placeholder="@L["EnterYourName"]" />
                                 <span asp-validation-for="FullName" class="text-red-500 text-xs mt-0.5 block"></span>
                             </div>
 
@@ -151,7 +144,7 @@
                             <!-- Company -->
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 mb-1.5">@L["Company"] <span class="text-xs text-gray-400 font-normal">(@L["Optional"])</span></label>
-                                <input asp-for="CompanyName" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none text-sm" placeholder="@(isArabic ? "اسم الشركة (اختياري)" : "Company Name (Optional)")" />
+                                <input asp-for="CompanyName" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none text-sm" placeholder="@L["CompanyNamePlaceholder"]" />
                                 <span asp-validation-for="CompanyName" class="text-red-500 text-xs mt-0.5 block"></span>
                             </div>
                         </div>
@@ -159,7 +152,7 @@
                         <!-- Message -->
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-1.5">@L["Message"] <span class="text-red-500">*</span></label>
-                            <textarea asp-for="Message" rows="4" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none resize-none text-sm" placeholder="@(isArabic ? "اكتب رسالتك هنا..." : "Enter your message here...")"></textarea>
+                            <textarea asp-for="Message" rows="4" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-gray-900 focus:ring-0 transition-colors outline-none resize-none text-sm" placeholder="@L["MessagePlaceholder"]"></textarea>
                             <span asp-validation-for="Message" class="text-red-500 text-xs mt-0.5 block"></span>
                         </div>
 
@@ -167,7 +160,7 @@
                         <div class="pt-2">
                             <button type="submit" class="w-full md:w-auto px-8 py-3 bg-[#D4B483] hover:bg-[#c4a473] text-gray-900 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm">
                                <i class="ph-bold ph-paper-plane-right text-lg"></i>
-                               <span>@(isArabic ? "إرسال الرسالة" : "Submit Message")</span>
+                               <span>@L["SubmitMessage"]</span>
                             </button>
                         </div>
                     </form>
