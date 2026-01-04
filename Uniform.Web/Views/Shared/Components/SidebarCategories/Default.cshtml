@@ -1,0 +1,18 @@
+@model IEnumerable<UniformPro.Core.Entities.Category>
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
+
+@{
+    var currentPath = Context.Request.Path.ToString().ToLower();
+    var isArabic = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+}
+
+<a href="/Products" class="block py-1.5 text-xs @(currentPath == "/products" ? "text-gray-900 font-bold" : "text-gray-500 hover:text-gray-900") transition-colors">@L["AllProducts"]</a>
+@foreach (var cat in Model)
+{
+    var isActiveCat = currentPath.Contains(cat.Id.ToString());
+    <a href="/Products?category=@cat.Id" class="block py-1.5 text-xs @(isActiveCat ? "text-gray-900 font-bold" : "text-gray-500 hover:text-gray-900") transition-colors">
+        @(isArabic ? cat.NameAr : cat.NameEn)
+    </a>
+}

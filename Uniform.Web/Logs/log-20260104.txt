@@ -911,3 +911,35 @@ Error Number:-2,State:0,Class:11
 2026-01-04 18:04:19.952 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
 2026-01-04 18:04:25.998 +02:00 [INF] HTTP GET /Products responded 200 in 6553.5908 ms
 2026-01-04 18:04:50.346 +02:00 [INF] HTTP GET /Products responded 200 in 119.6159 ms
+2026-01-04 18:28:12.354 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 18:28:17.498 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 18:28:17.786 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 18:28:17.819 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 18:29:22.052 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 18:29:22.060 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 18:29:22.585 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 18:29:23.055 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 18:29:23.972 +02:00 [INF] HTTP GET / responded 200 in 1901.2893 ms
+2026-01-04 18:29:47.100 +02:00 [INF] HTTP GET /Admin responded 200 in 533.7354 ms
+2026-01-04 18:29:50.331 +02:00 [INF] HTTP GET /Admin/Categories responded 200 in 116.7302 ms
+2026-01-04 18:30:09.702 +02:00 [INF] HTTP GET /Admin/HeroItems responded 200 in 882.0787 ms
+2026-01-04 18:30:31.508 +02:00 [INF] HTTP GET / responded 200 in 43.0876 ms
+2026-01-04 18:30:31.957 +02:00 [INF] HTTP GET / responded 200 in 13.6908 ms
+2026-01-04 18:36:27.137 +02:00 [INF] FileCleanupBackgroundService: Waiting 00:00:05 before first run (Development Mode)...
+2026-01-04 18:36:32.355 +02:00 [INF] FileCleanupBackgroundService: Starting cleanup process...
+2026-01-04 18:36:32.745 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 18:36:32.783 +02:00 [INF] FileCleanupBackgroundService: Cleanup finished. Next run in 7 days.
+2026-01-04 18:40:42.040 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 18:40:42.049 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-01-04 18:40:43.020 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 18:40:43.675 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-01-04 18:41:23.002 +02:00 [INF] HTTP GET / responded 200 in 40941.8812 ms
+2026-01-04 18:41:34.391 +02:00 [INF] HTTP GET /Products responded 200 in 1447.8459 ms
+2026-01-04 18:41:39.297 +02:00 [INF] HTTP GET /Language/Switch responded 302 in 81.3030 ms
+2026-01-04 18:41:39.659 +02:00 [INF] HTTP GET /Products responded 200 in 227.3974 ms
+2026-01-04 18:42:16.336 +02:00 [INF] HTTP GET /DiscountPolicy responded 200 in 325.7008 ms
+2026-01-04 18:42:22.090 +02:00 [INF] HTTP GET /Portfolio responded 200 in 246.3769 ms
+2026-01-04 18:42:31.539 +02:00 [INF] HTTP GET /Contact responded 200 in 300.4430 ms
+2026-01-04 18:42:38.087 +02:00 [INF] HTTP GET /Products responded 200 in 25.9862 ms
+2026-01-04 18:42:55.927 +02:00 [INF] HTTP GET / responded 200 in 30.4264 ms
+2026-01-04 18:43:32.721 +02:00 [INF] HTTP GET /Products responded 200 in 39.9397 ms

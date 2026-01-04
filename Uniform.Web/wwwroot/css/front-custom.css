@@ -1,0 +1,95 @@
+/* Font: Readex Pro (Arabic) + Libre Franklin (English) */
+* {
+    font-family: 'Readex Pro', 'Libre Franklin', sans-serif !important;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+a, button {
+    transition: all 0.3s ease;
+}
+
+/* Custom Scrollbar for Sidebar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #e5e7eb;
+    border-radius: 20px;
+}
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+}
+
+/* Dutch Line Style Header */
+.dutch-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: transparent;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease-in-out;
+}
+
+    .dutch-header:hover,
+    .dutch-header.scrolled {
+        background: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+/* Logo Font - Like DUTCH LINE */
+.dutch-logo {
+    font-family: 'Libre Franklin', sans-serif !important;
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #111;
+    text-decoration: none;
+}
+
+/* Page Title Font - Like ALL PRODUCTS */
+.dutch-title {
+    font-family: 'Libre Franklin', sans-serif !important;
+    font-weight: 700;
+    font-size: 2.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #111;
+}
+
+/* Mobile menu override for open state */
+#mobile-menu.open {
+    transform: translateX(0) !important;
+}
+
+/* Inquiry Cart Sidebar */
+#inquiryCartSidebar {
+    transition: transform 0.3s ease;
+}
+/* Arabic (RTL) - sidebar on left */
+html[dir="rtl"] #inquiryCartSidebar {
+    left: 0;
+    right: auto;
+    transform: translateX(-100%);
+}
+
+    html[dir="rtl"] #inquiryCartSidebar.cart-open {
+        transform: translateX(0);
+    }
+/* English (LTR) - sidebar on right */
+html[dir="ltr"] #inquiryCartSidebar {
+    right: 0;
+    left: auto;
+    transform: translateX(100%);
+}
+
+    html[dir="ltr"] #inquiryCartSidebar.cart-open {
+        transform: translateX(0);
+    }
