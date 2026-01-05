@@ -79,13 +79,15 @@
                         <!-- Overlay & Content -->
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 transition-opacity duration-300 flex flex-col justify-end p-6">
                              
-                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                <h3 class="text-white text-2xl font-bold mb-2">@item.ClientName</h3>
-                                
-                                <span class="inline-flex items-center gap-2 text-white/90 hover:text-white mt-2 group/btn text-sm font-medium">
-                                    @L["ViewDetails"]
-                                    <i class="ph-bold @(isArabic ? "ph-arrow-left" : "ph-arrow-right") transform group-hover/btn:translate-x-1 transition-transform"></i>
-                                </span>
+                            <div class="transform transition-transform duration-300">
+                                <h3 class="text-white text-xl font-semibold mb-1">@item.ClientName</h3>
+                                <div class="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-out">
+                                    <div class="overflow-hidden">
+                                        <p class="text-gray-200 text-sm font-medium">
+                                            @item.CategoryName
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
