@@ -45,6 +45,7 @@ builder.Services.AddRazorPages();
 //builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddLocalization();
 builder.Services.AddHostedService<UniformPro.Web.Services.FileCleanupBackgroundService>();
+builder.Services.AddHttpContextAccessor(); // Required for CatalogController
 
 // --- Caching & Performance Services ---
 builder.Services.AddMemoryCache(); // 1. Memory Cache

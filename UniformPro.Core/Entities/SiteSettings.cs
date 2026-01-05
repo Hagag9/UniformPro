@@ -39,5 +39,8 @@ namespace UniformPro.Core.Entities
         public string? AboutUsEn { get; set; }  // محتوى إنجليزي (HTML)
         public string? OwnerImage { get; set; } // اسم ملف صورة المالك
         public string? LogoPath { get; set; }   // لوجو الموقع
+        
+        // --- إعدادات التسويق ---
+        public string? FacebookPixelId { get; set; } // معرف فيسبوك بيكسل (Nullable)
     }
 }

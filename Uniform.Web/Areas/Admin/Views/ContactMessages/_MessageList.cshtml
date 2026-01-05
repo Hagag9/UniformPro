@@ -3,7 +3,7 @@
 
 <div id="messagesTableContainer" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full text-right">
+        <table class="w-full text-right min-w-[900px]">
             <thead class="bg-gray-50 text-gray-500 text-xs uppercase border-b border-gray-200">
                 <tr>
                     <th class="px-6 py-3">المرسل</th>
@@ -22,7 +22,7 @@
                 {
                     // تلوين الخلفية لو الرسالة جديدة
                     <tr class="hover:bg-gray-50 transition-colors @(!item.IsRead ? "bg-green-50/60" : "")">
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <div class="font-bold text-gray-800">@item.FullName</div>
                             <div class="text-xs text-gray-500">@item.Phone</div>
                         </td>
@@ -33,11 +33,11 @@
                             }
                             <span class="text-sm truncate block max-w-xs">@item.Message</span>
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-500">
+                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                             <span class="block">@item.SentAt.ToString("yyyy-MM-dd")</span>
                             <span class="text-xs text-gray-400">@item.SentAt.ToString("hh:mm tt")</span>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             @if (!item.IsRead)
                             {
                                 <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1 w-fit">

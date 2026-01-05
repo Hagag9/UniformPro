@@ -85,6 +85,17 @@ const InquiryCart = {
             items.push({ id, name, image });
             this.saveItems(items);
             this.showToast();
+
+            // Pixel Tracking: AddToCart
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'AddToCart', {
+                    content_ids: [id.toString()], // Must match Product ID
+                    content_type: 'product',
+                    content_name: name,
+                    value: 0, // Inquiry Cart has no direct price
+                    currency: 'EGP'
+                });
+            }
         }
     },
 
@@ -159,6 +170,14 @@ const InquiryCart = {
 
         const phone = whatsappNumber.replace(/\D/g, '');
         const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
+
+        // Pixel Tracking: Contact
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'Contact', {
+                content_name: 'WhatsApp Inquiry Cart'
+            });
+        }
+
         window.open(url, '_blank');
     }
 };

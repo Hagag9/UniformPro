@@ -201,6 +201,16 @@
                  container.innerHTML = html;
                  container.style.opacity = '1';
                  
+                 // Update Page Title
+                 const newTitleInput = document.getElementById('serverPageTitle');
+                 if (newTitleInput && newTitleInput.value) {
+                     const pageTitleElement = document.querySelector('h1.text-3xl'); // Targeting the h1 in the hero section
+                     if (pageTitleElement) {
+                         pageTitleElement.textContent = newTitleInput.value;
+                         document.title = newTitleInput.value + ' - @(isArabic ? ViewData["SiteNameAr"] : ViewData["SiteNameEn"])';
+                     }
+                 }
+
                  // Restore Grid View (important to prevent flash)
                  checkMobileView();
                  
@@ -246,6 +256,17 @@
              .then(html => {
                  container.innerHTML = html;
                  container.style.opacity = '1';
+                 
+                 // Update Page Title
+                 const newTitleInput = document.getElementById('serverPageTitle');
+                 if (newTitleInput && newTitleInput.value) {
+                     const pageTitleElement = document.querySelector('h1.text-3xl');
+                     if (pageTitleElement) {
+                         pageTitleElement.textContent = newTitleInput.value;
+                         document.title = newTitleInput.value + ' - @(isArabic ? ViewData["SiteNameAr"] : ViewData["SiteNameEn"])';
+                     }
+                 }
+                 
                  checkMobileView();
              });
         }

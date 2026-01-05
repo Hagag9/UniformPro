@@ -39,6 +39,7 @@ namespace UniformPro.Web.Controllers
                 ViewData["SiteNameEn"] = settings.WebsiteNameEn;
                 ViewData["LogoPath"] = settings.LogoPath;
                 ViewData["MapUrl"] = settings.MapLocationUrl;
+                ViewData["PixelId"] = settings.FacebookPixelId; // Added Pixel ID
             }
 
             // Add culture info for Layout

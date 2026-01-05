@@ -293,7 +293,7 @@ else
                     }
                 </div>
                 <!-- Scroll Hint Arrow -->
-                <button onclick="scrollSlider('latestProductsSlider')" class="slider-arrow absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur shadow-lg rounded-full p-2 animate-pulse hidden">
+                <button onclick="scrollSlider('latestProductsSlider')" class="slider-arrow absolute @(isArabic ? "left-0 rotate-180" : "right-0") top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur shadow-lg rounded-full p-2 animate-pulse hidden">
                     <i class="ph-bold ph-arrow-right text-primary text-xl"></i>
                 </button>
             </div>
@@ -353,7 +353,7 @@ else
                     }
                 </div>
                 <!-- Scroll Hint Arrow -->
-                <button onclick="scrollSlider('portfolioSlider')" class="slider-arrow absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur shadow-lg rounded-full p-2 animate-pulse hidden">
+                <button onclick="scrollSlider('portfolioSlider')" class="slider-arrow absolute @(isArabic ? "left-0 rotate-180" : "right-0") top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur shadow-lg rounded-full p-2 animate-pulse hidden">
                     <i class="ph-bold ph-arrow-right text-primary text-xl"></i>
                 </button>
             </div>
@@ -592,7 +592,7 @@ else
             checkScroll();
         }
 
-        function scrollSlider(sliderId, direction = 'right') {
+        function scrollSlider(sliderId, direction) {
             const slider = document.getElementById(sliderId);
             if (slider) {
                 // Update scroll amount for 3 items (approx 3 per screen)
@@ -600,22 +600,44 @@ else
                 const scrollAmount = slider.clientWidth / itemsPerScreen; 
                 const isRTL = document.documentElement.dir === 'rtl';
 
-                // Check if end
-                // RTL scrollLeft is negative/0 depending on browser, Abs covers offset
-                const reachedEnd = Math.abs(slider.scrollLeft) + slider.clientWidth >= slider.scrollWidth - 10;
+                // Determine logical direction if not explicitly provided
+                // Default behavior (no direction arg) is "Next"
+                // Next in LTR = Scroll Right (+). Next in RTL = Scroll Left (-).
+                let behaviorDirection = direction;
+                if (!behaviorDirection) {
+                    behaviorDirection = isRTL ? 'left' : 'right';
+                }
+
+                // Check end condition
+                // In RTL, scrollLeft is often negative (Chrome) or starts at 0 and goes negative.
+                // We use Math.abs to be safe.
+                const currentScroll = Math.abs(slider.scrollLeft);
+                const maxScroll = slider.scrollWidth - slider.clientWidth;
+                // Buffer of 10px
+                const reachedEnd = currentScroll >= maxScroll - 10;
                 
-                if (direction === 'left') {
+                if (behaviorDirection === 'left') {
+                    // Scrolling Left (Physical)
+                    // In RTL, this is "Next". In LTR, this is "Prev".
+                    // If RTL and reached max scroll (which is actually "Start" in some browsers or "End" physically?), 
+                    // Actually in RTL: Start is Right (0 or Max). End is Left (Max or 0).
+                    // Let's simplify: 
+                    // To scroll MORE to the left (Next items in RTL): scrollBy({ left: -amount })
+                    
                     if (isRTL && reachedEnd) {
-                        slider.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back to Start (Right)
+                        // Loop back to Start (Right side)
+                         slider.scrollTo({ left: 0, behavior: 'smooth' });
                     } else {
-                        slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                         slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
                     }
                 } else {
-                    // direction === 'right'
+                    // direction === 'right' (Physical)
+                    // In LTR, this is "Next". 
+                    
                     if (!isRTL && reachedEnd) {
-                        slider.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back to Start (Left)
+                         slider.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back to Start (Left)
                     } else {
-                        slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                         slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
                     }
                 }
             }
@@ -770,7 +792,13 @@ else
 
             function goToSlide(index) {
                 currentSlide = index;
-                carousel.style.transform = `translateX(-${index * 100}%)`;
+                const isRTL = document.documentElement.dir === 'rtl';
+                // In RTL, items are laid out Right-to-Left. 
+                // To view the 'next' item (physically to the left), we must shift the container Right (Positive X).
+                // In LTR, we shift Left (Negative X).
+                const translateVal = isRTL ? (index * 100) : -(index * 100);
+                
+                carousel.style.transform = `translateX(${translateVal}%)`;
                 dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === index);
                 });
