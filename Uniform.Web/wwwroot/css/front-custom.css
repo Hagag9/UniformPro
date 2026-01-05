@@ -105,3 +105,25 @@ html[dir="ltr"] #inquiryCartSidebar {
 html[dir="ltr"] #inquiryCartSidebar.cart-open {
     transform: translateX(0);
 }
+
+/* Homepage Transparent Navbar Styles */
+.dutch-header.is-home:not(.scrolled):not(:hover) {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.dutch-header.is-home:not(.scrolled):not(:hover) .dutch-logo {
+    color: #ffffff !important;
+}
+
+.dutch-header.is-home:not(.scrolled):not(:hover) #mobile-menu-btn,
+.dutch-header.is-home:not(.scrolled):not(:hover) button[onclick="toggleInquiryCart()"] {
+    color: #ffffff !important;
+}
+
+/* Update Cart Badge to be White on Transparent */
+.dutch-header.is-home:not(.scrolled):not(:hover) #cartBadge {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    /* gray-900 */
+}

@@ -8,6 +8,8 @@
     var dir = ViewData["Dir"]?.ToString() ?? "rtl";
     var siteName = isArabic ? ViewData["SiteNameAr"]?.ToString() : ViewData["SiteNameEn"]?.ToString();
     siteName = siteName ?? L["SiteNameDefault"];
+    var currentPath = Context.Request.Path.ToString().ToLower();
+    bool isHomePage = currentPath == "/" || currentPath == "/home" || currentPath == "/home/index";
 }
 <html lang="@lang" dir="@dir">
 <head>
@@ -48,13 +50,13 @@
     @await RenderSectionAsync("Styles", required: false)
     @await RenderSectionAsync("Head", required: false)
 </head>
-<body class="bg-white text-gray-800 antialiased pt-16 md:pt-20 flex flex-col min-h-screen overflow-x-hidden"
+<body class="bg-white text-gray-800 antialiased @(isHomePage ? "" : "pt-16 md:pt-20") flex flex-col min-h-screen overflow-x-hidden"
       data-i18n-added-to-cart="@L["AddedToCart"]"
       data-i18n-cart-empty="@L["CartEmpty"]"
       data-i18n-inquiry-msg="@L["InquiryMessage"]"
       data-whatsapp-number="@ViewData["WhatsApp"]">
 
-    <header id="mainHeader" class="dutch-header">
+    <header id="mainHeader" class="dutch-header @(isHomePage ? "is-home" : "")">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16 md:h-20 relative">
 
@@ -98,7 +100,7 @@
         </div>
         
         @{
-            var currentPath = Context.Request.Path.ToString().ToLower();
+            // var currentPath is now defined at the top of the file
             string GetActiveClass(string path, bool exact = true)
             {
                 if (path == "/" && currentPath == "/") return "bg-gray-100 text-gray-900 font-bold border-l-4 border-gray-900";
