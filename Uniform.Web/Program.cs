@@ -189,46 +189,18 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 
-// === بداية منطقة الـ Seeding (البيانات الافتراضية) ===
+// === Data Seeding ===
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider; 
-
     try
     {
-        // 1. إنشاء المستخدم الأدمن (Admin User)
-        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-        var adminEmail = "admin@uniformpro.com";
-        var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
-        if (adminUser == null)
-        {
-            var newAdmin = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
-            await userManager.CreateAsync(newAdmin, "Admin123!");
-        }
-
-        // 2. تهيئة إعدادات الموقع الافتراضية (Site Settings)
-        var context = services.GetRequiredService<ApplicationDbContext>();
-
-        // التحقق من وجود إعدادات مسبقة
-        if (!context.SiteSettings.Any())
-        {
-            context.SiteSettings.Add(new SiteSettings
-            {
-                WebsiteNameAr = "يونيفورم برو",
-                WebsiteNameEn = "Uniform Pro",
-                PhoneNumber = "01000000000",
-                Email = "info@uniformpro.com"
-            });
-            await context.SaveChangesAsync(); // 👈 لا تنسَ await هنا
-        }
+        await DbInitializer.InitializeAsync(scope.ServiceProvider);
     }
     catch (Exception ex)
     {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "حدث خطأ أثناء تهيئة البيانات الافتراضية.");
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred during data seeding.");
     }
 }
-// === نهاية منطقة الـ Seeding ===
 
 app.Run();

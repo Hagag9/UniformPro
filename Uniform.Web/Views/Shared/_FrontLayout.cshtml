@@ -43,7 +43,7 @@
     
     <!-- Custom Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="~/css/front-custom.css" rel="stylesheet" />
+    <link href="~/css/front-custom.css" rel="stylesheet" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
     @await RenderSectionAsync("Head", required: false)
@@ -195,11 +195,11 @@
                     <a href="/" class="flex items-center gap-3">
                         @if (ViewData["LogoPath"] != null)
                         {
-                            <img src="~/uploads/sitesettings/@ViewData["LogoPath"]" class="h-9 w-auto" alt="@siteName" />
+                            <img src="~/uploads/sitesettings/@ViewData["LogoPath"]" class="h-14 w-auto" alt="@siteName" />
                         }
                         else
                         {
-                            <img src="/images/Logo-color.png" class="h-9 w-auto" alt="@siteName" />
+                            <img src="/images/Logo-color.png" class="h-14 w-auto" alt="@siteName" />
                         }
                         <span class="text-lg font-bold text-white">@siteName</span>
                     </a>
@@ -248,7 +248,11 @@
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="ph-fill ph-whatsapp-logo text-primary text-lg"></i>
-                             <a href="https://wa.me/@ViewData["WhatsApp"]" target="_blank" class="text-gray-400 hover:text-white transition-colors text-sm" dir="ltr">@ViewData["WhatsApp"]</a>
+                            @{
+                                var waFooter = ViewData["WhatsApp"]?.ToString() ?? "";
+                                var waFooterClean = System.Text.RegularExpressions.Regex.Replace(waFooter, @"\D", ""); // Remove non-digits
+                            }
+                             <a href="https://api.whatsapp.com/send?phone=@waFooterClean" target="_blank" class="text-gray-400 hover:text-white transition-colors text-sm" dir="ltr">@ViewData["WhatsApp"]</a>
                         </li>
                     </ul>
 
@@ -328,7 +332,7 @@
            title="@L["CallNow"]">
             <i class="ph-fill ph-phone text-2xl"></i>
         </a>
-        <a href="https://wa.me/@ViewData["WhatsApp"]" target="_blank"
+        <a href="https://api.whatsapp.com/send?phone=@(System.Text.RegularExpressions.Regex.Replace(ViewData["WhatsApp"]?.ToString() ?? "", @"\D", ""))" target="_blank"
            class="w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
            title="@L["WhatsAppContact"]">
             <i class="ph-fill ph-whatsapp-logo text-3xl"></i>

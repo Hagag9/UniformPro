@@ -115,7 +115,7 @@ const InquiryCart = {
         // For now, hardcoding english/arabic agnostic check or using a simple string.
         // Better approach: Use data attributes on the body or a config object.
         const msg = document.body.getAttribute('data-i18n-added-to-cart') || 'Added to Cart';
-        
+
         const toast = document.createElement('div');
         toast.className = 'fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-bounce';
         toast.innerHTML = `<i class="ph ph-check me-1"></i> ${msg}`;
@@ -158,17 +158,17 @@ const InquiryCart = {
         });
 
         const phone = whatsappNumber.replace(/\D/g, '');
-        const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
     }
 };
 
 // Global functions exposed for onclick handlers
-window.addToCart = function(id, name, image) {
+window.addToCart = function (id, name, image) {
     InquiryCart.add(id, name, image);
 }
 
-window.toggleInquiryCart = function() {
+window.toggleInquiryCart = function () {
     const sidebar = document.getElementById('inquiryCartSidebar');
     const overlay = document.getElementById('cartOverlay');
     const body = document.body;
