@@ -18,6 +18,7 @@ namespace UniformPro.Web.Controllers
 
             // جلب الشرائح المفعلة مرتبة
             var tiers = await _context.DiscountTiers
+                .AsNoTracking()
                 .Where(t => t.IsActive)
                 .OrderBy(t => t.DisplayOrder)
                 .ToListAsync();

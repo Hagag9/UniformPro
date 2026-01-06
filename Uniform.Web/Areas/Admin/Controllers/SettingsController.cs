@@ -96,8 +96,9 @@ namespace UniformPro.Web.Areas.Admin.Controllers
                     _context.SiteSettings.Update(model);
                     await _context.SaveChangesAsync();
 
-                    // Evict Home Cache because settings (Logo, Phones) are on Home
+                    // Evict Home Cache & About Cache
                     await _cacheStore.EvictByTagAsync("home_data", CancellationToken.None);
+                    await _cacheStore.EvictByTagAsync("about_data", CancellationToken.None);
 
                     TempData["SuccessMessage"] = "تم تحديث إعدادات الموقع بنجاح!";
                     return RedirectToAction(nameof(Index));

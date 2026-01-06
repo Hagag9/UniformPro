@@ -205,7 +205,26 @@ window.toggleInquiryCart = function () {
     }
 }
 
-// Init badge on page load
+// ========== SCROLL TO TOP ==========
+window.scrollToTop = function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function initScrollToTop() {
+    const btn = document.getElementById('scrollTopBtn');
+    if (!btn) return;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+            btn.classList.remove('translate-y-20', 'opacity-0');
+        } else {
+            btn.classList.add('translate-y-20', 'opacity-0');
+        }
+    }, { passive: true });
+}
+
+// Init functionalities on page load
 document.addEventListener('DOMContentLoaded', function () {
     InquiryCart.updateBadge();
+    initScrollToTop();
 });

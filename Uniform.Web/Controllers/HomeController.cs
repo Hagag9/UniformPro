@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using UniformPro.Infrastructure.Data;
 using UniformPro.Web.ViewModels;
 using UniformPro.Core.Entities;
-using Microsoft.AspNetCore.OutputCaching; // Added namespace
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace UniformPro.Web.Controllers
 {
@@ -14,24 +14,27 @@ namespace UniformPro.Web.Controllers
         [OutputCache(PolicyName = "HomePage")]
         public async Task<IActionResult> Index()
         {
-            // جلب عناصر الـ Hero المفعلة مرتبة
+            // 1. Hero Items: Added AsNoTracking
             var heroItems = await _context.HeroItems
+                .AsNoTracking()
                 .Where(h => h.IsActive)
                 .OrderBy(h => h.DisplayOrder)
                 .ToListAsync();
 
-            // جلب المنتجات المميزة (التي حددها الأدمن)
+            // 2. Featured Products: Added AsNoTracking
             var featuredProducts = await _context.Products
+                .AsNoTracking()
                 .Where(p => p.IsActive && p.ShowOnHome)
                 .OrderByDescending(p => p.CreatedAt)
-                .Take(8) // Maximum 8 items if many are selected, or remove Take() if unlimited wanted
+                .Take(8)
                 .Include(p => p.Category)
                 .ToListAsync();
 
-            // Fallback: If no products selected for home, show latest 4 as before
+            // Fallback Logic
             if (!featuredProducts.Any())
             {
                 featuredProducts = await _context.Products
+                    .AsNoTracking() // Don't forget it here too
                     .Where(p => p.IsActive)
                     .OrderByDescending(p => p.CreatedAt)
                     .Take(4)
@@ -39,11 +42,10 @@ namespace UniformPro.Web.Controllers
                     .ToListAsync();
             }
 
-
-            // جلب أعمالنا السابقة المختارة للعرض في الرئيسية
+            // 3. Portfolios: This was already perfect (Good job!)
             var homePortfolios = await _context.Portfolios
                 .AsNoTracking()
-                .Where(p => p.ShowOnHome)
+                .Where(p => p.ShowOnHome && p.IsActive)
                 .OrderBy(p => p.DisplayOrder)
                 .ThenByDescending(p => p.CreatedAt)
                 .Select(p => new UniformPro.Web.ViewModels.PortfolioCardViewModel
@@ -57,16 +59,21 @@ namespace UniformPro.Web.Controllers
                 })
                 .ToListAsync();
 
-            // Fetch Happy Customers (Testimonials)
+            // 4. Testimonials: Added AsNoTracking (just to be safe, though you had logic right)
             var testimonials = await _context.Testimonials
                 .AsNoTracking()
                 .Where(t => t.IsActive && t.ShowOnHome)
                 .OrderByDescending(t => t.CreatedAt)
                 .ToListAsync();
 
+            // 5. SiteSettings: Added AsNoTracking
+            var settings = await _context.SiteSettings
+                .AsNoTracking()
+                .FirstOrDefaultAsync() ?? new SiteSettings();
+
             var viewModel = new HomeViewModel
             {
-                SiteSettings = await _context.SiteSettings.FirstOrDefaultAsync() ?? new SiteSettings(),
+                SiteSettings = settings,
                 HeroItems = heroItems,
                 LatestProducts = featuredProducts,
                 Portfolios = homePortfolios,
@@ -76,9 +83,13 @@ namespace UniformPro.Web.Controllers
             return View(viewModel);
         }
 
+        [OutputCache(PolicyName = "AboutPage")]
         public async Task<IActionResult> About()
         {
-            var settings = await _context.SiteSettings.FirstOrDefaultAsync();
+            var settings = await _context.SiteSettings
+                .AsNoTracking() // Important
+                .FirstOrDefaultAsync();
+
             if (settings == null) return NotFound();
             return View(settings);
         }

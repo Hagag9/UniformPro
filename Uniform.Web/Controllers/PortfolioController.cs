@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UniformPro.Infrastructure.Data;
 using UniformPro.Web.ViewModels;
-using Microsoft.AspNetCore.OutputCaching; // Added namespace
+using Microsoft.AspNetCore.OutputCaching;
 using UniformPro.Core.Entities;
 
 namespace UniformPro.Web.Controllers
@@ -16,8 +16,10 @@ namespace UniformPro.Web.Controllers
         {
              var isArabic = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
              
+             // التحسين 1: AsNoTracking() للأداء
+             // التحسين 2: شلنا Include لأن Select بتعمل اللازم
              var items = await _context.Portfolios
-                 .Include(p => p.Category)
+                 .AsNoTracking() 
                  .Where(p => p.IsActive)
                  .OrderBy(p => p.DisplayOrder)
                  .ThenByDescending(p => p.CreatedAt)
@@ -37,7 +39,10 @@ namespace UniformPro.Web.Controllers
         {
              var isArabic = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
              
+             // التحسين 3: AsSplitQuery عشان يمنع تكرار البيانات لما نجيب جداول فرعية كتير
              var item = await _context.Portfolios
+                 .AsNoTracking() // للعرض فقط
+                 .AsSplitQuery() // 👈 مهمة جداً هنا
                  .Include(p => p.Category)
                  .Include(p => p.PortfolioMedias)
                  .Include(p => p.Testimonials) 
@@ -53,6 +58,7 @@ namespace UniformPro.Web.Controllers
                  CoverImagePath = item.CoverImagePath,
                  CategoryName = isArabic ? item.Category.NameAr : item.Category.NameEn,
                  
+                 // تصفية الصور والفيديو (يفضل مستقبلاً تكون في الداتابيز بس كدا تمام للعدد الصغير)
                  GalleryImages = item.PortfolioMedias
                      .Where(m => m.Type == MediaType.Image)
                      .Select(m => m.MediaUrl).ToList(),

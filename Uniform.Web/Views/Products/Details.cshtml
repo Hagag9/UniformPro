@@ -2,7 +2,7 @@
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<UniformPro.Web.Resources.SharedResource> L
 @{
-    var relatedProducts = ViewBag.RelatedProducts as IEnumerable<UniformPro.Core.Entities.Product>;
+
     var whatsappNumber = ViewData["WhatsApp"]?.ToString();
     var phoneNumber = ViewData["Phone"]?.ToString();
     var isArabic = ViewData["IsArabic"] as bool? ?? true;
@@ -294,13 +294,13 @@
 </section>
 
 <!-- Related Products -->
-@if (relatedProducts != null && relatedProducts.Any())
+@if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
 {
     <section class="py-12 bg-gray-50">
         <div class="container mx-auto px-4">
             <h2 class="text-2xl font-bold text-gray-900 mb-8">@L["RelatedProducts"]</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                @foreach (var product in relatedProducts)
+                @foreach (var product in Model.RelatedProducts)
                 {
                     <a href="/Products/Details/@product.Id" class="group block">
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 group-hover:shadow-lg">

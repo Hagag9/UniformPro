@@ -277,7 +277,7 @@ else
                     {
                         <a href="/Products/Details/@product.Id" class="group w-[calc(50%-0.25rem)] md:w-[calc(25%-1.875rem)] flex-shrink-0 snap-start select-none">
                             <!-- Image -->
-                            <div class="aspect-[4/5] overflow-hidden rounded-lg mb-2">
+                            <div class="aspect-[4/5] overflow-hidden mb-2">
                                 <img src="~/uploads/products/@product.MainImagePath" 
                                      alt="@(isArabic ? product.NameAr : product.NameEn)"
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -333,7 +333,7 @@ else
                     {
                         <a href="/Portfolio/Details/@item.Id" class="group w-[calc(50%-0.25rem)] md:w-[calc(25%-1.875rem)] flex-shrink-0 snap-start relative select-none">
                             <!-- Image Card -->
-                            <div class="aspect-[4/5] overflow-hidden rounded-lg mb-2 relative">
+                            <div class="aspect-[4/5] overflow-hidden mb-2 relative">
                                 <img src="~/uploads/portfolios/covers/@item.CoverImagePath" 
                                      alt="@(isArabic ? item.ClientNameAr : item.ClientNameEn)"
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -575,7 +575,12 @@ else
             if (!arrow) return;
 
             function checkScroll() {
-                const isEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10; // 10px buffer
+                // Fixed RTL logic: use Math.abs because RTL scrollLeft is negative in modern browsers
+                const currentScroll = Math.abs(slider.scrollLeft);
+                const maxScroll = slider.scrollWidth - slider.clientWidth;
+                
+                // Check if we reached the physical end of the scroll container
+                const isEnd = currentScroll >= maxScroll - 10; // 10px buffer
                 const hasOverflow = slider.scrollWidth > slider.clientWidth;
                 
                 if (!isEnd && hasOverflow) {

@@ -104,6 +104,7 @@ namespace UniformPro.Web.Controllers
 
             var product = await _context.Products
                 .AsNoTracking()
+                .AsSplitQuery()
                 .Include(p => p.Category)
                 .Include(p => p.ProductImages)
                 .FirstOrDefaultAsync(p => p.Id == id);
@@ -136,13 +137,22 @@ namespace UniformPro.Web.Controllers
             ViewData["MetaDescription"] = product.MetaDescription;
             ViewData["MetaKeywords"] = product.MetaKeywords;
 
-            // Load related products (same category, max 4)
-            var relatedProducts = await _context.Products
+            // Load related products (same category, max 4) - Using Projection for Performance
+            viewModel.RelatedProducts = await _context.Products
                 .AsNoTracking()
                 .Where(p => p.CategoryId == product.CategoryId && p.Id != product.Id)
+                .OrderByDescending(p => p.CreatedAt)
                 .Take(4)
+                .Select(p => new UniformPro.Web.ViewModels.ProductListViewModel
+                {
+                    Id = p.Id,
+                    NameAr = p.NameAr,
+                    NameEn = p.NameEn,
+                    MainImagePath = p.MainImagePath,
+                    MaterialDetailsAr = p.MaterialDetailsAr,
+                    MaterialDetailsEn = p.MaterialDetailsEn
+                })
                 .ToListAsync();
-            ViewBag.RelatedProducts = relatedProducts;
 
             return View(viewModel);
         }

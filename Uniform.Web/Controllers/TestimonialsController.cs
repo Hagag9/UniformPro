@@ -14,6 +14,7 @@ namespace UniformPro.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var testimonials = await _context.Testimonials
+                .AsNoTracking()
                 .Where(t => t.IsActive)
                 .OrderByDescending(t => t.CreatedAt)
                 .ToListAsync();

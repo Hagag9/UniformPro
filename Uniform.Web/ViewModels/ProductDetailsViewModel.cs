@@ -28,5 +28,8 @@ namespace UniformPro.Web.ViewModels
         // SEO
         public string? MetaDescription { get; set; }
         public string? MetaKeywords { get; set; }
+
+        // Related Products
+        public List<ProductListViewModel> RelatedProducts { get; set; } = new();
     }
 }

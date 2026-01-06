@@ -92,6 +92,12 @@ builder.Services.AddOutputCache(options => // 3. Output Cache
                .Tag("portfolio_data") 
                .SetVaryByRouteValue("id")
                .VaryByValue(context => new KeyValuePair<string, string>("culture", context.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ar")));
+
+    // AboutPage Policy: 1 hour, Tag "about_data", Vary by Culture
+    options.AddPolicy("AboutPage", builder => 
+        builder.Expire(TimeSpan.FromHours(1))
+               .Tag("about_data")
+               .VaryByValue(context => new KeyValuePair<string, string>("culture", context.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ar")));
 });
 // --------------------------------------
 builder.Services.Configure<RequestLocalizationOptions>(options =>
