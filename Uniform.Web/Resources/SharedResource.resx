@@ -240,9 +240,6 @@
   <data name="InquiryMessage" xml:space="preserve">
     <value>مرحبًا، أريد الاستفسار عن المنتجات التالية:</value>
   </data>
-  <data name="Feedback" xml:space="preserve">
-    <value>آراء العملاء</value>
-  </data>
   <data name="AboutUs" xml:space="preserve">
     <value>من نحن</value>
   </data>
@@ -345,7 +342,6 @@
   <data name="ImageAlt" xml:space="preserve">
     <value>صورة</value>
   </data>
-
   <data name="WhatsAppProductInquiry" xml:space="preserve">
     <value>مرحباً، أريد الاستفسار عن المنتج: {0}</value>
   </data>
@@ -363,5 +359,134 @@
   </data>
   <data name="SixColumns" xml:space="preserve">
     <value>٦ أعمدة</value>
+  </data>
+  <data name="Feat_QualityFinish_Title" xml:space="preserve">
+    <value>Quality &amp; Finishing</value>
+  </data>
+  <data name="Feat_QualityFinish_Desc" xml:space="preserve">
+    <value>We use fabrics that withstand frequent washing and long hours of use.</value>
+  </data>
+  <data name="Feat_Creativity_Title" xml:space="preserve">
+    <value>Creativity &amp; Variety</value>
+  </data>
+  <data name="Feat_Creativity_Desc" xml:space="preserve">
+    <value> Extensive experience in understanding the requirements of every profession (from industrial overalls to waiter shirts).</value>
+  </data>
+  <data name="Feat_FastDelivery_Title" xml:space="preserve">
+    <value>Fast Delivery</value>
+  </data>
+  <data name="Feat_FastDelivery_Desc" xml:space="preserve">
+    <value>Respecting delivery deadlines is part of our built reputation.</value>
+  </data>
+  <data name="Feat_FlexPartner_Title" xml:space="preserve">
+    <value>Flexibility</value>
+  </data>
+  <data name="Feat_FlexPartner_Desc" xml:space="preserve">
+    <value>We build lasting partnerships through reliable service and outstanding support.</value>
+  </data>
+  <data name="DiscountPolicy" xml:space="preserve">
+    <value>سياسة الخصومات</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>العنوان</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+  </data>
+  <data name="DesignedBy" xml:space="preserve">
+    <value>تصميم</value>
+  </data>
+  <data name="DiscountPageTitle" xml:space="preserve">
+    <value>كلما زادت مشترياتك،</value>
+  </data>
+  <data name="DiscountPageTitle2" xml:space="preserve">
+    <value>زاد توفيرك معنا!</value>
+  </data>
+  <data name="DiscountPageDesc" xml:space="preserve">
+    <value>نحن نؤمن بمكافأة عملائنا المميزين. اطلع على هيكل الخصومات المتدرج أدناه واكتشف كيف يمكنك الحصول على أفضل الأسعار لطلبات الجملة والتجزئة.</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>خصم</value>
+  </data>
+  <data name="ForOrdersBetween" xml:space="preserve">
+    <value>للطلبات التي تتراوح بين:</value>
+  </data>
+  <data name="NoDiscountTiers" xml:space="preserve">
+    <value>لا توجد شرائح خصم متاحة حالياً</value>
+  </data>
+  <data name="ReadyToOrder" xml:space="preserve">
+    <value>جاهز للطلب؟</value>
+  </data>
+  <data name="ContactUsForOrder" xml:space="preserve">
+    <value>تواصل معنا الآن واستفد من خصوماتنا المميزة على طلبات الجملة</value>
+  </data>
+  <data name="PricingSystem" xml:space="preserve">
+    <value>نظام التسعير</value>
+  </data>
+  <data name="CheckDiscountPolicy" xml:space="preserve">
+    <value>تعرف على سياسة الخصومات</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>رقم الهاتف</value>
+  </data>
+  <data name="YourName" xml:space="preserve">
+    <value>الاسم بالكامل</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>اسم الشركة</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>اختياري</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>الرسالة</value>
+  </data>
+  <data name="CustomersAreSaying" xml:space="preserve">
+    <value>يقول العملاء عنا</value>
+  </data>
+  <data name="OurProjects" xml:space="preserve">
+    <value>معرض أعمالنا</value>
+  </data>
+  <data name="OurPortfolioDesc" xml:space="preserve">
+    <value>نفتخر بتقديم أفضل حلول الزي الموحد لشركاء النجاح في مختلف القطاعات.</value>
+  </data>
+  <data name="NoProjects" xml:space="preserve">
+    <value>لا توجد مشاريع مضافة حالياً.</value>
+  </data>
+  <data name="LatestProducts" xml:space="preserve">
+    <value>أحدث المنتجات</value>
+  </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>عرض الكل</value>
+  </data>
+  <data name="NoHeroImages" xml:space="preserve">
+    <value>لم يتم إضافة صور للسلايدر بعد</value>
+  </data>
+  <data name="OrderNow" xml:space="preserve">
+    <value>اطلب الآن</value>
+  </data>
+  <data name="PreviousWork" xml:space="preserve">
+    <value>بعض من أعمالنا السابقة</value>
+  </data>
+  <data name="ValueProp_Heading" xml:space="preserve">
+    <value>نصنع لك يونيفورم يعكس هوية علامتك التجارية بكل ثقة في كل يوم عمل</value>
+  </data>
+  <data name="ValueProp_Desc" xml:space="preserve">
+    <value>لأن مظهر فريقك هو جزء من قصة نجاحك، صممنا لك مجموعة تجمع بين الأناقة والعملية. زي موحد مصنوع من خامات مستدامة، سهلة العناية والتنظيف، لتضمن لفريقك الراحة التامة والمظهر المثالي مهما كانت ظروف العمل</value>
+  </data>
+  <data name="WhyMano" xml:space="preserve">
+    <value>لماذا مانو يونيفورم؟</value>
+  </data>
+  <data name="HappyCustomers" xml:space="preserve">
+    <value>!عملاء سعداء</value>
+  </data>
+  <data name="FromReviews" xml:space="preserve">
+    <value>من تقييمات عملائنا الموثوقة</value>
+  </data>
+  <data name="OurFeaturedClients" xml:space="preserve">
+    <value>عملاؤنا المميزون</value>
+  </data>
+  <data name="OurClientsSubtitle" xml:space="preserve">
+    <value>عملاؤنا</value>
   </data>
 </root>

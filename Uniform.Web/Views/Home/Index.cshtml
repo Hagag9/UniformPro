@@ -392,46 +392,70 @@ else
             @L["WhyMano"]
         </h3>
 
-        <!-- Features Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-10 md:gap-12">
-            
-            <!-- Feature 1: Tailoring -->
-            <div class="flex flex-col items-center group">
-                <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
-                    <i class="ph-thin ph-scissors text-5xl md:text-6xl"></i>
+        <!-- Features Grid / Slider -->
+        <div class="relative group/features-slider">
+            <div id="featuresSlider" class="flex md:grid md:grid-cols-2 gap-x-4 gap-y-10 md:gap-x-12 md:gap-y-16 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 md:pb-0">
+                
+                <!-- Feature 1: Quality and Finishing -->
+                <div class="w-full md:w-auto flex-shrink-0 snap-center flex flex-col items-center group text-center" style="scroll-snap-stop: always;">
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
+                        <i class="ph-thin ph-t-shirt text-5xl md:text-6xl"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_QualityFinish_Title"]</h3>
+                    <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
+                        @L["Feat_QualityFinish_Desc"]
+                    </p>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">@L["Feat_Tailoring_Title"]</h3>
-                <p class="text-gray-600 leading-relaxed max-w-xs">
-                    @L["Feat_Tailoring_Desc"]
-                </p>
+
+                <!-- Feature 2: Creativity and Variety -->
+                <div class="w-full md:w-auto flex-shrink-0 snap-center flex flex-col items-center group text-center" style="scroll-snap-stop: always;">
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
+                        <i class="ph-thin ph-lightbulb text-5xl md:text-6xl"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_Creativity_Title"]</h3>
+                    <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
+                        @L["Feat_Creativity_Desc"]
+                    </p>
+                </div>
+
+                <!-- Feature 3: Fast Delivery -->
+                <div class="w-full md:w-auto flex-shrink-0 snap-center flex flex-col items-center group text-center" style="scroll-snap-stop: always;">
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
+                        <i class="ph-thin ph-timer text-5xl md:text-6xl"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_FastDelivery_Title"]</h3>
+                    <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
+                        @L["Feat_FastDelivery_Desc"]
+                    </p>
+                </div>
+
+                <!-- Feature 4: Flexible Partnerships -->
+                <div class="w-full md:w-auto flex-shrink-0 snap-center flex flex-col items-center group text-center" style="scroll-snap-stop: always;">
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
+                        <i class="ph-thin ph-handshake text-5xl md:text-6xl"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_FlexPartner_Title"]</h3>
+                    <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
+                        @L["Feat_FlexPartner_Desc"]
+                    </p>
+                </div>
+
             </div>
 
-            <!-- Feature 2: Quality -->
-            <div class="flex flex-col items-center group">
-                <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
-                    <i class="ph-thin ph-t-shirt text-5xl md:text-6xl"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">@L["Feat_Quality_Title"]</h3>
-                <p class="text-gray-600 leading-relaxed max-w-xs">
-                    @L["Feat_Quality_Desc"]
-                </p>
+            <!-- Mobile Dots Navigation -->
+            <div id="featuresDots" class="flex md:hidden justify-center gap-2 mt-6">
+                <button class="w-2.5 h-2.5 rounded-full bg-gray-800 transition-all duration-300 active" onclick="scrollToFeature(0)"></button>
+                <button class="w-2.5 h-2.5 rounded-full bg-gray-300 transition-all duration-300" onclick="scrollToFeature(1)"></button>
+                <button class="w-2.5 h-2.5 rounded-full bg-gray-300 transition-all duration-300" onclick="scrollToFeature(2)"></button>
+                <button class="w-2.5 h-2.5 rounded-full bg-gray-300 transition-all duration-300" onclick="scrollToFeature(3)"></button>
             </div>
-
-            <!-- Feature 3: Partnership -->
-            <div class="flex flex-col items-center group col-span-2 md:col-span-1">
-                <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
-                    <i class="ph-thin ph-handshake text-5xl md:text-6xl"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">@L["Feat_Partner_Title"]</h3>
-                <p class="text-gray-600 leading-relaxed max-w-xs">
-                    @L["Feat_Partner_Desc"]
-                </p>
-            </div>
-
         </div>
 
-    </div>
 </section>
+
+
+
+
 
 @{
     var testimonials = Model.Testimonials?.ToList() ?? new List<UniformPro.Core.Entities.Testimonial>();
@@ -558,6 +582,57 @@ else
                         <i class="ph-bold ph-caret-right text-xl"></i>
                     </button>
                 </div>
+
+            </div>
+        </div>
+    </section>
+}
+
+
+
+@{
+    var clientLogos = Model.ClientLogos?.ToList() ?? new List<string>();
+}
+
+@if (clientLogos.Any())
+{
+    <!-- ========== OUR FEATURED CLIENTS SECTION ========== -->
+    <section class="py-14 bg-white border-t border-gray-100">
+        <div class="container mx-auto px-6 md:px-12 lg:px-20">
+            <!-- Header -->
+            <div class="text-center mb-10">
+                <span class="block text-xs md:text-sm font-bold tracking-widest text-gray-500 uppercase mb-2">
+                    @L["OurClientsSubtitle"]
+                </span>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 uppercase tracking-wide">
+                    @L["OurFeaturedClients"]
+                </h2>
+            </div>
+
+            <!-- Clients Slider Wrapper -->
+            <!-- Desktop: 3 cards, large margins. Mobile: 1 card, swipe. -->
+            <div class="relative group/c-slider max-w-sm md:max-w-4xl mx-auto px-0 md:px-12">
+                
+                <div id="clientsSlider" class="flex items-center overflow-x-auto snap-x snap-mandatory gap-6 md:gap-12 pb-4 hide-scrollbar cursor-grab active:cursor-grabbing scroll-smooth" style="scroll-padding-left: 0;">
+                    @foreach (var logo in clientLogos)
+                    {
+                        <!-- Client Logo Card -->
+                        <div class="w-full md:w-[calc(33.333%-2rem)] flex-shrink-0 snap-center flex items-center justify-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all select-none h-32 md:h-40">
+                            <img src="~/uploads/testimonials/images/@logo" 
+                                 alt="@L["OurFeaturedClients"]" 
+                                 class="max-w-full max-h-full object-contain transition-all duration-300 hover:scale-110" 
+                                 draggable="false">
+                        </div>
+                    }
+                </div>
+                
+                <!-- Side Arrows (Desktop) -->
+                <button onclick="scrollSlider('clientsSlider', 'left')" class="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-8 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:text-primary transition-all z-10 hidden md:flex" aria-label="Previous">
+                    <i class="ph-bold ph-caret-left text-xl"></i>
+                </button>
+                <button onclick="scrollSlider('clientsSlider', 'right')" class="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-8 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:text-primary transition-all z-10 hidden md:flex" aria-label="Next">
+                    <i class="ph-bold ph-caret-right text-xl"></i>
+                </button>
 
             </div>
         </div>
@@ -777,8 +852,10 @@ else
             enableMouseDrag('latestProductsSlider');
             enableMouseDrag('portfolioSlider');
             enableMouseDrag('happyCustomersSlider');
+            enableMouseDrag('clientsSlider');
 
             initAutoPlay('happyCustomersSlider', 3000);
+            initAutoPlay('clientsSlider', 3000);
         });
 
         // Hero Carousel Logic (Only runs if element exists)
@@ -814,6 +891,11 @@ else
                 goToSlide(currentSlide);
             }
 
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+                goToSlide(currentSlide);
+            }
+
             function startAutoPlay() {
                 autoPlayInterval = setInterval(nextSlide, 5000);
             }
@@ -832,9 +914,104 @@ else
 
             const wrapper = document.getElementById('heroCarouselWrapper');
             if(wrapper) {
+                // Allow vertical scroll but capture horizontal swipe
+                wrapper.style.touchAction = 'pan-y';
+
                 wrapper.addEventListener('mouseenter', stopAutoPlay);
                 wrapper.addEventListener('mouseleave', startAutoPlay);
+
+                // Swipe Support
+                let touchStartX = 0;
+                let touchEndX = 0;
+                let touchStartY = 0;
+                let touchEndY = 0;
+                
+                wrapper.addEventListener('touchstart', e => {
+                    touchStartX = e.changedTouches[0].clientX;
+                    touchStartY = e.changedTouches[0].clientY;
+                    stopAutoPlay();
+                }, {passive: true});
+
+                wrapper.addEventListener('touchend', e => {
+                    touchEndX = e.changedTouches[0].clientX;
+                    touchEndY = e.changedTouches[0].clientY;
+                    handleSwipe();
+                    startAutoPlay();
+                }, {passive: true});
+
+                function handleSwipe() {
+                    const swipeThreshold = 50;
+                    const deltaX = touchEndX - touchStartX;
+                    const deltaY = touchEndY - touchStartY;
+
+                    // Ignore if vertical scroll was dominant
+                    if (Math.abs(deltaY) > Math.abs(deltaX)) return;
+
+                    const isRTL = document.documentElement.dir === 'rtl';
+
+                    if (Math.abs(deltaX) > swipeThreshold) {
+                        if (deltaX < 0) {
+                             // Swiped Left -> Next (LTR) / Prev (RTL)
+                             isRTL ? prevSlide() : nextSlide();
+                        } else {
+                             // Swiped Right -> Prev (LTR) / Next (RTL)
+                             isRTL ? nextSlide() : prevSlide();
+                        }
+                    }
+                }
             }
+        })();
+
+        // Features Slider Logic
+        (function() {
+            const slider = document.getElementById('featuresSlider');
+            const dots = document.querySelectorAll('#featuresDots button');
+            if (!slider || !dots.length) return;
+
+            let isScrolling;
+
+            // Update dots on scroll
+            slider.addEventListener('scroll', () => {
+                window.clearTimeout(isScrolling);
+                
+                // Set a timeout to run after scrolling ends
+                isScrolling = setTimeout(() => {
+                    const scrollLeft = slider.scrollLeft;
+                    const width = slider.clientWidth;
+                    // Calculate active index based on scroll position - simplified for RTL/LTR
+                    const index = Math.round(Math.abs(scrollLeft) / width);
+                    
+                    dots.forEach((dot, i) => {
+                        if (i === index) {
+                            dot.classList.add('bg-gray-800', 'active');
+                            dot.classList.remove('bg-gray-300');
+                        } else {
+                            dot.classList.remove('bg-gray-800', 'active');
+                            dot.classList.add('bg-gray-300');
+                        }
+                    });
+                }, 66);
+            });
+
+            // Scroll to specific feature
+            window.scrollToFeature = function(index) {
+                const width = slider.clientWidth;
+                const isRTL = document.documentElement.dir === 'rtl';
+                // For scrollLeft, LTR is positive, RTL is negative (or positive depending on browser implementation, 
+                // but usually negative in Chrome/Edge, positive in Firefox/Safari but starting from max).
+                // Safest bet for cross-browser RTL scroll is scrollTo options behavior or using element offset.
+                
+                // Let's use simple calculation relative to item width which is 100% of slider in mobile
+                const targetScroll = isRTL ? -(index * width) : (index * width);
+                
+                slider.scrollTo({
+                    left: targetScroll,
+                    behavior: 'smooth'
+                });
+            };
+
+            // Enable mouse drag
+            enableMouseDrag('featuresSlider');
         })();
     </script>
 }

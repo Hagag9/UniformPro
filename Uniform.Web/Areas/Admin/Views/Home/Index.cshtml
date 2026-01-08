@@ -60,75 +60,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 class="font-bold text-gray-800">📩 آخر الرسائل الواردة</h3>
-                <a asp-controller="ContactMessages" asp-action="Index" class="text-xs text-primary hover:underline">عرض الكل</a>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-right text-sm">
-                    <tbody class="divide-y divide-gray-100">
-                        @foreach (var msg in Model.RecentMessages)
-                        {
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-3 font-medium text-gray-800">@msg.FullName</td>
-                                <td class="px-6 py-3 text-gray-500 truncate max-w-[150px]">@msg.Message</td>
-                                <td class="px-6 py-3 text-gray-400 text-xs">@msg.SentAt.ToString("dd/MM")</td>
-                                <td class="px-6 py-3">
-                                    @if (!msg.IsRead)
-                                    {
-                                        <span class="w-2 h-2 bg-red-500 rounded-full block" title="جديد"></span>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                        @if (!Model.RecentMessages.Any())
-                        {
-                            <tr><td colspan="4" class="text-center py-6 text-gray-400">لا توجد رسائل حديثة</td></tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 class="font-bold text-gray-800">👕 أحدث المنتجات</h3>
-                <a asp-controller="Products" asp-action="Index" class="text-xs text-primary hover:underline">عرض الكل</a>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-right text-sm">
-                    <tbody class="divide-y divide-gray-100">
-                        @foreach (var prod in Model.RecentProducts)
-                        {
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-3">
-                                    <div class="flex items-center gap-3">
-                                        @if (!string.IsNullOrEmpty(prod.MainImagePath))
-                                        {
-                                            <img src="~/uploads/products/@prod.MainImagePath" class="w-8 h-8 rounded object-cover border">
-                                        }
-                                        else
-                                        {
-                                            <div class="w-8 h-8 bg-gray-100 rounded"></div>
-                                        }
-                                        <span class="font-medium text-gray-800">@prod.NameAr</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-3 text-gray-500 text-xs">@prod.Category.NameAr</td>
-                                <td class="px-6 py-3 text-primary font-bold">@(prod.StartPrice?.ToString("N0") ?? "-")</td>
-                            </tr>
-                        }
-                        @if (!Model.RecentProducts.Any())
-                        {
-                            <tr><td colspan="3" class="text-center py-6 text-gray-400">لا توجد منتجات مضافة</td></tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">

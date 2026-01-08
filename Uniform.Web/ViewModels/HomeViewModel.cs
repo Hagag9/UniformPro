@@ -10,5 +10,6 @@ namespace UniformPro.Web.ViewModels
         public IEnumerable<Product> LatestProducts { get; set; } = new List<Product>();
         public IEnumerable<PortfolioCardViewModel> Portfolios { get; set; } = new List<PortfolioCardViewModel>();
         public IEnumerable<Testimonial> Testimonials { get; set; } = new List<Testimonial>();
+        public IEnumerable<string> ClientLogos { get; set; } = new List<string>();
     }
 }

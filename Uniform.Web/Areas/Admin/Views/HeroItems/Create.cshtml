@@ -37,13 +37,13 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">صورة الديسكتوب (مطلوب)</label>
                     <input type="file" name="desktopImage" accept="image/*" required onchange="validateFileInput(this, ['image'], 5)" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-primary hover:file:bg-green-100" />
-                    <p class="text-xs text-gray-500 mt-1">يفضل مقاس عرضي (Landscape) مثل 1920x800</p>
+                    <p class="text-xs text-gray-500 mt-1">الأبعاد المثالية: 1920 عرض × 1080 ارتفاع بكسل. يفضل وضع المحتوى الأساسي في المنتصف.</p>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">صورة الموبايل (اختياري)</label>
                     <input type="file" name="mobileImage" accept="image/*" onchange="validateFileInput(this, ['image'], 5)" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-primary hover:file:bg-green-100" />
-                    <p class="text-xs text-gray-500 mt-1">يفضل مقاس طولي (Portrait) للموبايل. إذا تركتها فارغة سيتم اقتصاص صورة الديسكتوب.</p>
+                    <p class="text-xs text-gray-500 mt-1">الأبعاد المثالية: 1080 عرض × 1920 ارتفاع بكسل. يفضل وضع المحتوى في المنتصف. (عند الترك فارغة تُستخدم صورة الديسكتوب)</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

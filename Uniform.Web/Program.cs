@@ -98,6 +98,18 @@ builder.Services.AddOutputCache(options => // 3. Output Cache
         builder.Expire(TimeSpan.FromHours(1))
                .Tag("about_data")
                .VaryByValue(context => new KeyValuePair<string, string>("culture", context.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ar")));
+
+    // TestimonialsPage Policy: 1 hour, Tag "testimonials_data", Vary by Culture
+    options.AddPolicy("TestimonialsPage", builder => 
+        builder.Expire(TimeSpan.FromHours(1))
+               .Tag("testimonials_data")
+               .VaryByValue(context => new KeyValuePair<string, string>("culture", context.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ar")));
+
+    // DiscountPage Policy: 1 hour, Tag "discount_data", Vary by Culture
+    options.AddPolicy("DiscountPage", builder => 
+        builder.Expire(TimeSpan.FromHours(1))
+               .Tag("discount_data")
+               .VaryByValue(context => new KeyValuePair<string, string>("culture", context.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ar")));
 });
 // --------------------------------------
 builder.Services.Configure<RequestLocalizationOptions>(options =>

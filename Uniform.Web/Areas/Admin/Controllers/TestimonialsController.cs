@@ -47,13 +47,15 @@ namespace UniformPro.Web.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    // التحقق: يجب وجود فيديو مرفوع أو رابط يوتيوب
+                    // التحقق: يجب وجود فيديو مرفوع أو رابط يوتيوب -> تم الايقاف لان الحقول Nullable
+                    /*
                     if (model.VideoFile == null && string.IsNullOrEmpty(model.YoutubeUrl))
                     {
                         ModelState.AddModelError("", "يجب إضافة فيديو (رفع ملف) أو رابط يوتيوب");
                         ViewBag.Portfolios = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(_context.Portfolios, "Id", "ClientNameAr", model.PortfolioId);
                         return View(model);
                     }
+                    */
 
                     var testimonial = new Testimonial
                     {

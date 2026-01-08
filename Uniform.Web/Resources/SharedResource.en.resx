@@ -240,131 +240,20 @@
   <data name="InquiryMessage" xml:space="preserve">
     <value>Hello, I would like to inquire about the following products:</value>
   </data>
-  <data name="Feedback" xml:space="preserve">
-    <value>Feedback</value>
-  </data>
   <data name="AboutUs" xml:space="preserve">
     <value>About Us</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>
   </data>
-  <data name="DiscountPolicy" xml:space="preserve">
-    <value>Discount Policy</value>
+  <data name="CustomDesign" xml:space="preserve">
+    <value>Customized with Your Logo</value>
   </data>
-  <data name="Address" xml:space="preserve">
-    <value>Address</value>
+  <data name="PremiumMaterials" xml:space="preserve">
+    <value>Premium Cotton Materials</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="DesignedBy" xml:space="preserve">
-    <value>Designed by</value>
-  </data>
-  <data name="DiscountPageTitle" xml:space="preserve">
-    <value>The more you buy,</value>
-  </data>
-  <data name="DiscountPageTitle2" xml:space="preserve">
-    <value>the more you save!</value>
-  </data>
-  <data name="DiscountPageDesc" xml:space="preserve">
-    <value>We believe in rewarding our valued customers. Check out our tiered discount structure below and discover how you can get the best prices for wholesale and retail orders.</value>
-  </data>
-  <data name="Discount" xml:space="preserve">
-    <value>Discount</value>
-  </data>
-  <data name="ForOrdersBetween" xml:space="preserve">
-    <value>For orders between:</value>
-  </data>
-  <data name="NoDiscountTiers" xml:space="preserve">
-    <value>No discount tiers available at the moment</value>
-  </data>
-  <data name="ReadyToOrder" xml:space="preserve">
-    <value>Ready to Order?</value>
-  </data>
-  <data name="ContactUsForOrder" xml:space="preserve">
-    <value>Contact us now and take advantage of our special discounts on bulk orders</value>
-  </data>
-  <data name="PricingSystem" xml:space="preserve">
-    <value>Pricing System</value>
-  </data>
-  <data name="CheckDiscountPolicy" xml:space="preserve">
-    <value>Check Discount Policy</value>
-  </data>
-  <data name="Phone" xml:space="preserve">
-    <value>Phone Number</value>
-  </data>
-  <data name="YourName" xml:space="preserve">
-    <value>Your Name</value>
-  </data>
-  <data name="Company" xml:space="preserve">
-    <value>Company Name</value>
-  </data>
-  <data name="Optional" xml:space="preserve">
-    <value>Optional</value>
-  </data>
-  <data name="Message" xml:space="preserve">
-    <value>Message</value>
-  </data>
-  <data name="CustomersAreSaying" xml:space="preserve">
-    <value>Customers are saying</value>
-  </data>
-  <data name="OurProjects" xml:space="preserve">
-    <value>Our Projects</value>
-  </data>
-  <data name="OurPortfolioDesc" xml:space="preserve">
-    <value>We are proud to provide the best uniform solutions for our success partners in various sectors.</value>
-  </data>
-  <data name="NoProjects" xml:space="preserve">
-    <value>No projects added yet.</value>
-  </data>
-  <data name="LatestProducts" xml:space="preserve">
-    <value>Latest Products</value>
-  </data>
-  <data name="ViewAll" xml:space="preserve">
-    <value>View All</value>
-  </data>
-  <data name="NoHeroImages" xml:space="preserve">
-    <value>No hero images added yet</value>
-  </data>
-  <data name="OrderNow" xml:space="preserve">
-    <value>Order Now</value>
-  </data>
-  <data name="PreviousWork" xml:space="preserve">
-    <value>Our Previous Work</value>
-  </data>
-  <data name="ValueProp_Heading" xml:space="preserve">
-    <value>We create uniforms that confidently reflect your brand identity every workday.</value>
-  </data>
-  <data name="ValueProp_Desc" xml:space="preserve">
-    <value>Because your team's appearance is part of your success story, we've designed a collection that combines style and functionality. Our uniforms are made from sustainable, easy-care, and easy-to-clean materials, ensuring your team's comfort and impeccable appearance, whatever the work environment.</value>
-  </data>
-  <data name="WhyMano" xml:space="preserve">
-    <value>WHY MANO UNIFORM?</value>
-  </data>
-  <data name="Feat_Tailoring_Title" xml:space="preserve">
-    <value>Tailored Perfection</value>
-  </data>
-  <data name="Feat_Tailoring_Desc" xml:space="preserve">
-    <value>Expertly crafted uniforms tailored to fit your team's specific needs.</value>
-  </data>
-  <data name="Feat_Quality_Title" xml:space="preserve">
-    <value>Premium &amp; Durable</value>
-  </data>
-  <data name="Feat_Quality_Desc" xml:space="preserve">
-    <value>High-quality fabrics that maintain their look and feel, wash after wash.</value>
-  </data>
-  <data name="Feat_Partner_Title" xml:space="preserve">
-    <value>Trusted Partner</value>
-  </data>
-  <data name="Feat_Partner_Desc" xml:space="preserve">
-    <value>We build lasting partnerships through reliable service and expert support.</value>
-  </data>
-  <data name="HappyCustomers" xml:space="preserve">
-    <value>Happy Customers!</value>
-  </data>
-  <data name="FromReviews" xml:space="preserve">
-    <value>from our trusted reviews</value>
+  <data name="FastShipping" xml:space="preserve">
+    <value>Fast &amp; Safe Shipping</value>
   </data>
   <data name="AdminLogin" xml:space="preserve">
     <value>Admin Login</value>
@@ -453,7 +342,6 @@
   <data name="ImageAlt" xml:space="preserve">
     <value>Image</value>
   </data>
-
   <data name="WhatsAppProductInquiry" xml:space="preserve">
     <value>Hello, I want to inquire about the product: {0}</value>
   </data>
@@ -471,5 +359,137 @@
   </data>
   <data name="SixColumns" xml:space="preserve">
     <value>6 Columns</value>
+  </data>
+  <data name="Feat_QualityFinish_Title" xml:space="preserve">
+    <value>Quality &amp; Finishing</value>
+  </data>
+  <data name="Feat_QualityFinish_Desc" xml:space="preserve">
+    <value>We use fabrics that withstand frequent washing and long hours of use.</value>
+  </data>
+  <data name="Feat_Creativity_Title" xml:space="preserve">
+    <value>Creativity &amp; Variety</value>
+  </data>
+  <data name="Feat_Creativity_Desc" xml:space="preserve">
+    <value> Extensive experience in understanding the requirements of every profession (from industrial overalls to waiter shirts).</value>
+  </data>
+  <data name="Feat_FastDelivery_Title" xml:space="preserve">
+    <value>Fast Delivery</value>
+  </data>
+  <data name="Feat_FastDelivery_Desc" xml:space="preserve">
+    <value>Respecting delivery deadlines is part of our built reputation.</value>
+  </data>
+  <data name="Feat_FlexPartner_Title" xml:space="preserve">
+    <value>Flexibility</value>
+  </data>
+  <data name="Feat_FlexPartner_Desc" xml:space="preserve">
+    <value>We build lasting partnerships through reliable service and outstanding support.</value>
+  </data>
+  <data name="DiscountPolicy" xml:space="preserve">
+    <value>Discount Policy</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="DesignedBy" xml:space="preserve">
+    <value>Developed by</value>
+  </data>
+  <data name="DiscountPageTitle" xml:space="preserve">
+    <value>The more you buy,</value>
+  </data>
+  <data name="DiscountPageTitle2" xml:space="preserve">
+    <value>the more you save!</value>
+  </data>
+  <data name="DiscountPageDesc" xml:space="preserve">
+    <value>We believe in rewarding our valued customers. Check out our tiered discount structure below and discover how you can get the best prices for wholesale and retail orders.</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
+  <data name="ForOrdersBetween" xml:space="preserve">
+    <value>For orders between:</value>
+  </data>
+  <data name="NoDiscountTiers" xml:space="preserve">
+    <value>No discount tiers available at the moment</value>
+  </data>
+  <data name="ReadyToOrder" xml:space="preserve">
+    <value>Ready to Order?</value>
+  </data>
+  <data name="ContactUsForOrder" xml:space="preserve">
+    <value>Contact us now and take advantage of our special discounts on bulk orders</value>
+  </data>
+  <data name="PricingSystem" xml:space="preserve">
+    <value>Pricing System</value>
+  </data>
+  <data name="CheckDiscountPolicy" xml:space="preserve">
+    <value>Check Discount Policy</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="YourName" xml:space="preserve">
+    <value>Your Name</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Optional</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="CustomersAreSaying" xml:space="preserve">
+    <value>Customers are saying</value>
+  </data>
+  <data name="OurProjects" xml:space="preserve">
+    <value>Our Projects</value>
+  </data>
+  <data name="OurPortfolioDesc" xml:space="preserve">
+    <value>We are proud to provide the best uniform solutions for our success partners in various sectors.</value>
+  </data>
+  <data name="NoProjects" xml:space="preserve">
+    <value>No projects added yet.</value>
+  </data>
+  <data name="LatestProducts" xml:space="preserve">
+    <value>Latest Products</value>
+  </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>View All</value>
+  </data>
+  <data name="NoHeroImages" xml:space="preserve">
+    <value>No hero images added yet</value>
+  </data>
+  <data name="OrderNow" xml:space="preserve">
+    <value>Order Now</value>
+  </data>
+  <data name="PreviousWork" xml:space="preserve">
+    <value>Our Previous Work</value>
+  </data>
+  <data name="ValueProp_Heading" xml:space="preserve">
+    <value>We create uniforms that confidently reflect your brand identity every workday.</value>
+  </data>
+  <data name="ValueProp_Desc" xml:space="preserve">
+    <value>Because your team's appearance is part of your success story, we've designed a collection that combines style and functionality. Our uniforms are made from sustainable, easy-care, and easy-to-clean materials, ensuring your team's comfort and impeccable appearance, whatever the work environment.</value>
+  </data>
+  <data name="WhyMano" xml:space="preserve">
+    <value>WHY MANO UNIFORM?</value>
+  </data>
+  <data name="HappyCustomers" xml:space="preserve">
+    <value>Happy Customers!</value>
+  </data>
+  <data name="FromReviews" xml:space="preserve">
+    <value>from our trusted reviews</value>
+  </data>
+  <data name="OurFeaturedClients" xml:space="preserve">
+    <value>Our Featured Clients</value>
+  </data>
+  <data name="OurClientsSubtitle" xml:space="preserve">
+    <value>Our Clients</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Feedback</value>
   </data>
 </root>

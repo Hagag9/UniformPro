@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using UniformPro.Infrastructure.Data;
 using UniformPro.Web.ViewModels;
 
+using Microsoft.AspNetCore.OutputCaching;
+
 namespace UniformPro.Web.Controllers
 {
     public class DiscountPolicyController : FrontBaseController
@@ -11,6 +13,7 @@ namespace UniformPro.Web.Controllers
         {
         }
 
+        [OutputCache(PolicyName = "DiscountPage")]
         public async Task<IActionResult> Index()
         {
             // تحديد اللغة الحالية

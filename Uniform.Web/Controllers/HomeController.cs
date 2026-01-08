@@ -77,7 +77,13 @@ namespace UniformPro.Web.Controllers
                 HeroItems = heroItems,
                 LatestProducts = featuredProducts,
                 Portfolios = homePortfolios,
-                Testimonials = testimonials
+                Testimonials = testimonials,
+                ClientLogos = await _context.Testimonials
+                    .AsNoTracking()
+                    .Where(t => t.IsActive && !string.IsNullOrEmpty(t.ImagePath))
+                    .OrderByDescending(t => t.CreatedAt)
+                    .Select(t => t.ImagePath)
+                    .ToListAsync()
             };
 
             return View(viewModel);
