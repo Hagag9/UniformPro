@@ -122,6 +122,43 @@
                 width: calc(25% - 1.875rem) !important; /* (100% - 3*gap) / 4 */
             }
         }
+        /* Marquee Animation */
+        .marquee-container {
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        
+        .marquee-track {
+            display: flex;
+            gap: 1.5rem; /* gap-6 */
+            width: max-content;
+            animation: marquee-scroll 40s linear infinite;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+        
+        /* RTL Support for Marquee */
+        html[dir="rtl"] .marquee-track {
+            animation: marquee-scroll-rtl 40s linear infinite;
+        }
+
+        @@keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @@keyframes marquee-scroll-rtl {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(50%); } /* In RTL, positive types move right */
+        }
+        
+        @@media (min-width: 768px) {
+            .marquee-track {
+                gap: 3rem; /* gap-12 */
+            }
+        }
     </style>
 }
 
@@ -597,7 +634,7 @@ else
 @if (clientLogos.Any())
 {
     <!-- ========== OUR FEATURED CLIENTS SECTION ========== -->
-    <section class="py-14 bg-white border-t border-gray-100">
+    <section class="py-14 bg-white border-t border-gray-100 overflow-hidden">
         <div class="container mx-auto px-6 md:px-12 lg:px-20">
             <!-- Header -->
             <div class="text-center mb-10">
@@ -609,15 +646,25 @@ else
                 </h2>
             </div>
 
-            <!-- Clients Slider Wrapper -->
-            <!-- Desktop: 3 cards, large margins. Mobile: 1 card, swipe. -->
-            <div class="relative group/c-slider max-w-sm md:max-w-4xl mx-auto px-0 md:px-12">
-                
-                <div id="clientsSlider" class="flex items-center overflow-x-auto snap-x snap-mandatory gap-6 md:gap-12 pb-4 hide-scrollbar cursor-grab active:cursor-grabbing scroll-smooth" style="scroll-padding-left: 0;">
+            <!-- Clients Slider Wrapper - Marquee Style -->
+            <div class="relative marquee-container max-w-full mx-auto">
+                <div class="marquee-track">
+                    <!-- Original Set -->
                     @foreach (var logo in clientLogos)
                     {
                         <!-- Client Logo Card -->
-                        <div class="w-full md:w-[calc(33.333%-2rem)] flex-shrink-0 snap-center flex items-center justify-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all select-none h-32 md:h-40">
+                        <div class="w-[40vw] md:w-60 flex-shrink-0 flex items-center justify-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all select-none h-28 md:h-36">
+                            <img src="~/uploads/testimonials/images/@logo" 
+                                 alt="@L["OurFeaturedClients"]" 
+                                 class="max-w-full max-h-full object-contain transition-all duration-300 hover:scale-110" 
+                                 draggable="false">
+                        </div>
+                    }
+                    <!-- Duplicated Set for Infinite Loop -->
+                    @foreach (var logo in clientLogos)
+                    {
+                        <!-- Client Logo Card -->
+                        <div class="w-[40vw] md:w-60 flex-shrink-0 flex items-center justify-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all select-none h-28 md:h-36">
                             <img src="~/uploads/testimonials/images/@logo" 
                                  alt="@L["OurFeaturedClients"]" 
                                  class="max-w-full max-h-full object-contain transition-all duration-300 hover:scale-110" 
@@ -625,15 +672,6 @@ else
                         </div>
                     }
                 </div>
-                
-                <!-- Side Arrows (Desktop) -->
-                <button onclick="scrollSlider('clientsSlider', 'left')" class="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-8 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:text-primary transition-all z-10 hidden md:flex" aria-label="Previous">
-                    <i class="ph-bold ph-caret-left text-xl"></i>
-                </button>
-                <button onclick="scrollSlider('clientsSlider', 'right')" class="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-8 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:text-primary transition-all z-10 hidden md:flex" aria-label="Next">
-                    <i class="ph-bold ph-caret-right text-xl"></i>
-                </button>
-
             </div>
         </div>
     </section>

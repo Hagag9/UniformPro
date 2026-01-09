@@ -9,7 +9,6 @@
     ViewData["MetaDescription"] = Model.MetaDescription;
     ViewData["MetaKeywords"] = Model.MetaKeywords;
 
-    // تجهيز صورة الخلفية للهيرو
     var heroImage = Model.GalleryImages.FirstOrDefault();
     var heroBgStyle = heroImage != null 
         ? $"background-image: url('{Url.Content($"~/uploads/portfolios/media/{heroImage}")}');" 
@@ -18,7 +17,6 @@
 
 @section Head {
     @{
-        // SEO Logic remains the same
         var rawDesc = !string.IsNullOrEmpty(Model.MetaDescription) 
             ? Model.MetaDescription 
             : (Model.Description ?? "");
@@ -43,6 +41,7 @@
         var pageUrl = $"{baseUrl}{Context.Request.Path}";
     }
 
+    <!-- SEO Meta Tags -->
     <meta name="description" content="@plainDesc" />
     <meta name="keywords" content="@metaKeys" />
     
@@ -54,6 +53,16 @@
     }
     <meta property="og:url" content="@pageUrl" />
     <meta property="og:type" content="article" />
+
+    <!-- iPhone Specific Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://www.youtube.com" crossorigin>
+    <link rel="preconnect" href="https://i.ytimg.com" crossorigin>
 
     <script type="application/ld+json">
     {
@@ -73,6 +82,168 @@
     </script>
 }
 
+<!-- Custom Styles with iPhone Fixes -->
+<style>
+    /* ========================================
+       🍎 CRITICAL iPhone Safari Fixes
+       ======================================== */
+    
+    /* Force hardware acceleration for smooth animations */
+    * {
+        -webkit-transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        -webkit-perspective: 1000;
+    }
+    
+    /* Fix border-radius rendering on iPhone */
+    .ios-radius-fix {
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        isolation: isolate;
+    }
+    
+    /* Improve touch response */
+    .touch-optimized {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        touch-action: manipulation;
+    }
+    
+    /* Safe area padding for iPhone notch */
+    @@supports (padding: max(0px)) {
+        .safe-area-padding {
+            padding-left: max(1rem, env(safe-area-inset-left));
+            padding-right: max(1rem, env(safe-area-inset-right));
+        }
+    }
+    
+    /* ========================================
+       Gallery Cards - iPhone Border Radius Fix
+       ======================================== */
+    .gallery-card {
+        border-radius: 0.75rem; /* 12px */
+        overflow: hidden;
+        /* Critical for iPhone Safari */
+        -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        isolation: isolate;
+        will-change: transform;
+    }
+    
+    .gallery-card img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 0.75rem;
+        /* Force GPU rendering */
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    
+    /* ========================================
+       Video Container Fixes
+       ======================================== */
+    .video-container-ios {
+        border-radius: 0.75rem;
+        overflow: hidden;
+        -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        isolation: isolate;
+        position: relative;
+        background: #000;
+    }
+    
+    .video-container-ios video,
+    .video-container-ios iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 0.75rem;
+    }
+    
+    /* ========================================
+       Testimonial Card Fix
+       ======================================== */
+    .testimonial-card-ios {
+        border-radius: 1rem;
+        -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        isolation: isolate;
+        overflow: hidden;
+    }
+    
+    /* ========================================
+       Lightbox Optimizations
+       ======================================== */
+    #lightbox {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+    
+    #lightbox-img {
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+        pointer-events: none;
+    }
+    
+    /* ========================================
+       Animations
+       ======================================== */
+    @@keyframes fadeInUp { 
+        from { 
+            opacity: 0; 
+            transform: translate3d(0, 20px, 0); 
+        } 
+        to { 
+            opacity: 1; 
+            transform: translate3d(0, 0, 0); 
+        } 
+    }
+    
+    .animate-fade-in-up { 
+        animation: fadeInUp 0.8s ease-out forwards; 
+        opacity: 0;
+        will-change: transform, opacity;
+    }
+    
+    /* ========================================
+       Smooth Scrolling
+       ======================================== */
+    html {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* ========================================
+       Button Styles
+       ======================================== */
+    .nav-button {
+        transition: all 0.3s ease;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+    
+    .nav-button:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+    
+    /* ========================================
+       Text Rendering
+       ======================================== */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+</style>
+
+<!-- Hero Section -->
 <div class="relative w-full min-h-[65vh] flex items-center justify-center bg-gray-900 text-white overflow-hidden isolate">
     
     @if (heroImage != null)
@@ -87,9 +258,9 @@
         <div class="absolute inset-0 z-0 bg-gradient-to-br from-gray-800 to-black"></div>
     }
 
-    <div class="container mx-auto px-4 relative z-20 pt-20 pb-12 text-center">
+    <div class="container mx-auto safe-area-padding px-4 relative z-20 pt-20 pb-12 text-center">
         <div class="animate-fade-in-up" style="animation-delay: 0.1s;">
-            <span class="inline-block px-5 py-2 backdrop-blur-md bg-white/10 border border-white/20 text-white text-xs md:text-sm font-bold rounded-full mb-6 tracking-widest uppercase shadow-lg hover:bg-white/20 transition-colors cursor-default">
+            <span class="inline-block px-5 py-2 backdrop-blur-md bg-white/10 border border-white/20 text-white text-xs md:text-sm font-bold rounded-full mb-6 tracking-widest uppercase shadow-lg hover:bg-white/20 transition-colors cursor-default touch-optimized">
                 @Model.CategoryName
             </span>
         </div>
@@ -115,9 +286,11 @@
     </div>
 </div>
 
+<!-- Main Content -->
 <div class="bg-white py-12">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto safe-area-padding px-4">
         
+        <!-- Gallery Section with iPhone Fixes -->
         @if (Model.GalleryImages.Any())
         {
             <div class="mb-16">
@@ -125,15 +298,19 @@
                     @{ int i = 0; }
                     @foreach (var imgUrl in Model.GalleryImages)
                     {
-                        <div class="break-inside-avoid mb-4 relative group cursor-zoom-in overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow" 
-                             onclick="openLightbox(@i)">
+                        <div class="gallery-card break-inside-avoid mb-4 relative group cursor-zoom-in shadow-sm hover:shadow-md transition-shadow touch-optimized ios-radius-fix" 
+                             onclick="portfolioGallery.open(@i)"
+                             role="button"
+                             tabindex="0"
+                             aria-label="View image @(i+1)"
+                             onkeypress="if(event.key==='Enter'||event.key===' ') portfolioGallery.open(@i)">
                             
                             <img src="~/uploads/portfolios/media/@imgUrl" 
                                  class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500" 
                                  loading="lazy"
                                  alt="@Model.ClientName - @L["ImageAlt"] @(i+1)">
                             
-                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none"></div>
                         </div>
                         i++;
                     }
@@ -141,6 +318,7 @@
             </div>
         }
 
+        <!-- Video Slider Section -->
         @if (Model.VideoUrls.Any())
         {
             <div class="max-w-5xl mx-auto mb-16 relative">
@@ -151,27 +329,38 @@
                 </div>
                 
                 <div class="relative group px-4 md:px-12" id="video-slider-container">
-                    <button class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-primary hover:text-white text-gray-700 w-10 h-10 flex items-center justify-center rounded-full shadow-lg border border-gray-100 transition-all" 
-                            id="vid-prev-btn" onclick="moveVideoSlider(-1)">
+                    <button class="nav-button absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-primary hover:text-white text-gray-700 w-10 h-10 flex items-center justify-center rounded-full shadow-lg border border-gray-100 transition-all touch-optimized" 
+                            id="vid-prev-btn" 
+                            onclick="videoSlider.prev()"
+                            aria-label="Previous video">
                         <i class="ph-bold @(isArabic ? "ph-caret-right" : "ph-caret-left") text-xl"></i>
                     </button>
 
-                    <button class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-primary hover:text-white text-gray-700 w-10 h-10 flex items-center justify-center rounded-full shadow-lg border border-gray-100 transition-all" 
-                            id="vid-next-btn" onclick="moveVideoSlider(1)">
+                    <button class="nav-button absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-primary hover:text-white text-gray-700 w-10 h-10 flex items-center justify-center rounded-full shadow-lg border border-gray-100 transition-all touch-optimized" 
+                            id="vid-next-btn" 
+                            onclick="videoSlider.next()"
+                            aria-label="Next video">
                         <i class="ph-bold @(isArabic ? "ph-caret-left" : "ph-caret-right") text-xl"></i>
                     </button>
 
-                    <div class="overflow-hidden rounded-xl shadow-lg bg-black">
+                    <div class="overflow-hidden rounded-xl shadow-lg bg-black ios-radius-fix">
                         <div class="flex transition-transform duration-500 ease-out will-change-transform" id="video-track" dir="ltr">
                             @foreach (var videoUrl in Model.VideoUrls)
                             {
                                 <div class="w-full md:w-1/2 flex-shrink-0 px-2 py-4 md:py-8">
-                                    <div class="aspect-video bg-gray-900 rounded-lg overflow-hidden relative border border-gray-800 group/vid">
+                                    <div class="video-container-ios aspect-video bg-gray-900 relative border border-gray-800 group/vid">
                                          @if (videoUrl.Contains("youtube") || videoUrl.Contains("youtu.be"))
                                          {
-                                              <div class="w-full h-full cursor-pointer relative" onclick="playCardYoutube(this, '@YoutubeHelper.GetEmbedUrl(videoUrl)')">
+                                              <div class="w-full h-full cursor-pointer relative touch-optimized" 
+                                                   onclick="videoSlider.playYoutube(this, '@YoutubeHelper.GetEmbedUrl(videoUrl)')"
+                                                   role="button"
+                                                   tabindex="0"
+                                                   aria-label="Play YouTube video"
+                                                   onkeypress="if(event.key==='Enter'||event.key===' ') videoSlider.playYoutube(this, '@YoutubeHelper.GetEmbedUrl(videoUrl)')">
                                                  <img src="@YoutubeHelper.GetThumbnailUrl(videoUrl)" 
-                                                      class="w-full h-full object-cover opacity-90 group-hover/vid:opacity-100 transition-opacity">
+                                                      class="w-full h-full object-cover opacity-90 group-hover/vid:opacity-100 transition-opacity"
+                                                      loading="lazy"
+                                                      alt="Video thumbnail">
                                                  <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                                                      <div class="w-14 h-14 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-xl group-hover/vid:scale-110 transition-transform">
                                                          <i class="ph-fill ph-play text-red-600 text-2xl pl-1"></i>
@@ -181,7 +370,12 @@
                                          }
                                          else
                                          {
-                                              <video controls class="w-full h-full object-contain" preload="none">
+                                              <video controls 
+                                                     class="w-full h-full object-contain" 
+                                                     preload="metadata"
+                                                     playsinline
+                                                     webkit-playsinline
+                                                     aria-label="Project video">
                                                   <source src="~/uploads/portfolios/media/@videoUrl" type="video/mp4">
                                               </video>
                                          }
@@ -191,59 +385,14 @@
                         </div>
                     </div>
                 </div>
-
-                <script>
-                    (function() {
-                        let currentVideoIndex = 0;
-                        const videoTrack = document.getElementById('video-track');
-                        const videoPrevBtn = document.getElementById('vid-prev-btn');
-                        const videoNextBtn = document.getElementById('vid-next-btn');
-                        const totalVideos = @Model.VideoUrls.Count;
-
-                        function getVisibleCount() { return window.innerWidth >= 768 ? 2 : 1; }
-
-                        function updateVideoSliderButtons() {
-                            const visibleCount = getVisibleCount();
-                            const maxIndex = Math.max(0, totalVideos - visibleCount);
-                            
-                            if (totalVideos <= visibleCount) {
-                                videoPrevBtn.style.display = 'none';
-                                videoNextBtn.style.display = 'none';
-                                return;
-                            }
-                            videoPrevBtn.style.display = 'flex';
-                            videoNextBtn.style.display = 'flex';
-                            
-                            videoPrevBtn.disabled = currentVideoIndex === 0;
-                            videoNextBtn.disabled = currentVideoIndex >= maxIndex;
-                            videoPrevBtn.style.opacity = currentVideoIndex === 0 ? '0.5' : '1';
-                            videoNextBtn.style.opacity = currentVideoIndex >= maxIndex ? '0.5' : '1';
-                        }
-
-                        window.moveVideoSlider = function(direction) {
-                            const visibleCount = getVisibleCount();
-                            const maxIndex = Math.max(0, totalVideos - visibleCount);
-                            currentVideoIndex += direction;
-                            if (currentVideoIndex < 0) currentVideoIndex = 0;
-                            if (currentVideoIndex > maxIndex) currentVideoIndex = maxIndex;
-                            const percent = currentVideoIndex * (100 / visibleCount);
-                            videoTrack.style.transform = `translateX(-${percent}%)`;
-                            updateVideoSliderButtons();
-                        }
-
-                        document.addEventListener('DOMContentLoaded', () => {
-                            updateVideoSliderButtons();
-                            window.addEventListener('resize', () => { currentVideoIndex = 0; moveVideoSlider(0); });
-                        });
-                    })();
-                </script>
             </div>
         }
 
+        <!-- Testimonial Section -->
         @if (Model.ClientTestimonial != null)
         {
             <div class="max-w-4xl mx-auto">
-                <div class="bg-gray-50 rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10 relative overflow-hidden">
+                <div class="testimonial-card-ios bg-gray-50 shadow-sm border border-gray-100 p-8 md:p-10 relative">
                     <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
                         <i class="ph-fill ph-quotes text-8xl text-primary"></i>
                     </div>
@@ -252,10 +401,16 @@
                         <div class="w-full md:w-1/3 flex-shrink-0">
                             @if (!string.IsNullOrEmpty(Model.ClientTestimonial.YoutubeUrl))
                              {
-                                  <div class="aspect-video rounded-xl overflow-hidden shadow-lg bg-black border border-gray-200 group cursor-pointer relative"
-                                       onclick="playCardYoutube(this, '@YoutubeHelper.GetEmbedUrl(Model.ClientTestimonial.YoutubeUrl)')">
+                                  <div class="video-container-ios aspect-video shadow-lg bg-black border border-gray-200 group cursor-pointer relative touch-optimized"
+                                       onclick="videoSlider.playYoutube(this, '@YoutubeHelper.GetEmbedUrl(Model.ClientTestimonial.YoutubeUrl)')"
+                                       role="button"
+                                       tabindex="0"
+                                       aria-label="Play testimonial video"
+                                       onkeypress="if(event.key==='Enter'||event.key===' ') videoSlider.playYoutube(this, '@YoutubeHelper.GetEmbedUrl(Model.ClientTestimonial.YoutubeUrl)')">
                                       <img src="@YoutubeHelper.GetThumbnailUrl(Model.ClientTestimonial.YoutubeUrl)" 
-                                           class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
+                                           class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                                           loading="lazy"
+                                           alt="Testimonial video thumbnail">
                                       <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                                           <div class="w-14 h-14 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
                                               <i class="ph-fill ph-play text-red-600 text-2xl pl-1"></i>
@@ -265,39 +420,55 @@
                              }
                              else if (!string.IsNullOrEmpty(Model.ClientTestimonial.VideoPath))
                              {
-                                  <div class="aspect-[9/16] max-h-72 mx-auto md:mx-0 rounded-xl overflow-hidden shadow-lg bg-black border border-gray-200 relative group cursor-pointer"
-                                       onclick="playLocalVideo(this)">
+                                  <div class="video-container-ios aspect-[9/16] max-h-72 mx-auto md:mx-0 shadow-lg bg-black border border-gray-200 relative group cursor-pointer touch-optimized"
+                                       onclick="videoSlider.playLocal(this)"
+                                       role="button"
+                                       tabindex="0"
+                                       aria-label="Play testimonial video"
+                                       onkeypress="if(event.key==='Enter'||event.key===' ') videoSlider.playLocal(this)">
                                       <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none play-overlay">
                                            <div class="w-14 h-14 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
                                                <i class="ph-fill ph-play text-gray-900 text-2xl pl-1"></i>
                                            </div>
                                       </div>
-                                      <video controls class="w-full h-full object-cover" preload="none">
+                                      <video controls 
+                                             class="w-full h-full object-cover" 
+                                             preload="metadata"
+                                             playsinline
+                                             webkit-playsinline
+                                             aria-label="Customer testimonial video">
                                           <source src="~/uploads/testimonials/videos/@Model.ClientTestimonial.VideoPath" type="video/mp4">
                                       </video>
                                   </div>
                              }
                              else if (!string.IsNullOrEmpty(Model.ClientTestimonial.ImagePath))
                              {
-                                  <div class="aspect-square w-32 md:w-full max-w-[180px] mx-auto md:mx-0 rounded-full md:rounded-xl overflow-hidden shadow-md border-4 border-white">
-                                      <img src="~/uploads/testimonials/images/@Model.ClientTestimonial.ImagePath" class="w-full h-full object-cover">
+                                  <div class="aspect-square w-32 md:w-full max-w-[180px] mx-auto md:mx-0 rounded-full md:rounded-xl overflow-hidden shadow-md border-4 border-white ios-radius-fix">
+                                      <img src="~/uploads/testimonials/images/@Model.ClientTestimonial.ImagePath" 
+                                           class="w-full h-full object-cover"
+                                           loading="lazy"
+                                           alt="@Model.ClientTestimonial.ClientName">
                                   </div>
                              }
                              else
                              {
-                                  <div class="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary text-3xl mx-auto md:mx-0">
+                                  <div class="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary text-3xl mx-auto md:mx-0 ios-radius-fix">
                                       <i class="ph-duotone ph-user"></i>
                                   </div>
                              }
                         </div>
 
                         <div class="flex-grow text-center md:text-start rtl:md:text-right">
-                             <div class="flex items-center justify-center md:justify-start gap-1 mb-3 text-orange-400 text-lg">
-                                 <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+                             <div class="flex items-center justify-center md:justify-start gap-1 mb-3 text-orange-400 text-lg" role="img" aria-label="5 stars rating">
+                                 <i class="ph-fill ph-star"></i>
+                                 <i class="ph-fill ph-star"></i>
+                                 <i class="ph-fill ph-star"></i>
+                                 <i class="ph-fill ph-star"></i>
+                                 <i class="ph-fill ph-star"></i>
                              </div>
                              
                              <blockquote class="text-xl font-medium text-gray-800 italic mb-6 leading-relaxed">
-                                 " @Model.ClientTestimonial.Feedback "
+                                 "@Model.ClientTestimonial.Feedback"
                              </blockquote>
 
                              <div class="flex items-center justify-center md:justify-start gap-4">
@@ -317,7 +488,13 @@
     </div>
 </div>
 
-<div id="lightbox" class="fixed inset-0 z-[100] bg-black/95 hidden transition-opacity duration-300 opacity-0" aria-hidden="true" role="dialog">
+<!-- Lightbox -->
+<div id="lightbox" 
+     class="fixed inset-0 z-[100] bg-black/95 hidden transition-opacity duration-300 opacity-0" 
+     aria-hidden="true" 
+     role="dialog"
+     aria-label="Image viewer">
+    
     <div id="lightbox-loader" class="absolute inset-0 z-40 flex items-center justify-center hidden">
         <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -325,125 +502,273 @@
         </svg>
     </div>
 
-    <button class="absolute top-4 right-4 text-white/50 hover:text-white p-2 z-[110] transition-colors" onclick="closeLightbox()">
+    <button class="absolute top-4 right-4 text-white/50 hover:text-white p-2 z-[110] transition-colors touch-optimized" 
+            onclick="portfolioGallery.close()"
+            aria-label="Close viewer">
         <i class="ph-bold ph-x text-3xl"></i>
     </button>
     
-    <button class="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white p-4 z-[110] transition-colors" onclick="prevImage()">
+    <button class="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white p-4 z-[110] transition-colors touch-optimized" 
+            onclick="portfolioGallery.prev()"
+            aria-label="Previous image">
         <i class="ph-bold ph-caret-left text-4xl"></i>
     </button>
 
-    <button class="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white p-4 z-[110] transition-colors" onclick="nextImage()">
+    <button class="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white p-4 z-[110] transition-colors touch-optimized" 
+            onclick="portfolioGallery.next()"
+            aria-label="Next image">
         <i class="ph-bold ph-caret-right text-4xl"></i>
     </button>
     
-    <div class="relative w-full h-full flex items-center justify-center p-4" onclick="if(event.target === this) closeLightbox()">
-        <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain shadow-2xl rounded-sm transform scale-95 transition-all duration-300 opacity-0 select-none" draggable="false">
+    <div class="relative w-full h-full flex items-center justify-center p-4" onclick="if(event.target === this) portfolioGallery.close()">
+        <img id="lightbox-img" 
+             src="" 
+             class="max-w-full max-h-full object-contain shadow-2xl rounded-sm transform scale-95 transition-all duration-300 opacity-0 select-none" 
+             draggable="false"
+             alt="Gallery image">
     </div>
 
-    <div class="md:hidden absolute bottom-8 left-0 right-0 text-center text-white/50 text-sm pointer-events-none">
+    <div class="md:hidden absolute bottom-8 left-0 right-0 text-center text-white/50 text-sm pointer-events-none safe-area-padding">
         @L["SwipeToNavigate"]
     </div>
 </div>
 
-<style>
-    @@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
-</style>
-
 @section Scripts {
     <script>
-        // ✅ 1. Play Video Functions (Added Here)
-        function playCardYoutube(el, url) {
-            el.innerHTML = `<iframe src="${url}?autoplay=1" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        }
+        // ========================================
+        // 🎬 Video Slider Manager
+        // ========================================
+        const videoSlider = (() => {
+            let currentIndex = 0;
+            const track = document.getElementById('video-track');
+            const prevBtn = document.getElementById('vid-prev-btn');
+            const nextBtn = document.getElementById('vid-next-btn');
+            const totalVideos = @Model.VideoUrls.Count;
+            let resizeTimeout;
 
-        function playLocalVideo(container) {
-            const video = container.querySelector('video');
-            const overlay = container.querySelector('.play-overlay');
-            if(video) {
-                if(overlay) overlay.style.display = 'none';
-                video.controls = true;
-                video.play();
-                container.onclick = null;
-            }
-        }
+            const getVisibleCount = () => window.innerWidth >= 768 ? 2 : 1;
+            const getMaxIndex = () => Math.max(0, totalVideos - getVisibleCount());
+            const isRTL = () => document.documentElement.dir === 'rtl';
 
-        // ✅ 2. Lightbox Logic (Existing)
-        const galleryImages = @Json.Serialize(Model.GalleryImages);
-        let currentIndex = 0;
-        const lightbox = document.getElementById('lightbox');
-        const img = document.getElementById('lightbox-img');
-        const loader = document.getElementById('lightbox-loader');
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        function openLightbox(index) {
-            if (!galleryImages || index < 0 || index >= galleryImages.length) return;
-            currentIndex = index;
-            lightbox.classList.remove('hidden');
-            requestAnimationFrame(() => {
-                lightbox.classList.remove('opacity-0');
-                lightbox.classList.add('flex');
-                lightbox.setAttribute('aria-hidden', 'false');
-            });
-            document.body.style.overflow = 'hidden'; 
-            updateImage();
-        }
-
-        function closeLightbox() {
-            lightbox.classList.add('opacity-0');
-            img.classList.remove('scale-100');
-            img.classList.add('scale-95');
-            setTimeout(() => {
-                lightbox.classList.add('hidden');
-                lightbox.classList.remove('flex');
-                lightbox.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = '';
-                img.src = "";
-            }, 300);
-        }
-
-        function nextImage() {
-            if (galleryImages.length <= 1) return;
-            currentIndex = (currentIndex + 1) % galleryImages.length;
-            updateImage();
-        }
-
-        function prevImage() {
-            if (galleryImages.length <= 1) return;
-            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-            updateImage();
-        }
-
-        function updateImage() {
-            const imgSrc = '/uploads/portfolios/media/' + galleryImages[currentIndex];
-            loader.classList.remove('hidden');
-            img.classList.add('opacity-0', 'scale-95');
-            img.classList.remove('scale-100');
-            const tempImg = new Image();
-            tempImg.src = imgSrc;
-            tempImg.onload = function() {
-                img.src = imgSrc;
-                loader.classList.add('hidden');
-                img.classList.remove('opacity-0', 'scale-95');
-                img.classList.add('scale-100');
+            const updateButtons = () => {
+                const visibleCount = getVisibleCount();
+                const maxIndex = getMaxIndex();
+                
+                if (totalVideos <= visibleCount) {
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                    return;
+                }
+                
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+                prevBtn.disabled = currentIndex === 0;
+                nextBtn.disabled = currentIndex >= maxIndex;
+                prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+                nextBtn.style.opacity = currentIndex >= maxIndex ? '0.5' : '1';
             };
-        }
 
-        document.addEventListener('keydown', function(e) {
-            if (lightbox.classList.contains('hidden')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowRight') @(isArabic ? "prevImage()" : "nextImage()"); 
-            if (e.key === 'ArrowLeft') @(isArabic ? "nextImage()" : "prevImage()");
+            const update = () => {
+                const visibleCount = getVisibleCount();
+                const maxIndex = getMaxIndex();
+                
+                if (currentIndex < 0) currentIndex = 0;
+                if (currentIndex > maxIndex) currentIndex = maxIndex;
+                
+                const percent = currentIndex * (100 / visibleCount);
+                track.style.transform = `translateX(-${percent}%)`;
+                updateButtons();
+            };
+
+            const next = () => {
+                const maxIndex = getMaxIndex();
+                if (currentIndex < maxIndex) {
+                    currentIndex++;
+                    update();
+                }
+            };
+
+            const prev = () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    update();
+                }
+            };
+
+            const playYoutube = (el, url) => {
+                const iframe = document.createElement('iframe');
+                iframe.src = `${url}?autoplay=1&rel=0&modestbranding=1`;
+                iframe.className = 'w-full h-full';
+                iframe.allow = 'autoplay; encrypted-media';
+                iframe.allowFullscreen = true;
+                iframe.setAttribute('playsinline', '');
+                iframe.frameBorder = '0';
+                
+                el.innerHTML = '';
+                el.appendChild(iframe);
+            };
+
+            const playLocal = (container) => {
+                const video = container.querySelector('video');
+                const overlay = container.querySelector('.play-overlay');
+                if (video) {
+                    if (overlay) overlay.style.display = 'none';
+                    video.controls = true;
+                    video.play();
+                    container.onclick = null;
+                }
+            };
+
+            const handleResize = () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    currentIndex = 0;
+                    update();
+                }, 150);
+            };
+
+            const init = () => {
+                if (!track) return;
+                updateButtons();
+                window.addEventListener('resize', handleResize);
+            };
+
+            return { init, next, prev, playYoutube, playLocal };
+        })();
+
+        // ========================================
+        // 🖼️ Gallery Lightbox Manager
+        // ========================================
+        const portfolioGallery = (() => {
+            const images = @Json.Serialize(Model.GalleryImages);
+            let currentIndex = 0;
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            const elements = {
+                lightbox: document.getElementById('lightbox'),
+                img: document.getElementById('lightbox-img'),
+                loader: document.getElementById('lightbox-loader')
+            };
+
+            const isRTL = () => document.documentElement.dir === 'rtl';
+
+            const open = (index) => {
+                if (!images || index < 0 || index >= images.length) return;
+                
+                currentIndex = index;
+                elements.lightbox.classList.remove('hidden');
+                
+                requestAnimationFrame(() => {
+                    elements.lightbox.classList.remove('opacity-0');
+                    elements.lightbox.classList.add('flex');
+                    elements.lightbox.setAttribute('aria-hidden', 'false');
+                });
+                
+                document.body.style.overflow = 'hidden';
+                updateImage();
+            };
+
+            const close = () => {
+                elements.lightbox.classList.add('opacity-0');
+                elements.img.classList.remove('scale-100');
+                elements.img.classList.add('scale-95');
+                
+                setTimeout(() => {
+                    elements.lightbox.classList.add('hidden');
+                    elements.lightbox.classList.remove('flex');
+                    elements.lightbox.setAttribute('aria-hidden', 'true');
+                    document.body.style.overflow = '';
+                    elements.img.src = "";
+                }, 300);
+            };
+
+            const next = () => {
+                if (images.length <= 1) return;
+                currentIndex = (currentIndex + 1) % images.length;
+                updateImage();
+            };
+
+            const prev = () => {
+                if (images.length <= 1) return;
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                updateImage();
+            };
+
+            const updateImage = () => {
+                const imgSrc = '/uploads/portfolios/media/' + images[currentIndex];
+                
+                elements.loader.classList.remove('hidden');
+                elements.img.classList.add('opacity-0', 'scale-95');
+                elements.img.classList.remove('scale-100');
+                
+                const tempImg = new Image();
+                tempImg.src = imgSrc;
+                tempImg.onload = () => {
+                    elements.img.src = imgSrc;
+                    elements.loader.classList.add('hidden');
+                    elements.img.classList.remove('opacity-0', 'scale-95');
+                    elements.img.classList.add('scale-100');
+                };
+            };
+
+            const handleKeyDown = (e) => {
+                if (elements.lightbox.classList.contains('hidden')) return;
+                
+                if (e.key === 'Escape') close();
+                if (e.key === 'ArrowRight') @(isArabic ? "prev()" : "next()");
+                if (e.key === 'ArrowLeft') @(isArabic ? "next()" : "prev()");
+            };
+
+            const handleTouchStart = (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            };
+
+            const handleTouchEnd = (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                const diff = touchEndX - touchStartX;
+                
+                if (Math.abs(diff) < 50) return;
+                
+                if (diff < 0) { // Swipe left
+                    @(isArabic ? "prev()" : "next()");
+                } else { // Swipe right
+                    @(isArabic ? "next()" : "prev()");
+                }
+            };
+
+            const init = () => {
+                if (!elements.lightbox) return;
+                
+                document.addEventListener('keydown', handleKeyDown);
+                elements.lightbox.addEventListener('touchstart', handleTouchStart, { passive: true });
+                elements.lightbox.addEventListener('touchend', handleTouchEnd, { passive: true });
+            };
+
+            return { init, open, close, next, prev };
+        })();
+
+        // ========================================
+        // 🚀 Initialize on DOM Ready
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            videoSlider.init();
+            portfolioGallery.init();
         });
 
-        lightbox.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
-        lightbox.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            if (Math.abs(touchEndX - touchStartX) < 50) return;
-            if (touchEndX < touchStartX) { @(isArabic ? "prevImage()" : "nextImage()") }
-            if (touchEndX > touchStartX) { @(isArabic ? "nextImage()" : "prevImage()") }
-        }, {passive: true});
+        // Legacy functions for backward compatibility
+        function openLightbox(index) { portfolioGallery.open(index); }
+        function closeLightbox() { portfolioGallery.close(); }
+        function nextImage() { portfolioGallery.next(); }
+        function prevImage() { portfolioGallery.prev(); }
+        function playCardYoutube(el, url) { videoSlider.playYoutube(el, url); }
+        function playLocalVideo(container) { videoSlider.playLocal(container); }
+        function moveVideoSlider(direction) { 
+            direction > 0 ? videoSlider.next() : videoSlider.prev(); 
+        }
     </script>
 }
+
+<!-- Performance Hints -->
+<link rel="dns-prefetch" href="//www.youtube.com">
+<link rel="dns-prefetch" href="//i.ytimg.com">
