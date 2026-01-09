@@ -34,132 +34,11 @@
       "sameAs": @Html.Raw(Json.Serialize(socialLinks))
     }
     </script>
-}
-
-@section Styles {
-    <style>
-        /* Hero Section Styles */
-        .hero-section {
-            height: 70vh;
-            min-height: 500px;
-            max-height: 800px;
-        }
-        @@media (min-width: 768px) {
-            .hero-section {
-                height: 85vh;
-                max-height: 900px;
-            }
-        }
-
-        /* Carousel Styles */
-        .hero-carousel {
-            display: flex;
-            transition: transform 0.6s ease-in-out;
-        }
-        .hero-slide {
-            min-width: 100%;
-            position: relative;
-        }
-        .hero-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Dots Navigation */
-        .hero-dots {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 30;
-            display: flex;
-            gap: 8px;
-        }
-        .hero-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.5);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .hero-dot.active {
-            background: white;
-            transform: scale(1.2);
-        }
-
-        /* Content Animation */
-        .hero-content {
-            animation: fadeInUp 0.8s ease-out;
-        }
-        @@keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Hide Scrollbar Utility */
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Force Desktop Slider Layout */
-        @@media (min-width: 768px) {
-            #latestProductsSlider, #portfolioSlider {
-                gap: 2.5rem !important; /* 40px */
-            }
-            #latestProductsSlider > a, #portfolioSlider > a {
-                width: calc(25% - 1.875rem) !important; /* (100% - 3*gap) / 4 */
-            }
-        }
-        /* Marquee Animation */
-        .marquee-container {
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        }
-        
-        .marquee-track {
-            display: flex;
-            gap: 1.5rem; /* gap-6 */
-            width: max-content;
-            animation: marquee-scroll 40s linear infinite;
-        }
-
-        .marquee-track:hover {
-            animation-play-state: paused;
-        }
-        
-        /* RTL Support for Marquee */
-        html[dir="rtl"] .marquee-track {
-            animation: marquee-scroll-rtl 40s linear infinite;
-        }
-
-        @@keyframes marquee-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        @@keyframes marquee-scroll-rtl {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(50%); } /* In RTL, positive types move right */
-        }
-        
-        @@media (min-width: 768px) {
-            .marquee-track {
-                gap: 3rem; /* gap-12 */
-            }
-        }
-    </style>
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <!-- Home Page Styles -->
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true">
 }
 
 @if (hasHero)
@@ -169,7 +48,7 @@
 
         @if (!isCarousel)
         {
-            <!-- ===== STATIC MODE (1 صورة) ===== -->
+            <!-- ===== STATIC MODE (1 Image) ===== -->
             var item = heroItems.First();
             <picture class="absolute inset-0 z-0">
                 @if (!string.IsNullOrEmpty(item.MobileImagePath))
@@ -203,9 +82,10 @@
                     @if (!string.IsNullOrEmpty(item.LinkUrl))
                     {
                         <a href="@item.LinkUrl" 
-                           class="inline-flex items-center gap-2 px-8 py-3 bg-white text-gray-900 font-bold rounded-full hover:bg-gray-100 transition-all hover:scale-105 shadow-lg">
+                           class="inline-flex items-center gap-2 px-8 py-3 bg-white text-gray-900 font-bold rounded-full hover:bg-gray-100 transition-all hover:scale-105 shadow-lg"
+                           aria-label="@L["OrderNow"]">
                             <span>@L["OrderNow"]</span>
-                            <i class="ph-bold ph-arrow-right @(isArabic ? "rotate-180" : "")"></i>
+                            <i class="ph-bold ph-arrow-right @(isArabic ? "rotate-180" : "")" aria-hidden="true"></i>
                         </a>
                     }
                 </div>
@@ -213,14 +93,14 @@
         }
         else
         {
-            <!-- ===== CAROUSEL MODE (2+ صور) ===== -->
-            <div id="heroCarouselWrapper" class="absolute inset-0 z-0 overflow-hidden">
-                <div id="heroCarousel" class="hero-carousel h-full">
+            <!-- ===== CAROUSEL MODE (2+ Images) - Swiper ===== -->
+            <div id="heroCarousel" class="swiper absolute inset-0 z-0">
+                <div class="swiper-wrapper">
                     @{ int slideIndex = 0; }
                     @foreach (var item in heroItems)
                     {
                         var isFirstSlide = slideIndex == 0;
-                        <div class="hero-slide">
+                        <div class="swiper-slide hero-slide">
                             <picture>
                                 @if (!string.IsNullOrEmpty(item.MobileImagePath))
                                 {
@@ -228,10 +108,11 @@
                                 }
                                 <img src="~/uploads/hero/@item.ImagePath" 
                                      alt="@(isArabic ? item.TitleAr : item.TitleEn)"
+                                     class="w-full h-full object-cover"
                                      loading="@(isFirstSlide ? "eager" : "lazy")"
                                      fetchpriority="@(isFirstSlide ? "high" : "auto")">
                             </picture>
-                        @{ slideIndex++; }
+        @{ slideIndex++; }
 
                             <!-- Per-slide Overlay -->
                             @if (item.HasOverlay)
@@ -242,9 +123,9 @@
                             <!-- Per-slide Content -->
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="container mx-auto px-4 text-center">
-                                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+                                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
                                         @(isArabic ? item.TitleAr : item.TitleEn)
-                                    </h2>
+                                    </h1>
                                     @if (!string.IsNullOrEmpty(isArabic ? item.SubtitleAr : item.SubtitleEn))
                                     {
                                         <p class="text-lg md:text-xl text-white/80 mb-6 max-w-2xl mx-auto">
@@ -254,9 +135,10 @@
                                     @if (!string.IsNullOrEmpty(item.LinkUrl))
                                     {
                                         <a href="@item.LinkUrl" 
-                                           class="inline-flex items-center gap-2 px-8 py-3 bg-white text-gray-900 font-bold rounded-full hover:bg-gray-100 transition-all hover:scale-105 shadow-lg">
+                                           class="inline-flex items-center gap-2 px-8 py-3 bg-white text-gray-900 font-bold rounded-full hover:bg-gray-100 transition-all hover:scale-105 shadow-lg"
+                                           aria-label="@L["OrderNow"]">
                                             <span>@L["OrderNow"]</span>
-                                            <i class="ph-bold ph-arrow-right @(isArabic ? "rotate-180" : "")"></i>
+                                            <i class="ph-bold ph-arrow-right @(isArabic ? "rotate-180" : "")" aria-hidden="true"></i>
                                         </a>
                                     }
                                 </div>
@@ -264,16 +146,9 @@
                         </div>
                     }
                 </div>
-            </div>
-
-            <!-- Dots Navigation -->
-            <div class="hero-dots">
-                @for (int i = 0; i < heroItems.Count; i++)
-                {
-                    <button class="hero-dot @(i == 0 ? "active" : "")" 
-                            onclick="goToSlide(@i)" 
-                            aria-label="Slide @(i + 1)"></button>
-                }
+                
+                <!-- Pagination Dots -->
+                <div class="swiper-pagination hero-dots"></div>
             </div>
         }
 
@@ -284,7 +159,7 @@ else
     <!-- ===== NO HERO - FALLBACK ===== -->
     <section class="hero-section relative bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
         <div class="text-center text-white px-4">
-            <i class="ph ph-image text-6xl mb-4 opacity-50"></i>
+            <i class="ph ph-image text-6xl mb-4 opacity-50" aria-hidden="true"></i>
             <h1 class="text-3xl md:text-4xl font-bold mb-2">@L["Welcome"]</h1>
             <p class="text-white/70">@L["NoHeroImages"]</p>
         </div>
@@ -307,32 +182,35 @@ else
                 </h2>
             </div>
 
-            <!-- Products Slider -->
-            <div class="relative group/slider">
-                <div id="latestProductsSlider" class="flex overflow-x-auto snap-x snap-mandatory gap-2 md:gap-10 pb-4 hide-scrollbar md:pb-0 cursor-grab active:cursor-grabbing">
+            <!-- Products Slider - Swiper -->
+            <div id="latestProductsSlider" class="swiper">
+                <div class="swiper-wrapper">
                     @foreach (var product in latestProducts)
                     {
-                        <a href="/Products/Details/@product.Id" class="group w-[calc(50%-0.25rem)] md:w-[calc(25%-1.875rem)] flex-shrink-0 snap-start select-none">
-                            <!-- Image -->
-                            <div class="aspect-[4/5] overflow-hidden mb-2">
-                                <img src="~/uploads/products/@product.MainImagePath" 
-                                     alt="@(isArabic ? product.NameAr : product.NameEn)"
-                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            </div>
-                            
-                            <!-- Title (Centered) -->
-                            <div class="text-center px-1">
-                                <h3 class="text-sm md:text-base font-medium text-gray-900 group-hover:text-primary transition-colors line-clamp-2">
-                                    @(isArabic ? product.NameAr : product.NameEn)
-                                </h3>
-                            </div>
-                        </a>
+                        <div class="swiper-slide">
+                            <a href="/Products/Details/@product.Id" class="group block">
+                                <!-- Image -->
+                                <div class="aspect-[4/5] overflow-hidden mb-2">
+                                    <img src="~/uploads/products/@product.MainImagePath" 
+                                         alt="@(isArabic ? product.NameAr : product.NameEn)"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                         loading="lazy">
+                                </div>
+                                
+                                <!-- Title (Centered) -->
+                                <div class="text-center px-1">
+                                    <h3 class="text-sm md:text-base font-medium text-gray-900 group-hover:text-primary transition-colors line-clamp-2">
+                                        @(isArabic ? product.NameAr : product.NameEn)
+                                    </h3>
+                                </div>
+                            </a>
+                        </div>
                     }
                 </div>
-                <!-- Scroll Hint Arrow -->
-                <button onclick="scrollSlider('latestProductsSlider')" class="slider-arrow absolute @(isArabic ? "left-0 rotate-180" : "right-0") top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur shadow-lg rounded-full p-2 animate-pulse hidden">
-                    <i class="ph-bold ph-arrow-right text-primary text-xl"></i>
-                </button>
+                
+                <!-- Navigation Arrows -->
+                <div class="swiper-button-next products-button-next" aria-label="@L["NextSlide"]"></div>
+                <div class="swiper-button-prev products-button-prev" aria-label="@L["PreviousSlide"]"></div>
             </div>
             
             <!-- View All Button -->
@@ -363,36 +241,39 @@ else
                 </h2>
             </div>
 
-            <!-- Portfolio Slider (Mobile: 2 items, Desktop: 4 items) -->
-            <div class="relative group/p-slider">
-                <div id="portfolioSlider" class="flex overflow-x-auto snap-x snap-mandatory gap-2 md:gap-10 pb-4 hide-scrollbar cursor-grab active:cursor-grabbing">
+            <!-- Portfolio Slider - Swiper -->
+            <div id="portfolioSlider" class="swiper">
+                <div class="swiper-wrapper">
                     @foreach (var item in homePortfolios)
                     {
-                        <a href="/Portfolio/Details/@item.Id" class="group w-[calc(50%-0.25rem)] md:w-[calc(25%-1.875rem)] flex-shrink-0 snap-start relative select-none">
-                            <!-- Image Card -->
-                            <div class="aspect-[4/5] overflow-hidden mb-2 relative">
-                                <img src="~/uploads/portfolios/covers/@item.CoverImagePath" 
-                                     alt="@(isArabic ? item.ClientNameAr : item.ClientNameEn)"
-                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                 
-                                 <!-- Overlay Gradient for text readability -->
-                                 <div class="absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-black/80 to-transparent"></div>
-                                 
-                                 <!-- Text Content -->
-                                 <div class="absolute bottom-4 left-4 right-4">
-                                    <p class="text-xs text-white/80 mb-1">@(isArabic ? item.CategoryNameAr : item.CategoryNameEn)</p>
-                                    <h3 class="text-sm md:text-base font-bold text-white line-clamp-2">
-                                        @(isArabic ? item.ClientNameAr : item.ClientNameEn)
-                                    </h3>
-                                 </div>
-                            </div>
-                        </a>
+                        <div class="swiper-slide">
+                            <a href="/Portfolio/Details/@item.Id" class="group block relative">
+                                <!-- Image Card -->
+                                <div class="aspect-[4/5] overflow-hidden mb-2 relative">
+                                    <img src="~/uploads/portfolios/covers/@item.CoverImagePath" 
+                                         alt="@(isArabic ? item.ClientNameAr : item.ClientNameEn)"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                         loading="lazy">
+                                     
+                                     <!-- Overlay Gradient for text readability -->
+                                     <div class="absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                     
+                                     <!-- Text Content -->
+                                     <div class="absolute bottom-4 left-4 right-4">
+                                        <p class="text-xs text-white/80 mb-1">@(isArabic ? item.CategoryNameAr : item.CategoryNameEn)</p>
+                                        <h3 class="text-sm md:text-base font-bold text-white line-clamp-2">
+                                            @(isArabic ? item.ClientNameAr : item.ClientNameEn)
+                                        </h3>
+                                     </div>
+                                </div>
+                            </a>
+                        </div>
                     }
                 </div>
-                <!-- Scroll Hint Arrow -->
-                <button onclick="scrollSlider('portfolioSlider')" class="slider-arrow absolute @(isArabic ? "left-0 rotate-180" : "right-0") top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur shadow-lg rounded-full p-2 animate-pulse hidden">
-                    <i class="ph-bold ph-arrow-right text-primary text-xl"></i>
-                </button>
+                
+                <!-- Navigation Arrows -->
+                <div class="swiper-button-next portfolio-button-next" aria-label="@L["NextSlide"]"></div>
+                <div class="swiper-button-prev portfolio-button-prev" aria-label="@L["PreviousSlide"]"></div>
             </div>
             
             <!-- View All Button -->
@@ -411,7 +292,7 @@ else
         
         <!-- Brand Label -->
         <span class="block text-xs md:text-sm font-bold tracking-widest text-gray-500 uppercase mb-3 md:mb-5">
-            MANO UNIFORM
+            @(isArabic ? Model.SiteSettings.WebsiteNameAr : Model.SiteSettings.WebsiteNameEn)
         </span>
 
         <!-- Main Heading -->
@@ -430,13 +311,13 @@ else
         </h3>
 
         <!-- Features Grid / Slider -->
-        <div class="relative group/features-slider">
-            <div id="featuresSlider" class="flex md:grid md:grid-cols-2 gap-x-4 gap-y-10 md:gap-x-12 md:gap-y-16 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 md:pb-0">
+        <div id="featuresSlider" class="swiper md:!overflow-visible">
+            <div class="swiper-wrapper md:!grid md:grid-cols-2 lg:grid-cols-4 md:gap-8 lg:gap-8">
                 
                 <!-- Feature 1: Quality and Finishing -->
-                <div class="w-full md:w-auto flex-shrink-0 snap-center flex flex-col items-center group text-center" style="scroll-snap-stop: always;">
+                <div class="swiper-slide md:!h-auto md:!w-auto flex flex-col items-center group text-center">
                     <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
-                        <i class="ph-thin ph-t-shirt text-5xl md:text-6xl"></i>
+                        <i class="ph-thin ph-t-shirt text-5xl md:text-6xl" aria-hidden="true"></i>
                     </div>
                     <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_QualityFinish_Title"]</h3>
                     <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
@@ -445,9 +326,9 @@ else
                 </div>
 
                 <!-- Feature 2: Creativity and Variety -->
-                <div class="w-full md:w-auto flex-shrink-0 snap-center flex flex-col items-center group text-center" style="scroll-snap-stop: always;">
+                <div class="swiper-slide md:!h-auto md:!w-auto flex flex-col items-center group text-center">
                     <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
-                        <i class="ph-thin ph-lightbulb text-5xl md:text-6xl"></i>
+                        <i class="ph-thin ph-lightbulb text-5xl md:text-6xl" aria-hidden="true"></i>
                     </div>
                     <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_Creativity_Title"]</h3>
                     <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
@@ -456,9 +337,9 @@ else
                 </div>
 
                 <!-- Feature 3: Fast Delivery -->
-                <div class="w-full md:w-auto flex-shrink-0 snap-center flex flex-col items-center group text-center" style="scroll-snap-stop: always;">
+                <div class="swiper-slide md:!h-auto md:!w-auto flex flex-col items-center group text-center">
                     <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
-                        <i class="ph-thin ph-timer text-5xl md:text-6xl"></i>
+                        <i class="ph-thin ph-timer text-5xl md:text-6xl" aria-hidden="true"></i>
                     </div>
                     <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_FastDelivery_Title"]</h3>
                     <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
@@ -467,9 +348,9 @@ else
                 </div>
 
                 <!-- Feature 4: Flexible Partnerships -->
-                <div class="w-full md:w-auto flex-shrink-0 snap-center flex flex-col items-center group text-center" style="scroll-snap-stop: always;">
+                <div class="swiper-slide md:!h-auto md:!w-auto flex flex-col items-center group text-center">
                     <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
-                        <i class="ph-thin ph-handshake text-5xl md:text-6xl"></i>
+                        <i class="ph-thin ph-handshake text-5xl md:text-6xl" aria-hidden="true"></i>
                     </div>
                     <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_FlexPartner_Title"]</h3>
                     <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
@@ -479,17 +360,11 @@ else
 
             </div>
 
-            <!-- Mobile Dots Navigation -->
-            <div id="featuresDots" class="flex md:hidden justify-center gap-2 mt-6">
-                <button class="w-2.5 h-2.5 rounded-full bg-gray-800 transition-all duration-300 active" onclick="scrollToFeature(0)"></button>
-                <button class="w-2.5 h-2.5 rounded-full bg-gray-300 transition-all duration-300" onclick="scrollToFeature(1)"></button>
-                <button class="w-2.5 h-2.5 rounded-full bg-gray-300 transition-all duration-300" onclick="scrollToFeature(2)"></button>
-                <button class="w-2.5 h-2.5 rounded-full bg-gray-300 transition-all duration-300" onclick="scrollToFeature(3)"></button>
-            </div>
+            <!-- Mobile Pagination Dots -->
+            <div id="featuresPagination" class="md:hidden flex justify-center gap-2 mt-6"></div>
         </div>
 
 </section>
-
 
 
 
@@ -511,112 +386,129 @@ else
                 <p class="text-gray-500 text-sm md:text-base">@L["FromReviews"]</p>
             </div>
 
-            <!-- Testimonials Slider Wrapper (3 Cards Centered on Desktop) -->
-            <div class="relative group/t-slider max-w-[85%] xl:max-w-3xl mx-auto">
+            <!-- Testimonials Slider - Swiper -->
+            <div class="relative max-w-[85%] xl:max-w-3xl mx-auto">
                 
-                <div id="happyCustomersSlider" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 hide-scrollbar cursor-grab active:cursor-grabbing scroll-smooth @(testimonials.Count < 5 ? "md:justify-center" : "")" style="scroll-padding-left: 0;">
-                    @foreach (var item in testimonials)
-                    {
-                        <!-- Card: Video Based (3 items desktop) -->
-                        <div class="w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.75rem)] flex-shrink-0 snap-center bg-white rounded-xl shadow-sm border border-gray-100 overflow-visible flex flex-col hover:shadow-md transition-shadow select-none h-auto mt-4 mb-2">
-                            
-                            <!-- Video Container (Top) - Aspect 4/5 -->
-                            <div class="aspect-[4/5] bg-black relative group video-container rounded-t-xl overflow-hidden">
-                                @if (!string.IsNullOrEmpty(item.YoutubeUrl))
-                                {
-                                     <div class="w-full h-full cursor-pointer relative" onclick="playCardYoutube(this, '@YoutubeHelper.GetEmbedUrl(item.YoutubeUrl)')">
-                                         <img src="@( !string.IsNullOrEmpty(item.CoverImage) ? Url.Content($"~/uploads/testimonials/covers/{item.CoverImage}") : YoutubeHelper.GetThumbnailUrl(item.YoutubeUrl) )" 
-                                              class="w-full h-full object-cover opacity-100 transition-opacity" draggable="false">
-                                         
-                                         <!-- Play Button (Show on Hover) -->
-                                         <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                              <div class="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                                                  <i class="ph-fill ph-play text-red-600 text-xl pl-1"></i>
-                                              </div>
-                                         </div>
-                                     </div>
-                                }
-                                else if (!string.IsNullOrEmpty(item.VideoPath))
-                                {
-                                     var hasCover = !string.IsNullOrEmpty(item.CoverImage);
-                                     <div class="w-full h-full relative cursor-pointer" onclick="@(hasCover ? "playLocalVideo(this)" : "")">
-                                         @if(hasCover) {
-                                             <img src="~/uploads/testimonials/covers/@item.CoverImage" class="absolute inset-0 w-full h-full object-cover z-20 transition-opacity duration-300 cover-img">
-                                             <!-- Play Button Overlay -->
-                                             <div class="absolute inset-0 z-30 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 play-overlay">
-                                                  <div class="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                                                       <i class="ph-fill ph-play text-gray-900 text-xl pl-1"></i>
-                                                  </div>
+                <div id="happyCustomersSlider" class="swiper">
+                    <div class="swiper-wrapper">
+                        @foreach (var item in testimonials)
+                        {
+                            <!-- Card: Video Based (3 items desktop) -->
+                            <div class="swiper-slide">
+                                <div class="testimonial-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-visible flex flex-col hover:shadow-md transition-shadow select-none h-full">
+                                    
+                                    <!-- Video Container (Top) - Aspect 4/5 -->
+                                    <div class="aspect-[4/5] bg-black relative group video-container rounded-t-xl overflow-hidden">
+                                        @if (!string.IsNullOrEmpty(item.YoutubeUrl))
+                                        {
+                                             <div class="w-full h-full cursor-pointer relative" onclick="playCardYoutube(this, '@YoutubeHelper.GetEmbedUrl(item.YoutubeUrl)')">
+                                                 <img src="@( !string.IsNullOrEmpty(item.CoverImage) ? Url.Content($"~/uploads/testimonials/covers/{item.CoverImage}") : YoutubeHelper.GetThumbnailUrl(item.YoutubeUrl) )" 
+                                                      class="w-full h-full object-cover opacity-100 transition-opacity" draggable="false"
+                                                      loading="lazy"
+                                                      alt="@item.ClientName">
+                                                 
+                                                 <!-- Play Button (Show on Hover) -->
+                                                 <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                      <div class="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                                                          <i class="ph-fill ph-play text-red-600 text-xl pl-1" aria-hidden="true"></i>
+                                                      </div>
+                                                 </div>
                                              </div>
-                                         }
-                                         
-                                         <video src="~/uploads/testimonials/videos/@item.VideoPath" 
-                                                class="w-full h-full object-cover" 
-                                                controls="@(hasCover ? null : "controls")" 
-                                                preload="none"
-                                                poster="@(!string.IsNullOrEmpty(item.ImagePath) ? Url.Content($"~/uploads/testimonials/images/{item.ImagePath}") : "")"></video>
-                                     </div>
-                                }
-                                else
-                                {
-                                    <!-- Fallback if no video, show Image covering -->
-                                     <div class="w-full h-full relative">
-                                        @if(!string.IsNullOrEmpty(item.ImagePath)){
-                                            <img src="~/uploads/testimonials/images/@item.ImagePath" class="w-full h-full object-cover" draggable="false">
-                                        } else {
-                                            <div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300">
-                                                <i class="ph-duotone ph-video-camera-slash text-4xl"></i>
-                                            </div>
                                         }
-                                     </div>
-                                }
+                                        else if (!string.IsNullOrEmpty(item.VideoPath))
+                                        {
+                                             var hasCover = !string.IsNullOrEmpty(item.CoverImage);
+                                             <div class="w-full h-full relative cursor-pointer" onclick="@(hasCover ? "playLocalVideo(this)" : "")">
+                                                 @if(hasCover) {
+                                                     <img src="~/uploads/testimonials/covers/@item.CoverImage" 
+                                                          class="absolute inset-0 w-full h-full object-cover z-20 transition-opacity duration-300 cover-img"
+                                                          loading="lazy"
+                                                          alt="@item.ClientName">
+                                                     <!-- Play Button Overlay -->
+                                                     <div class="absolute inset-0 z-30 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 play-overlay">
+                                                          <div class="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                                                               <i class="ph-fill ph-play text-gray-900 text-xl pl-1" aria-hidden="true"></i>
+                                                          </div>
+                                                     </div>
+                                                 }
+                                                 
+                                                 <video src="~/uploads/testimonials/videos/@item.VideoPath" 
+                                                        class="w-full h-full object-cover" 
+                                                        controls="@(hasCover ? null : "controls")" 
+                                                        preload="metadata"
+                                                        poster="@(!string.IsNullOrEmpty(item.ImagePath) ? Url.Content($"~/uploads/testimonials/images/{item.ImagePath}") : "")"></video>
+                                             </div>
+                                        }
+                                        else
+                                        {
+                                            <!-- Fallback if no video, show Image covering -->
+                                             <div class="w-full h-full relative">
+                                                @if(!string.IsNullOrEmpty(item.ImagePath)){
+                                                    <img src="~/uploads/testimonials/images/@item.ImagePath" 
+                                                         class="w-full h-full object-cover" draggable="false"
+                                                         loading="lazy"
+                                                         alt="@item.ClientName">
+                                                } else {
+                                                    <div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300">
+                                                        <i class="ph-duotone ph-video-camera-slash text-4xl" aria-hidden="true"></i>
+                                                    </div>
+                                                }
+                                             </div>
+                                        }
+                                    </div>
+
+                                    <!-- Content Body -->
+                                    <div class="p-4 pt-10 flex flex-col items-center text-center relative bg-white rounded-b-xl">
+                                        
+                                        <!-- Large Avatar (Overlapping) -->
+                                        <div class="testimonial-avatar">
+                                            @if (!string.IsNullOrEmpty(item.ImagePath))
+                                            {
+                                                <img src="~/uploads/testimonials/images/@item.ImagePath" 
+                                                     class="w-full h-full object-cover" draggable="false"
+                                                     loading="lazy"
+                                                     alt="@item.ClientName">
+                                            }
+                                            else
+                                            {
+                                                <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                                    <i class="ph-fill ph-user text-xl" aria-hidden="true"></i>
+                                                </div>
+                                            }
+                                        </div>
+
+                                        <!-- Stars -->
+                                        <div class="flex gap-0.5 text-yellow-400 text-xs mb-2" aria-label="5 @L["Stars"]">
+                                            <i class="ph-fill ph-star" aria-hidden="true"></i><i class="ph-fill ph-star" aria-hidden="true"></i><i class="ph-fill ph-star" aria-hidden="true"></i><i class="ph-fill ph-star" aria-hidden="true"></i><i class="ph-fill ph-star" aria-hidden="true"></i>
+                                        </div>
+
+                                        <!-- Client Name & Verified -->
+                                        <div class="flex items-center gap-1.5 mb-2">
+                                            <h4 class="text-sm font-bold text-gray-900 truncate max-w-[120px]" title="@item.ClientName">@item.ClientName</h4>
+                                            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5" title="@L["VerifiedCustomer"]">
+                                                <i class="ph-fill ph-check-circle" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+
+                                        <!-- Feedback -->
+                                        <p class="text-gray-600 text-xs leading-relaxed line-clamp-2 italic w-full">
+                                            "@item.Feedback"
+                                        </p>
+                                    </div>
+
+                                </div>
                             </div>
-
-                            <!-- Content Body -->
-                            <div class="p-4 pt-10 flex flex-col items-center text-center relative bg-white rounded-b-xl">
-                                
-                                <!-- Large Avatar (Overlapping) -->
-                                <div class="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 rounded-full border-4 border-white shadow-md overflow-hidden bg-gray-100 z-10">
-                                    @if (!string.IsNullOrEmpty(item.ImagePath))
-                                    {
-                                        <img src="~/uploads/testimonials/images/@item.ImagePath" class="w-full h-full object-cover" draggable="false">
-                                    }
-                                    else
-                                    {
-                                        <div class="w-full h-full flex items-center justify-center text-gray-400"><i class="ph-fill ph-user text-xl"></i></div>
-                                    }
-                                </div>
-
-                                <!-- Stars -->
-                                <div class="flex gap-0.5 text-yellow-400 text-xs mb-2">
-                                    <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
-                                </div>
-
-                                <!-- Client Name & Verified -->
-                                <div class="flex items-center gap-1.5 mb-2">
-                                    <h4 class="text-sm font-bold text-gray-900 truncate max-w-[120px]" title="@item.ClientName">@item.ClientName</h4>
-                                    <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5" title="@L["VerifiedCustomer"]">
-                                        <i class="ph-fill ph-check-circle"></i>
-                                    </span>
-                                </div>
-
-                                <!-- Feedback -->
-                                <p class="text-gray-600 text-xs leading-relaxed line-clamp-2 italic w-full">
-                                    "@item.Feedback"
-                                </p>
-                            </div>
-
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
                 
                 <!-- Bottom Controls (Arrows) -->
                 <div class="flex justify-center items-center gap-6 mt-6" dir="ltr">
-                    <button onclick="scrollSlider('happyCustomersSlider', 'left')" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-black hover:text-black transition-colors">
-                        <i class="ph-bold ph-caret-left text-xl"></i>
+                    <button class="testimonials-button-prev w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-black hover:text-black transition-colors" aria-label="@L["PreviousSlide"]">
+                        <i class="ph-bold ph-caret-left text-xl" aria-hidden="true"></i>
                     </button>
-                    <button onclick="scrollSlider('happyCustomersSlider', 'right')" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-black hover:text-black transition-colors">
-                        <i class="ph-bold ph-caret-right text-xl"></i>
+                    <button class="testimonials-button-next w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-black hover:text-black transition-colors" aria-label="@L["NextSlide"]">
+                        <i class="ph-bold ph-caret-right text-xl" aria-hidden="true"></i>
                     </button>
                 </div>
 
@@ -646,7 +538,7 @@ else
                 </h2>
             </div>
 
-            <!-- Clients Slider Wrapper - Marquee Style -->
+            <!-- Clients Slider Wrapper - Marquee Style (CSS Animation) -->
             <div class="relative marquee-container max-w-full mx-auto">
                 <div class="marquee-track">
                     <!-- Original Set -->
@@ -657,7 +549,8 @@ else
                             <img src="~/uploads/testimonials/images/@logo" 
                                  alt="@L["OurFeaturedClients"]" 
                                  class="max-w-full max-h-full object-contain transition-all duration-300 hover:scale-110" 
-                                 draggable="false">
+                                 draggable="false"
+                                 loading="lazy">
                         </div>
                     }
                     <!-- Duplicated Set for Infinite Loop -->
@@ -668,7 +561,8 @@ else
                             <img src="~/uploads/testimonials/images/@logo" 
                                  alt="@L["OurFeaturedClients"]" 
                                  class="max-w-full max-h-full object-contain transition-all duration-300 hover:scale-110" 
-                                 draggable="false">
+                                 draggable="false"
+                                 loading="lazy">
                         </div>
                     }
                 </div>
@@ -678,378 +572,8 @@ else
 }
 
 @section Scripts {
-    <script>
-        // Slider Arrow Logic
-        function initSliderArrow(sliderId) {
-            const slider = document.getElementById(sliderId);
-            if (!slider) return;
-
-            const arrow = slider.parentElement.querySelector('.slider-arrow');
-            if (!arrow) return;
-
-            function checkScroll() {
-                // Fixed RTL logic: use Math.abs because RTL scrollLeft is negative in modern browsers
-                const currentScroll = Math.abs(slider.scrollLeft);
-                const maxScroll = slider.scrollWidth - slider.clientWidth;
-                
-                // Check if we reached the physical end of the scroll container
-                const isEnd = currentScroll >= maxScroll - 10; // 10px buffer
-                const hasOverflow = slider.scrollWidth > slider.clientWidth;
-                
-                if (!isEnd && hasOverflow) {
-                    arrow.classList.remove('hidden');
-                } else {
-                    arrow.classList.add('hidden');
-                }
-            }
-
-            slider.addEventListener('scroll', checkScroll);
-            window.addEventListener('resize', checkScroll);
-            
-            // Initial check
-            checkScroll();
-        }
-
-        function scrollSlider(sliderId, direction) {
-            const slider = document.getElementById(sliderId);
-            if (slider) {
-                // Update scroll amount for 3 items (approx 3 per screen)
-                const itemsPerScreen = window.innerWidth >= 768 ? 3 : 2;
-                const scrollAmount = slider.clientWidth / itemsPerScreen; 
-                const isRTL = document.documentElement.dir === 'rtl';
-
-                // Determine logical direction if not explicitly provided
-                // Default behavior (no direction arg) is "Next"
-                // Next in LTR = Scroll Right (+). Next in RTL = Scroll Left (-).
-                let behaviorDirection = direction;
-                if (!behaviorDirection) {
-                    behaviorDirection = isRTL ? 'left' : 'right';
-                }
-
-                // Check end condition
-                // In RTL, scrollLeft is often negative (Chrome) or starts at 0 and goes negative.
-                // We use Math.abs to be safe.
-                const currentScroll = Math.abs(slider.scrollLeft);
-                const maxScroll = slider.scrollWidth - slider.clientWidth;
-                // Buffer of 10px
-                const reachedEnd = currentScroll >= maxScroll - 10;
-                
-                if (behaviorDirection === 'left') {
-                    // Scrolling Left (Physical)
-                    // In RTL, this is "Next". In LTR, this is "Prev".
-                    // If RTL and reached max scroll (which is actually "Start" in some browsers or "End" physically?), 
-                    // Actually in RTL: Start is Right (0 or Max). End is Left (Max or 0).
-                    // Let's simplify: 
-                    // To scroll MORE to the left (Next items in RTL): scrollBy({ left: -amount })
-                    
-                    if (isRTL && reachedEnd) {
-                        // Loop back to Start (Right side)
-                         slider.scrollTo({ left: 0, behavior: 'smooth' });
-                    } else {
-                         slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-                    }
-                } else {
-                    // direction === 'right' (Physical)
-                    // In LTR, this is "Next". 
-                    
-                    if (!isRTL && reachedEnd) {
-                         slider.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back to Start (Left)
-                    } else {
-                         slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-                    }
-                }
-            }
-        }
-
-        // Auto Play Logic
-        function initAutoPlay(sliderId, intervalTime = 3000) {
-            const slider = document.getElementById(sliderId);
-            if (!slider) return;
-            
-            let autoPlayInterval;
-            const isRTL = document.documentElement.dir === 'rtl';
-
-            function start() {
-                stop();
-                autoPlayInterval = setInterval(() => {
-                    // Only scroll if not hovered
-                     if (!slider.parentElement.matches(':hover')) {
-                        // In RTL, 'Next' is Left. In LTR, 'Next' is Right.
-                        scrollSlider(sliderId, isRTL ? 'left' : 'right');
-                    }
-                }, intervalTime);
-            }
-
-            function stop() {
-                clearInterval(autoPlayInterval);
-            }
-
-            // Pause on interaction
-            slider.parentElement.addEventListener('mouseenter', stop);
-            slider.parentElement.addEventListener('mouseleave', start);
-            slider.addEventListener('touchstart', stop);
-            slider.addEventListener('touchend', start);
-
-            start();
-        }
-
-        // Mouse Drag Logic with Click Prevention
-        function enableMouseDrag(sliderId) {
-            const slider = document.getElementById(sliderId);
-            if (!slider) return;
-
-            let isDown = false;
-            let startX;
-            let scrollLeft;
-            let isDragging = false;
-
-            slider.addEventListener('mousedown', (e) => {
-                isDown = true;
-                isDragging = false;
-                slider.classList.add('cursor-grabbing');
-                slider.classList.remove('cursor-grab');
-                startX = e.pageX - slider.offsetLeft;
-                scrollLeft = slider.scrollLeft;
-                slider.style.scrollSnapType = 'none'; 
-            });
-
-            slider.addEventListener('mouseleave', () => {
-                isDown = false;
-                slider.classList.remove('cursor-grabbing');
-                slider.classList.add('cursor-grab');
-                slider.classList.remove('active');
-                if(slider.style.scrollSnapType === 'none') slider.style.scrollSnapType = '';
-            });
-
-            slider.addEventListener('mouseup', () => {
-                isDown = false;
-                slider.classList.remove('cursor-grabbing');
-                slider.classList.add('cursor-grab');
-                if(slider.style.scrollSnapType === 'none') slider.style.scrollSnapType = '';
-                setTimeout(() => { isDragging = false; }, 50);
-            });
-
-            slider.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const x = e.pageX - slider.offsetLeft;
-                const walk = (x - startX) * 1.5; 
-                if (Math.abs(x - startX) > 5) isDragging = true;
-                slider.scrollLeft = scrollLeft - walk;
-            });
-
-            const preventClick = (e) => {
-                if (isDragging) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            };
-
-            const clickables = slider.querySelectorAll('a, button, .cursor-pointer, video');
-            clickables.forEach(el => {
-                el.addEventListener('click', preventClick, true);
-            });
-            
-            slider.dataset.isDragging = "false";
-            slider.addEventListener('mousemove', () => {
-                 if(isDragging) slider.dataset.isDragging = "true";
-            });
-            slider.addEventListener('mouseup', () => {
-                 setTimeout(() => slider.dataset.isDragging = "false", 50);
-            });
-        }
-
-        function playCardYoutube(el, url) {
-            if (el.closest('.cursor-grabbing')) return; 
-            el.innerHTML = `<iframe src="${url}?autoplay=1" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        }
-        
-        // Local Video Play Logic
-        function playLocalVideo(container) {
-            const slider = container.closest('.overflow-x-auto');
-            if(slider && slider.dataset.isDragging === "true") return;
-
-            const video = container.querySelector('video');
-            const cover = container.querySelector('.cover-img');
-            const overlay = container.querySelector('.play-overlay');
-            
-            if(video) {
-                if(cover) cover.classList.add('opacity-0', 'pointer-events-none');
-                if(overlay) overlay.classList.add('opacity-0', 'hidden'); 
-                video.controls = true;
-                video.play();
-                container.onclick = null;
-            }
-        }
-
-        // Init sliders on load
-        document.addEventListener('DOMContentLoaded', () => {
-            initSliderArrow('latestProductsSlider');
-            initSliderArrow('portfolioSlider');
-            
-            enableMouseDrag('latestProductsSlider');
-            enableMouseDrag('portfolioSlider');
-            enableMouseDrag('happyCustomersSlider');
-            enableMouseDrag('clientsSlider');
-
-            initAutoPlay('happyCustomersSlider', 3000);
-            initAutoPlay('clientsSlider', 3000);
-        });
-
-        // Hero Carousel Logic (Only runs if element exists)
-        (function() {
-            const carousel = document.getElementById('heroCarousel');
-            // If no carousel (single image), exit immediately
-            if (!carousel) return;
-
-            const dots = document.querySelectorAll('.hero-dot');
-            // Use safe count from rendered HTML or default to 0
-            const slideCount = dots.length > 0 ? dots.length : 0; 
-            if(slideCount <= 1) return;
-
-            let currentSlide = 0;
-            let autoPlayInterval;
-
-            function goToSlide(index) {
-                currentSlide = index;
-                const isRTL = document.documentElement.dir === 'rtl';
-                // In RTL, items are laid out Right-to-Left. 
-                // To view the 'next' item (physically to the left), we must shift the container Right (Positive X).
-                // In LTR, we shift Left (Negative X).
-                const translateVal = isRTL ? (index * 100) : -(index * 100);
-                
-                carousel.style.transform = `translateX(${translateVal}%)`;
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === index);
-                });
-            }
-
-            function nextSlide() {
-                currentSlide = (currentSlide + 1) % slideCount;
-                goToSlide(currentSlide);
-            }
-
-            function prevSlide() {
-                currentSlide = (currentSlide - 1 + slideCount) % slideCount;
-                goToSlide(currentSlide);
-            }
-
-            function startAutoPlay() {
-                autoPlayInterval = setInterval(nextSlide, 5000);
-            }
-
-            function stopAutoPlay() {
-                clearInterval(autoPlayInterval);
-            }
-
-            window.goToSlide = function(index) {
-                stopAutoPlay();
-                goToSlide(index);
-                startAutoPlay();
-            };
-
-            startAutoPlay();
-
-            const wrapper = document.getElementById('heroCarouselWrapper');
-            if(wrapper) {
-                // Allow vertical scroll but capture horizontal swipe
-                wrapper.style.touchAction = 'pan-y';
-
-                wrapper.addEventListener('mouseenter', stopAutoPlay);
-                wrapper.addEventListener('mouseleave', startAutoPlay);
-
-                // Swipe Support
-                let touchStartX = 0;
-                let touchEndX = 0;
-                let touchStartY = 0;
-                let touchEndY = 0;
-                
-                wrapper.addEventListener('touchstart', e => {
-                    touchStartX = e.changedTouches[0].clientX;
-                    touchStartY = e.changedTouches[0].clientY;
-                    stopAutoPlay();
-                }, {passive: true});
-
-                wrapper.addEventListener('touchend', e => {
-                    touchEndX = e.changedTouches[0].clientX;
-                    touchEndY = e.changedTouches[0].clientY;
-                    handleSwipe();
-                    startAutoPlay();
-                }, {passive: true});
-
-                function handleSwipe() {
-                    const swipeThreshold = 50;
-                    const deltaX = touchEndX - touchStartX;
-                    const deltaY = touchEndY - touchStartY;
-
-                    // Ignore if vertical scroll was dominant
-                    if (Math.abs(deltaY) > Math.abs(deltaX)) return;
-
-                    const isRTL = document.documentElement.dir === 'rtl';
-
-                    if (Math.abs(deltaX) > swipeThreshold) {
-                        if (deltaX < 0) {
-                             // Swiped Left -> Next (LTR) / Prev (RTL)
-                             isRTL ? prevSlide() : nextSlide();
-                        } else {
-                             // Swiped Right -> Prev (LTR) / Next (RTL)
-                             isRTL ? nextSlide() : prevSlide();
-                        }
-                    }
-                }
-            }
-        })();
-
-        // Features Slider Logic
-        (function() {
-            const slider = document.getElementById('featuresSlider');
-            const dots = document.querySelectorAll('#featuresDots button');
-            if (!slider || !dots.length) return;
-
-            let isScrolling;
-
-            // Update dots on scroll
-            slider.addEventListener('scroll', () => {
-                window.clearTimeout(isScrolling);
-                
-                // Set a timeout to run after scrolling ends
-                isScrolling = setTimeout(() => {
-                    const scrollLeft = slider.scrollLeft;
-                    const width = slider.clientWidth;
-                    // Calculate active index based on scroll position - simplified for RTL/LTR
-                    const index = Math.round(Math.abs(scrollLeft) / width);
-                    
-                    dots.forEach((dot, i) => {
-                        if (i === index) {
-                            dot.classList.add('bg-gray-800', 'active');
-                            dot.classList.remove('bg-gray-300');
-                        } else {
-                            dot.classList.remove('bg-gray-800', 'active');
-                            dot.classList.add('bg-gray-300');
-                        }
-                    });
-                }, 66);
-            });
-
-            // Scroll to specific feature
-            window.scrollToFeature = function(index) {
-                const width = slider.clientWidth;
-                const isRTL = document.documentElement.dir === 'rtl';
-                // For scrollLeft, LTR is positive, RTL is negative (or positive depending on browser implementation, 
-                // but usually negative in Chrome/Edge, positive in Firefox/Safari but starting from max).
-                // Safest bet for cross-browser RTL scroll is scrollTo options behavior or using element offset.
-                
-                // Let's use simple calculation relative to item width which is 100% of slider in mobile
-                const targetScroll = isRTL ? -(index * width) : (index * width);
-                
-                slider.scrollTo({
-                    left: targetScroll,
-                    behavior: 'smooth'
-                });
-            };
-
-            // Enable mouse drag
-            enableMouseDrag('featuresSlider');
-        })();
-    </script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Home Page Scripts -->
+    <script src="~/js/home.js" asp-append-version="true"></script>
 }

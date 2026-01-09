@@ -101,8 +101,8 @@
     </header>
 
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-all duration-300" onclick="toggleMobileMenu()"></div>
-    <nav id="mobile-menu" class="fixed top-0 @(isArabic ? "right-0 translate-x-full" : "left-0 -translate-x-full") h-full w-72 bg-white z-[60] shadow-xl flex flex-col transition-transform duration-300">
-        <div class="flex items-center justify-between p-4 border-b">
+    <nav id="mobile-menu" class="fixed top-0 @(isArabic ? "right-0 translate-x-full" : "left-0 -translate-x-full") h-full w-[85vw] max-w-[380px] bg-white/95 backdrop-blur-2xl z-[60] shadow-2xl flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]">
+        <div class="flex items-center justify-between px-4 py-2 border-b">
             <!-- Sidebar Header: Logo -->
              <a href="/" class="flex items-center gap-2">
                 @if (ViewData["LogoPath"] != null)
@@ -124,11 +124,13 @@
             // var currentPath is now defined at the top of the file
             string GetActiveClass(string path, bool exact = true)
             {
-                if (path == "/" && currentPath == "/") return "bg-gray-100 text-gray-900 font-bold border-l-4 border-gray-900";
+                // Active State: Transparent Gray "Pill" with Dark Text
+                if (path == "/" && currentPath == "/") return "bg-gray-200/50 text-gray-900 font-bold transform scale-[1.02]";
                 if (path != "/" && (exact ? currentPath == path.ToLower() : currentPath.StartsWith(path.ToLower())))
-                    return "bg-gray-100 text-gray-900 font-bold border-l-4 border-gray-900";
+                    return "bg-gray-200/50 text-gray-900 font-bold transform scale-[1.02]";
                 
-                return "text-gray-600 font-medium hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent";
+                // Inactive State: Gray Text, Hover Light Gray
+                return "text-gray-600 font-medium hover:bg-gray-50 hover:text-gray-900";
             }
             
              string GetIconClass(string path, bool exact = true)
@@ -141,16 +143,16 @@
             }
         }
         
-        <div class="flex-1 px-3 py-2 overflow-y-auto custom-scrollbar">
+        <div class="flex-1 px-4 py-4 overflow-y-auto custom-scrollbar">
             <div class="space-y-1">
-                <a href="/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/")">
+                <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/")">
                     <i class="ph ph-house text-xl @GetIconClass("/")"></i>
                     @L["Home"]
                 </a>
                 
                 <!-- Products Dropdown -->
                 <div x-data="{ open: @(currentPath.StartsWith("/products") ? "true" : "false") }" class="border-b border-gray-50 last:border-0"> 
-                    <button onclick="toggleSubmenu('productsSubmenu')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/products", false)">
+                    <button onclick="toggleSubmenu('productsSubmenu')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all group @GetActiveClass("/products", false)">
                         <div class="flex items-center gap-3">
                             <i class="ph ph-tag text-xl @GetIconClass("/products", false)"></i>
                             @L["Products"]
@@ -163,43 +165,71 @@
                     </div>
                 </div>
 
-                <a href="/Portfolio" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/portfolio")">
+                <a href="/Portfolio" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/portfolio")">
                     <i class="ph ph-briefcase text-xl @GetIconClass("/portfolio")"></i>
                     @L["Portfolio"]
                 </a>
                 
-                <a href="/DiscountPolicy" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/discountpolicy")">
+                <a href="/DiscountPolicy" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/discountpolicy")">
                     <i class="ph ph-percent text-xl @GetIconClass("/discountpolicy")"></i>
                     @L["DiscountPolicy"]
                 </a>
 
-                <a href="/Testimonials" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/testimonials", false)">
+                <a href="/Testimonials" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/testimonials", false)">
                      <i class="ph ph-star text-xl @GetIconClass("/testimonials", false)"></i>
                     @L["Feedback"]
                 </a>
                 
-                <a href="/Contact" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/contact")">
+                <a href="/Contact" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/contact")">
                      <i class="ph ph-envelope text-xl @GetIconClass("/contact")"></i>
                     @L["Contact"]
                 </a>
 
-                <a href="/Home/About" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group @GetActiveClass("/home/about")">
+                <a href="/Home/About" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/home/about")">
                      <i class="ph ph-info text-xl @GetIconClass("/home/about")"></i>
                     @L["AboutUs"]
                 </a>
             </div>
         </div>
 
-        <div class="bg-gray-50 p-3 border-t">
-            <div class="flex items-center justify-between">
+        <div class="p-4 border-t border-gray-100/50">
+            <!-- Social Media Icons (Added for easier access) -->
+            <div class="flex justify-center gap-2 mb-4">
+                @if (ViewData["Facebook"] != null)
+                {
+                    <a href="@ViewData["Facebook"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#1877F2] hover:text-white transition-all transform hover:-translate-y-1">
+                        <i class="ph-fill ph-facebook-logo text-xl"></i>
+                    </a>
+                }
+                @if (ViewData["Instagram"] != null)
+                {
+                    <a href="@ViewData["Instagram"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#E4405F] hover:text-white transition-all transform hover:-translate-y-1">
+                        <i class="ph-fill ph-instagram-logo text-xl"></i>
+                    </a>
+                }
+                @if (ViewData["TikTok"] != null)
+                {
+                    <a href="@ViewData["TikTok"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#000000] hover:text-white transition-all transform hover:-translate-y-1">
+                        <i class="ph-fill ph-tiktok-logo text-xl"></i>
+                    </a>
+                }
+                 @if (ViewData["Youtube"] != null)
+                {
+                    <a href="@ViewData["Youtube"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#FF0000] hover:text-white transition-all transform hover:-translate-y-1">
+                        <i class="ph-fill ph-youtube-logo text-xl"></i>
+                    </a>
+                }
+            </div>
+
+            <div class="flex items-center justify-between gap-3">
                 <a href="/Language/Switch?culture=@(isArabic ? "en" : "ar")&returnUrl=@Context.Request.Path"
-                   class="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md text-xs font-bold text-gray-700 transition-all">
-                    <i class="ph ph-globe text-sm"></i>
-                    @L["LanguageSwitchLabel"]
+                   class="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-900 text-white rounded-lg shadow-md hover:shadow-lg hover:bg-gray-800 transition-all text-xs font-bold">
+                    <i class="ph ph-globe text-base"></i>
+                    <span>@L["LanguageSwitchLabel"]</span>
                 </a>
 
-                <a href="/Admin" class="text-gray-400 hover:text-gray-600" title="@L["AdminLogin"]">
-                    <i class="ph ph-lock-key text-xl"></i>
+                <a href="/Admin" class="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-900 border border-gray-100 transition-all" title="@L["AdminLogin"]">
+                    <i class="ph-fill ph-lock-key text-xl"></i>
                 </a>
             </div>
         </div>
