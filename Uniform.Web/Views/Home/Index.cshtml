@@ -173,8 +173,8 @@ else
 @if (latestProducts.Any())
 {
     <!-- ========== LATEST PRODUCTS SECTION ========== -->
-    <section class="py-14 bg-white">
-        <div class="container mx-auto px-6 md:px-12 lg:px-20">
+    <section class="py-14 bg-cream">
+        <div class="container mx-auto px-2 md:px-12 lg:px-20">
             <!-- Header -->
             <div class="text-center mb-8 md:mb-12">
                 <h2 class="text-lg md:text-3xl font-bold text-gray-900 uppercase tracking-wide">
@@ -183,14 +183,14 @@ else
             </div>
 
             <!-- Products Slider - Swiper -->
-            <div id="latestProductsSlider" class="swiper">
+            <div id="latestProductsSlider" class="swiper !pb-12 md:!pb-0">
                 <div class="swiper-wrapper">
                     @foreach (var product in latestProducts)
                     {
                         <div class="swiper-slide">
                             <a href="/Products/Details/@product.Id" class="group block">
                                 <!-- Image -->
-                                <div class="aspect-[4/5] overflow-hidden mb-2">
+                                <div class="aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-xl mb-2">
                                     <img src="~/uploads/products/@product.MainImagePath" 
                                          alt="@(isArabic ? product.NameAr : product.NameEn)"
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -208,9 +208,14 @@ else
                     }
                 </div>
                 
-                <!-- Navigation Arrows -->
-                <div class="swiper-button-next products-button-next" aria-label="@L["NextSlide"]"></div>
-                <div class="swiper-button-prev products-button-prev" aria-label="@L["PreviousSlide"]"></div>
+                <!-- Pagination (Mobile) -->
+                <div class="swiper-pagination md:hidden"></div>
+            </div>
+            
+             <!-- Navigation Arrows (Desktop - Below Slider) -->
+            <div class="hidden md:flex justify-center items-center gap-4 mt-8" dir="ltr">
+                <div class="swiper-button-prev products-button-prev static m-0 translate-y-0" aria-label="@L["PreviousSlide"]"></div>
+                <div class="swiper-button-next products-button-next static m-0 translate-y-0" aria-label="@L["NextSlide"]"></div>
             </div>
             
             <!-- View All Button -->
@@ -232,8 +237,8 @@ else
 @if (homePortfolios.Any())
 {
     <!-- ========== PREVIOUS WORK SECTION ========== -->
-    <section class="pb-14 pt-4 bg-gray-50">
-        <div class="container mx-auto px-6 md:px-12 lg:px-20">
+    <section class="pb-14 pt-4 bg-cream-accent">
+        <div class="container mx-auto px-2 md:px-12 lg:px-20">
             <!-- Header -->
             <div class="text-center mb-8 md:mb-12">
                 <h2 class="text-lg md:text-3xl font-bold text-gray-900 uppercase tracking-wide">
@@ -242,14 +247,14 @@ else
             </div>
 
             <!-- Portfolio Slider - Swiper -->
-            <div id="portfolioSlider" class="swiper">
+            <div id="portfolioSlider" class="swiper !pb-12 md:!pb-0">
                 <div class="swiper-wrapper">
                     @foreach (var item in homePortfolios)
                     {
                         <div class="swiper-slide">
                             <a href="/Portfolio/Details/@item.Id" class="group block relative">
                                 <!-- Image Card -->
-                                <div class="aspect-[4/5] overflow-hidden mb-2 relative">
+                                <div class="aspect-[4/5] overflow-hidden rounded-xl mb-2 relative">
                                     <img src="~/uploads/portfolios/covers/@item.CoverImagePath" 
                                          alt="@(isArabic ? item.ClientNameAr : item.ClientNameEn)"
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -271,9 +276,14 @@ else
                     }
                 </div>
                 
-                <!-- Navigation Arrows -->
-                <div class="swiper-button-next portfolio-button-next" aria-label="@L["NextSlide"]"></div>
-                <div class="swiper-button-prev portfolio-button-prev" aria-label="@L["PreviousSlide"]"></div>
+                <!-- Pagination (Mobile) -->
+                <div class="swiper-pagination md:hidden"></div>
+            </div>
+            
+            <!-- Navigation Arrows (Desktop - Below Slider) -->
+            <div class="hidden md:flex justify-center items-center gap-4 mt-8" dir="ltr">
+                <div class="swiper-button-prev portfolio-button-prev static m-0 translate-y-0" aria-label="@L["PreviousSlide"]"></div>
+                <div class="swiper-button-next portfolio-button-next static m-0 translate-y-0" aria-label="@L["NextSlide"]"></div>
             </div>
             
             <!-- View All Button -->
@@ -287,7 +297,7 @@ else
 }
 
 <!-- ========== VALUE PROPOSITION SECTION ========== -->
-<section class="py-16 md:py-24 bg-white relative overflow-hidden">
+<section class="py-16 md:py-24 bg-cream relative overflow-hidden">
     <div class="container mx-auto px-6 md:px-12 lg:px-20 text-center relative z-10">
         
         <!-- Brand Label -->
@@ -312,7 +322,7 @@ else
 
         <!-- Features Grid / Slider -->
         <div id="featuresSlider" class="swiper md:!overflow-visible">
-            <div class="swiper-wrapper md:!grid md:grid-cols-2 lg:grid-cols-4 md:gap-8 lg:gap-8">
+            <div class="swiper-wrapper md:!grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 lg:gap-8">
                 
                 <!-- Feature 1: Quality and Finishing -->
                 <div class="swiper-slide md:!h-auto md:!w-auto flex flex-col items-center group text-center">
@@ -325,18 +335,7 @@ else
                     </p>
                 </div>
 
-                <!-- Feature 2: Creativity and Variety -->
-                <div class="swiper-slide md:!h-auto md:!w-auto flex flex-col items-center group text-center">
-                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
-                        <i class="ph-thin ph-lightbulb text-5xl md:text-6xl" aria-hidden="true"></i>
-                    </div>
-                    <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_Creativity_Title"]</h3>
-                    <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
-                        @L["Feat_Creativity_Desc"]
-                    </p>
-                </div>
-
-                <!-- Feature 3: Fast Delivery -->
+                <!-- Feature 2: Fast Delivery (Moved Up) -->
                 <div class="swiper-slide md:!h-auto md:!w-auto flex flex-col items-center group text-center">
                     <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
                         <i class="ph-thin ph-timer text-5xl md:text-6xl" aria-hidden="true"></i>
@@ -347,7 +346,7 @@ else
                     </p>
                 </div>
 
-                <!-- Feature 4: Flexible Partnerships -->
+                <!-- Feature 3: Flexible Partnerships (Moved Up) -->
                 <div class="swiper-slide md:!h-auto md:!w-auto flex flex-col items-center group text-center">
                     <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
                         <i class="ph-thin ph-handshake text-5xl md:text-6xl" aria-hidden="true"></i>
@@ -355,6 +354,17 @@ else
                     <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_FlexPartner_Title"]</h3>
                     <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
                         @L["Feat_FlexPartner_Desc"]
+                    </p>
+                </div>
+
+                <!-- Feature 4: Creativity and Variety (Moved Last & Centered) -->
+                <div class="swiper-slide md:!h-auto md:!w-auto flex flex-col items-center group text-center lg:col-start-2">
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-6 text-gray-800 transition-transform group-hover:scale-110">
+                        <i class="ph-thin ph-lightbulb text-5xl md:text-6xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-3">@L["Feat_Creativity_Title"]</h3>
+                    <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
+                        @L["Feat_Creativity_Desc"]
                     </p>
                 </div>
 
@@ -376,7 +386,7 @@ else
 @if (testimonials.Any())
 {
     <!-- ========== HAPPY CUSTOMERS SECTION ========== -->
-    <section class="py-14 bg-gray-50 border-t border-gray-100">
+    <section class="py-14 bg-cream-accent border-t border-gray-100">
         <div class="container mx-auto px-6 md:px-12 lg:px-20">
             <!-- Header -->
             <div class="text-center mb-10">
@@ -526,7 +536,7 @@ else
 @if (clientLogos.Any())
 {
     <!-- ========== OUR FEATURED CLIENTS SECTION ========== -->
-    <section class="py-14 bg-white border-t border-gray-100 overflow-hidden">
+    <section class="py-14 bg-cream border-t border-gray-100 overflow-hidden">
         <div class="container mx-auto px-6 md:px-12 lg:px-20">
             <!-- Header -->
             <div class="text-center mb-10">

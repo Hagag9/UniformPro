@@ -54,6 +54,7 @@
                         secondary: '#f9fafb',      /* Gray-50 */
                         dark: '#111827',           /* Gray-900 */
                         accent: '#6b7280',         /* Gray-500 */
+                        cream: '#FFFBF2',          /* Off-White */
                     }
                 }
             }
@@ -65,13 +66,13 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <!-- Custom Styles -->
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="~/css/front-custom.css" rel="stylesheet" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
     @await RenderSectionAsync("Head", required: false)
 </head>
-<body class="bg-white text-gray-800 antialiased @(isHomePage ? "" : "pt-16 md:pt-20") flex flex-col min-h-screen overflow-x-hidden"
+<body class="text-gray-800 antialiased @(isHomePage ? "" : "pt-16 md:pt-20") flex flex-col min-h-screen overflow-x-hidden"
       data-i18n-added-to-cart="@L["AddedToCart"]"
       data-i18n-cart-empty="@L["CartEmpty"]"
       data-i18n-inquiry-msg="@L["InquiryMessage"]"
@@ -91,7 +92,7 @@
 
                 <div class="flex items-center gap-2 md:gap-3">
                     <button onclick="toggleInquiryCart()" class="relative p-2 text-gray-600 hover:text-gray-900 group">
-                        <i class="ph ph-shopping-cart text-xl"></i>
+                        <i class="ph ph-bag text-2xl"></i>
                         <span id="cartBadge" class="hidden absolute -top-1 @(isArabic ? "-left-1" : "-right-1") bg-gray-900 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center pointer-events-none">0</span>
                     </button>
 
@@ -101,22 +102,21 @@
     </header>
 
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-all duration-300" onclick="toggleMobileMenu()"></div>
-    <nav id="mobile-menu" class="fixed top-0 @(isArabic ? "right-0 translate-x-full" : "left-0 -translate-x-full") h-full w-[85vw] max-w-[380px] bg-white/95 backdrop-blur-2xl z-[60] shadow-2xl flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]">
-        <div class="flex items-center justify-between px-4 py-2 border-b">
-            <!-- Sidebar Header: Logo -->
+    <nav id="mobile-menu" class="fixed top-0 @(isArabic ? "right-0 translate-x-full" : "left-0 -translate-x-full") h-full w-[85vw] max-w-[380px] sidebar-cream z-[60] shadow-2xl flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]">
+        <!-- Sidebar Header: Logo & Close -->
+        <div class="flex items-center justify-between px-6 py-3">
              <a href="/" class="flex items-center gap-2">
                 @if (ViewData["LogoPath"] != null)
                 {
-                    <img src="~/uploads/sitesettings/@ViewData["LogoPath"]" class="h-8 w-auto" alt="@siteName" />
+                    <img src="~/uploads/sitesettings/@ViewData["LogoPath"]" class="h-14 w-auto" alt="@siteName" />
                 }
                 else
                 {
-                    <img src="/images/Logo-color.svg" class="h-8 w-auto" alt="@siteName" />
+                    <img src="/images/Logo-color.svg" class="h-14 w-auto" alt="@siteName" />
                 }
-                <span class="text-sm font-bold text-gray-800">@siteName</span>
             </a>
-            <button onclick="toggleMobileMenu()" class="p-2 text-gray-500 hover:text-gray-800 transition-colors">
-                <i class="ph-bold ph-x text-2xl"></i>
+            <button onclick="toggleMobileMenu()" class="text-gray-900 hover:text-gray-600 transition-colors">
+                <i class="ph-bold ph-x text-3xl"></i>
             </button>
         </div>
         
@@ -124,111 +124,92 @@
             // var currentPath is now defined at the top of the file
             string GetActiveClass(string path, bool exact = true)
             {
-                // Active State: Transparent Gray "Pill" with Dark Text
-                if (path == "/" && currentPath == "/") return "bg-gray-200/50 text-gray-900 font-bold transform scale-[1.02]";
-                if (path != "/" && (exact ? currentPath == path.ToLower() : currentPath.StartsWith(path.ToLower())))
-                    return "bg-gray-200/50 text-gray-900 font-bold transform scale-[1.02]";
-                
-                // Inactive State: Gray Text, Hover Light Gray
-                return "text-gray-600 font-medium hover:bg-gray-50 hover:text-gray-900";
-            }
-            
-             string GetIconClass(string path, bool exact = true)
-            {
-                 if (path == "/" && currentPath == "/") return "text-gray-900";
-                 if (path != "/" && (exact ? currentPath == path.ToLower() : currentPath.StartsWith(path.ToLower())))
-                    return "text-gray-900";
-                
-                return "text-gray-400 group-hover:text-gray-900";
+                // Active State logic
+                bool isActive = false;
+                if (path == "/" && currentPath == "/") isActive = true;
+                else if (path != "/" && (exact ? currentPath == path.ToLower() : currentPath.StartsWith(path.ToLower()))) isActive = true;
+
+                return isActive ? "active" : "";
             }
         }
         
-        <div class="flex-1 px-4 py-4 overflow-y-auto custom-scrollbar">
+        <div class="flex-1 px-6 py-2 overflow-y-auto custom-scrollbar">
             <div class="space-y-1">
-                <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/")">
-                    <i class="ph ph-house text-xl @GetIconClass("/")"></i>
+                <a href="/" class="sidebar-link @GetActiveClass("/")">
                     @L["Home"]
                 </a>
                 
                 <!-- Products Dropdown -->
-                <div x-data="{ open: @(currentPath.StartsWith("/products") ? "true" : "false") }" class="border-b border-gray-50 last:border-0"> 
-                    <button onclick="toggleSubmenu('productsSubmenu')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all group @GetActiveClass("/products", false)">
-                        <div class="flex items-center gap-3">
-                            <i class="ph ph-tag text-xl @GetIconClass("/products", false)"></i>
-                            @L["Products"]
-                        </div>
-                        <i id="productsSubmenuIcon" class="ph ph-caret-down transition-transform duration-300 @(currentPath.StartsWith("/products") ? "rotate-180 text-gray-900" : "text-gray-400")"></i>
+                <div x-data="{ open: @(currentPath.StartsWith("/products") ? "true" : "false") }"> 
+                    <button onclick="toggleSubmenu('productsSubmenu')" class="sidebar-link w-full flex items-center justify-between group text-start @GetActiveClass("/products", false)">
+                        <span>@L["Products"]</span>
+                        <i id="productsSubmenuIcon" class="ph-bold ph-caret-down caret-rotate @(currentPath.StartsWith("/products") ? "open" : "") text-xl"></i>
                     </button>
-                    <div id="productsSubmenu" class="@(currentPath.StartsWith("/products") ? "" : "hidden") pl-9 pr-4 space-y-0 pb-1">
+                    <div id="productsSubmenu" class="@(currentPath.StartsWith("/products") ? "" : "hidden") pl-4 pr-4 space-y-1 pb-2">
                         <!-- Categories Via ViewComponent -->
                         <vc:sidebar-categories />
                     </div>
                 </div>
 
-                <a href="/Portfolio" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/portfolio")">
-                    <i class="ph ph-briefcase text-xl @GetIconClass("/portfolio")"></i>
+                <a href="/Portfolio" class="sidebar-link @GetActiveClass("/portfolio")">
                     @L["Portfolio"]
                 </a>
                 
-                <a href="/DiscountPolicy" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/discountpolicy")">
-                    <i class="ph ph-percent text-xl @GetIconClass("/discountpolicy")"></i>
+                <a href="/DiscountPolicy" class="sidebar-link @GetActiveClass("/discountpolicy")">
                     @L["DiscountPolicy"]
                 </a>
 
-                <a href="/Testimonials" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/testimonials", false)">
-                     <i class="ph ph-star text-xl @GetIconClass("/testimonials", false)"></i>
+                <a href="/Testimonials" class="sidebar-link @GetActiveClass("/testimonials", false)">
                     @L["Feedback"]
                 </a>
                 
-                <a href="/Contact" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/contact")">
-                     <i class="ph ph-envelope text-xl @GetIconClass("/contact")"></i>
+                <a href="/Contact" class="sidebar-link @GetActiveClass("/contact")">
                     @L["Contact"]
                 </a>
 
-                <a href="/Home/About" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group @GetActiveClass("/home/about")">
-                     <i class="ph ph-info text-xl @GetIconClass("/home/about")"></i>
+                <a href="/Home/About" class="sidebar-link @GetActiveClass("/home/about")">
                     @L["AboutUs"]
                 </a>
             </div>
         </div>
 
-        <div class="p-4 border-t border-gray-100/50">
-            <!-- Social Media Icons (Added for easier access) -->
-            <div class="flex justify-center gap-2 mb-4">
+        <div class="p-6">
+            <!-- Social Media Icons -->
+            <div class="flex flex-wrap gap-4 mb-6">
                 @if (ViewData["Facebook"] != null)
                 {
-                    <a href="@ViewData["Facebook"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#1877F2] hover:text-white transition-all transform hover:-translate-y-1">
-                        <i class="ph-fill ph-facebook-logo text-xl"></i>
+                    <a href="@ViewData["Facebook"]" target="_blank" class="text-gray-900 hover:text-[#1877F2] transition-colors">
+                        <i class="ph-fill ph-facebook-logo text-2xl"></i>
                     </a>
                 }
                 @if (ViewData["Instagram"] != null)
                 {
-                    <a href="@ViewData["Instagram"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#E4405F] hover:text-white transition-all transform hover:-translate-y-1">
-                        <i class="ph-fill ph-instagram-logo text-xl"></i>
+                    <a href="@ViewData["Instagram"]" target="_blank" class="text-gray-900 hover:text-[#E4405F] transition-colors">
+                        <i class="ph-fill ph-instagram-logo text-2xl"></i>
                     </a>
                 }
                 @if (ViewData["TikTok"] != null)
                 {
-                    <a href="@ViewData["TikTok"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#000000] hover:text-white transition-all transform hover:-translate-y-1">
-                        <i class="ph-fill ph-tiktok-logo text-xl"></i>
+                    <a href="@ViewData["TikTok"]" target="_blank" class="text-gray-900 hover:text-black transition-colors">
+                        <i class="ph-fill ph-tiktok-logo text-2xl"></i>
                     </a>
                 }
                  @if (ViewData["Youtube"] != null)
                 {
-                    <a href="@ViewData["Youtube"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#FF0000] hover:text-white transition-all transform hover:-translate-y-1">
-                        <i class="ph-fill ph-youtube-logo text-xl"></i>
+                    <a href="@ViewData["Youtube"]" target="_blank" class="text-gray-900 hover:text-[#FF0000] transition-colors">
+                        <i class="ph-fill ph-youtube-logo text-2xl"></i>
                     </a>
                 }
             </div>
 
             <div class="flex items-center justify-between gap-3">
                 <a href="/Language/Switch?culture=@(isArabic ? "en" : "ar")&returnUrl=@Context.Request.Path"
-                   class="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-900 text-white rounded-lg shadow-md hover:shadow-lg hover:bg-gray-800 transition-all text-xs font-bold">
-                    <i class="ph ph-globe text-base"></i>
+                   class="flex items-center gap-2 text-gray-900 font-bold text-sm tracking-widest uppercase hover:text-gray-600 transition-colors">
+                    <i class="ph ph-globe text-xl"></i>
                     <span>@L["LanguageSwitchLabel"]</span>
                 </a>
 
-                <a href="/Admin" class="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-900 border border-gray-100 transition-all" title="@L["AdminLogin"]">
+                <a href="/Admin" class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 text-gray-400 hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all" title="@L["AdminLogin"]">
                     <i class="ph-fill ph-lock-key text-xl"></i>
                 </a>
             </div>
@@ -239,142 +220,136 @@
         @RenderBody()
     </main>
 
-    <footer class="bg-neutral-900 text-gray-300 pt-10 pb-6 border-t border-neutral-800">
+    <footer class="bg-[#1c1c1c] text-cream pt-12 md:pt-16 pb-8 border-t border-neutral-800">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-10 lg:gap-8 mb-10">
                 
-                <!-- Company Info -->
-                <div class="space-y-4">
-                    <a href="/" class="flex items-center gap-3">
+                <!-- Company Info & Social -->
+                <!-- Company Info & Social -->
+                <div class="space-y-2 md:col-span-2 lg:col-span-4 flex flex-col items-center">
+                    <a href="/" class="flex flex-col items-center gap-0 -mt-4">
                         @if (ViewData["LogoPath"] != null)
                         {
-                            <img src="~/uploads/sitesettings/@ViewData["LogoPath"]" class="h-14 w-auto" alt="@siteName" />
+                            <img src="~/uploads/sitesettings/@ViewData["LogoPath"]" class="h-28 md:h-36 w-auto object-contain" alt="@siteName" />
                         }
                         else
                         {
-                            <img src="/images/Logo-color.png" class="h-14 w-auto" alt="@siteName" />
+                            <img src="/images/Logo-color.png" class="h-28 md:h-36 w-auto object-contain" alt="@siteName" />
                         }
-                        <span class="text-lg font-bold text-white">@siteName</span>
+                         <span class="text-xl md:text-2xl font-bold text-white tracking-wide dutch-logo text-center -mt-3" style="color: white !important;">@siteName</span>
                     </a>
-                    <p class="text-gray-400 text-sm leading-relaxed">
+                    <p class="text-cream/80 text-base leading-relaxed max-w-sm text-center">
                         @L["CompanyDesc"]
                     </p>
-                </div>
 
-                <!-- Quick Links -->
-                <div>
-                    <h3 class="text-white font-bold text-base mb-4 relative inline-block">
-                        @L["QuickLinks"]
-                        <span class="absolute bottom-0 @(isArabic ? "right-0" : "left-0") w-1/2 h-0.5 bg-primary rounded-full"></span>
-                    </h3>
-                    <ul class="space-y-2">
-                        <li><a href="/" class="text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block text-sm">@L["Home"]</a></li>
-                        <li><a href="/Products" class="text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block text-sm">@L["Products"]</a></li>
-                        <li><a href="/Portfolio" class="text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block text-sm">@L["Portfolio"]</a></li>
-                        <li><a href="/DiscountPolicy" class="text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block text-sm">@L["DiscountPolicy"]</a></li>
-                        <li><a href="/Home/About" class="text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block text-sm">@L["AboutUs"]</a></li>
-                    </ul>
-                </div>
-
-                <!-- Contact Info -->
-                <div>
-                    <h3 class="text-white font-bold text-base mb-4 relative inline-block">
-                        @L["Contact"]
-                        <span class="absolute bottom-0 @(isArabic ? "right-0" : "left-0") w-1/2 h-0.5 bg-primary rounded-full"></span>
-                    </h3>
-                    <ul class="space-y-3">
-                         <li class="flex items-start gap-3">
-                            <i class="ph-fill ph-map-pin text-primary text-lg mt-0.5"></i>
-                            <span class="text-gray-400 text-sm leading-relaxed">
-                                @(isArabic ? ViewData["AddressAr"] : ViewData["AddressEn"])
-                            </span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="ph-fill ph-phone text-primary text-lg"></i>
-                            <div class="flex items-center gap-2 text-sm text-gray-400">
-                                <a href="tel:@ViewData["Phone"]" class="hover:text-white transition-colors" dir="ltr">@ViewData["Phone"]</a>
-                                @if(ViewData["Phone2"] != null)
-                                {
-                                    <span class="text-gray-500">-</span>
-                                    <a href="tel:@ViewData["Phone2"]" class="hover:text-white transition-colors" dir="ltr">@ViewData["Phone2"]</a>
-                                }
-                            </div>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="ph-fill ph-whatsapp-logo text-primary text-lg"></i>
-                            @{
-                                var waFooter = ViewData["WhatsApp"]?.ToString() ?? "";
-                                var waFooterClean = System.Text.RegularExpressions.Regex.Replace(waFooter, @"\D", ""); // Remove non-digits
-                            }
-                             <a href="https://api.whatsapp.com/send?phone=@waFooterClean" target="_blank" class="text-gray-400 hover:text-white transition-colors text-sm" dir="ltr">@ViewData["WhatsApp"]</a>
-                        </li>
-                    </ul>
-
-                    <!-- Social Media (Moved here) -->
-                    <div class="flex gap-3 flex-wrap mt-6">
+                    <!-- Social Media -->
+                    <div class="flex gap-3 flex-wrap pt-2">
                         @if (ViewData["Facebook"] != null)
                         {
-                            <a href="@ViewData["Facebook"]" target="_blank" class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 hover:bg-[#1877F2] hover:text-white transition-all transform hover:-translate-y-1">
-                                <i class="ph-fill ph-facebook-logo text-lg"></i>
+                            <a href="@ViewData["Facebook"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#1877F2] hover:text-white transition-all transform hover:-translate-y-1">
+                                <i class="ph-fill ph-facebook-logo text-xl"></i>
                             </a>
                         }
                         @if (ViewData["Instagram"] != null)
                         {
-                            <a href="@ViewData["Instagram"]" target="_blank" class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 hover:bg-[#E4405F] hover:text-white transition-all transform hover:-translate-y-1">
-                                <i class="ph-fill ph-instagram-logo text-lg"></i>
+                            <a href="@ViewData["Instagram"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#E4405F] hover:text-white transition-all transform hover:-translate-y-1">
+                                <i class="ph-fill ph-instagram-logo text-xl"></i>
                             </a>
                         }
                         @if (ViewData["TikTok"] != null)
                         {
-                            <a href="@ViewData["TikTok"]" target="_blank" class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 hover:bg-[#000000] hover:text-white transition-all transform hover:-translate-y-1">
-                                <i class="ph-fill ph-tiktok-logo text-lg"></i>
+                            <a href="@ViewData["TikTok"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#000000] hover:text-white transition-all transform hover:-translate-y-1">
+                                <i class="ph-fill ph-tiktok-logo text-xl"></i>
                             </a>
                         }
                          @if (ViewData["Youtube"] != null)
                         {
-                            <a href="@ViewData["Youtube"]" target="_blank" class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 hover:bg-[#FF0000] hover:text-white transition-all transform hover:-translate-y-1">
-                                <i class="ph-fill ph-youtube-logo text-lg"></i>
+                            <a href="@ViewData["Youtube"]" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#FF0000] hover:text-white transition-all transform hover:-translate-y-1">
+                                <i class="ph-fill ph-youtube-logo text-xl"></i>
                             </a>
                         }
                     </div>
                 </div>
 
-                <!-- Follow Us -->
-                <!-- Our Office (Map) -->
-                 <div>
-                    <h3 class="text-white font-bold text-base mb-4 relative inline-block">
-                        @L["OurOffice"]
-                        <span class="absolute bottom-0 @(isArabic ? "right-0" : "left-0") w-1/2 h-0.5 bg-primary rounded-full"></span>
+                <!-- Quick Links -->
+                <div class="lg:col-span-3 lg:mx-auto">
+                    <h3 class="text-white font-bold text-lg mb-6 relative inline-block cursor-pointer md:cursor-default flex items-center justify-between w-full md:w-auto" onclick="toggleFooterLinks('quickLinksList', 'quickLinksIcon')">
+                        @L["QuickLinks"]
+                         <i id="quickLinksIcon" class="ph ph-plus text-gray-400 md:hidden transition-transform duration-300"></i>
                     </h3>
-                    
+                    <ul id="quickLinksList" class="space-y-3 hidden md:block transition-all duration-300">
+                        <li><a href="/" class="text-cream/70 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block text-base">@L["Home"]</a></li>
+                        <li><a href="/Products" class="text-cream/70 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block text-base">@L["Products"]</a></li>
+                        <li><a href="/Portfolio" class="text-cream/70 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block text-base">@L["Portfolio"]</a></li>
+                        <li><a href="/DiscountPolicy" class="text-cream/70 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block text-base">@L["DiscountPolicy"]</a></li>
+                        <li><a href="/Home/About" class="text-cream/70 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block text-base">@L["AboutUs"]</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info & Location -->
+                <div class="lg:col-span-5">
+                    <h3 class="text-white font-bold text-lg mb-6 relative inline-block cursor-pointer md:cursor-default flex items-center justify-between w-full md:w-auto" onclick="toggleFooterLinks('contactList', 'contactIcon')">
+                        @L["Contact"]
+                         <i id="contactIcon" class="ph ph-plus text-gray-400 md:hidden transition-transform duration-300"></i>
+                    </h3>
+                    <ul id="contactList" class="space-y-4 hidden md:block transition-all duration-300">
+                        <li class="flex items-center gap-4">
+                            <i class="ph-fill ph-phone text-gray-400 text-xl"></i>
+                            <div class="flex items-center gap-2 text-base text-cream/80">
+                                <a href="tel:@ViewData["Phone"]" class="hover:text-white transition-colors" dir="ltr">@ViewData["Phone"]</a>
+                                @if(ViewData["Phone2"] != null)
+                                {
+                                    <span class="text-gray-600">/</span>
+                                    <a href="tel:@ViewData["Phone2"]" class="hover:text-white transition-colors" dir="ltr">@ViewData["Phone2"]</a>
+                                }
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <i class="ph-fill ph-whatsapp-logo text-gray-400 text-xl"></i>
+                            @{
+                                var waFooter = ViewData["WhatsApp"]?.ToString() ?? "";
+                                var waFooterClean = System.Text.RegularExpressions.Regex.Replace(waFooter, @"\D", ""); 
+                            }
+                             <a href="https://api.whatsapp.com/send?phone=@waFooterClean" target="_blank" class="text-cream/80 hover:text-white transition-colors text-base" dir="ltr">@ViewData["WhatsApp"]</a>
+                        </li>
+                    </ul>
+
                     @if (ViewData["MapUrl"] != null && !string.IsNullOrEmpty(ViewData["MapUrl"].ToString()))
                     {
-                        <div class="rounded-lg overflow-hidden border border-gray-700 shadow-md">
-                            <iframe src="@ViewData["MapUrl"]" 
-                                    class="w-full h-48 border-0" 
-                                    allowfullscreen="" 
-                                    loading="lazy" 
-                                    referrerpolicy="no-referrer-when-downgrade">
-                            </iframe>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="h-48 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-sm border border-gray-700">
-                           @L["NoMapAvailable"]
+                        <div class="mt-6 bg-cream rounded-lg p-4 shadow-lg border border-gray-800 relative group overflow-hidden max-w-sm">
+                            <div class="absolute top-0 right-0 w-16 h-16 bg-gray-200/20 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                            
+                            <div class="flex flex-col gap-3 relative z-10">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center shrink-0 text-white shadow-sm">
+                                        <i class="ph-fill ph-map-pin text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-gray-900 font-bold text-sm mb-0.5">@L["VisitUs"]</h4>
+                                        <p class="text-gray-600 text-xs leading-snug">
+                                            @(isArabic ? ViewData["AddressAr"] : ViewData["AddressEn"])
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <a href="@ViewData["MapUrl"]" target="_blank" class="w-full py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-md font-bold text-[11px] uppercase tracking-wide flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
+                                    <i class="ph-fill ph-map-pin text-[#EA4335] text-sm"></i>
+                                    <span>@L["GetDirections"]</span>
+                                    <i class="ph-bold @(isArabic ? "ph-arrow-left" : "ph-arrow-right")"></i>
+                                </a>
+                            </div>
                         </div>
                     }
                 </div>
-
             </div>
             
-            <div class="border-t border-gray-700 pt-6 mt-4 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-500 text-xs text-center md:text-start">
+            <div class="border-t border-gray-800 pt-8 flex flex-col items-center gap-2">
+                <p class="text-cream/50 text-sm text-center">
                     &copy; @DateTime.Now.Year @siteName. @L["AllRightsReserved"]
                 </p>
-                <div class="flex items-center gap-1 text-xs text-gray-500">
+                <div class="flex items-center gap-1.5 text-sm text-cream/50">
                     <span>@L["DesignedBy"]</span>
-                    <a href="https://www.linkedin.com/in/ahagag/" class="text-primary hover:text-white font-bold transition-colors">@@Ahmed Hagag</a>
+                    <a href="https://www.facebook.com/share/16xsDV7MFa/" target="_blank" class="text-cream/80 hover:text-cream font-medium transition-colors border-b border-transparent hover:border-cream/50 pb-0.5">Ahmed Hagag</a>
                 </div>
             </div>
         </div>
@@ -403,23 +378,34 @@
 
     <div id="cartOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-all duration-300" onclick="toggleInquiryCart()"></div>
     
-    <div id="inquiryCartSidebar" class="fixed top-0 h-full w-80 bg-white shadow-xl z-[60] flex flex-col">
-        <div class="p-4 border-b flex items-center justify-between">
-            <button onclick="toggleInquiryCart()" class="text-gray-400 hover:text-gray-800 transition-colors">
-                <i class="ph-bold ph-x text-xl"></i>
+    <div id="inquiryCartSidebar" class="fixed top-0 h-full w-80 sidebar-cream shadow-xl z-[60] flex flex-col">
+        <!-- Cart Header -->
+        <div class="p-6 flex items-center justify-between">
+            <h3 class="sidebar-header-font font-bold text-2xl text-gray-900 uppercase tracking-wide">@L["ShoppingCart"]</h3>
+            <button onclick="toggleInquiryCart()" class="text-gray-900 hover:text-gray-600 transition-colors">
+                <i class="ph-bold ph-x text-2xl"></i>
             </button>
-            <h3 class="font-bold text-lg text-gray-900 absolute left-1/2 transform -translate-x-1/2">@L["ShoppingCart"]</h3>
-            <div class="w-5"></div> <!-- Spacer for centering -->
         </div>
         
         <div id="cartItems" class="flex-1 overflow-y-auto p-4 custom-scrollbar"></div>
         
-        <div class="p-4 border-t space-y-3 bg-white">
-            <button onclick="InquiryCart.generateWhatsAppMessage()" class="w-full bg-green-500 hover:bg-green-600 text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-green-100 transition-all hover:-translate-y-0.5">
-                <i class="ph-bold ph-whatsapp-logo text-xl"></i> @L["SendViaWhatsApp"]
+        <div id="cartEmptyState" class="hidden flex-1 flex flex-col items-center justify-center p-8 text-center">
+            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm">
+                <i class="ph ph-shopping-cart text-3xl text-gray-400"></i>
+            </div>
+            <h4 class="text-lg font-bold text-gray-900 mb-2 font-serif">@L["CartEmpty"]</h4>
+            <p class="text-xs text-gray-500 mb-6 uppercase tracking-wider">@L["ChooseWide"]</p>
+            <a href="/Products" onclick="toggleInquiryCart()" class="px-8 py-3 bg-gray-900 text-white rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-gray-700 transition-all shadow-md hover:shadow-lg">
+                @L["StartShopping"]
+            </a>
+        </div>
+
+        <div id="cartActionsFooter" class="p-6 border-t border-gray-200/50 space-y-4 sidebar-cream z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]">
+            <button onclick="InquiryCart.generateWhatsAppMessage()" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg font-bold flex items-center justify-center gap-2 shadow-lg shadow-green-100 transition-all hover:-translate-y-0.5 uppercase text-sm tracking-wide">
+                <i class="ph-bold ph-whatsapp-logo text-lg"></i> @L["SendViaWhatsApp"]
             </button>
-            <button onclick="InquiryCart.clear()" class="w-full border-2 border-gray-100 text-gray-500 hover:text-red-500 hover:border-red-100 hover:bg-red-50 py-3 rounded-xl text-sm font-semibold transition-all">
-                @L["ClearCart"]
+            <button onclick="InquiryCart.clear()" class="w-full flex items-center justify-center gap-2 text-gray-400 hover:text-red-600 py-1 text-xs font-bold uppercase tracking-widest transition-all">
+                <i class="ph ph-trash"></i> @L["ClearCart"]
             </button>
         </div>
     </div>

@@ -127,6 +127,35 @@
     transform: scale(1.1);
 }
 
+/* External Slider Controls (Below Slider) */
+.swiper-button-next.static,
+.swiper-button-prev.static {
+    position: static !important;
+    transform: none !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+}
+
+/* Dashed Pagination */
+.swiper-pagination-bullet {
+    width: 24px;
+    height: 4px;
+    border-radius: 2px;
+    background: #d1d5db;
+    /* gray-300 */
+    opacity: 0.5;
+    transition: all 0.3s;
+    margin: 0 4px !important;
+}
+
+.swiper-pagination-bullet-active {
+    background: #111827;
+    /* gray-900 */
+    opacity: 1;
+    width: 32px;
+    /* Active dash slightly longer */
+}
+
 /* Mobile: Hide Arrows completely */
 @media (max-width: 767px) {
 
@@ -136,15 +165,7 @@
     }
 }
 
-.swiper-pagination-bullet {
-    background: #6b7280;
-    opacity: 0.5;
-}
-
-.swiper-pagination-bullet-active {
-    background: #111827;
-    opacity: 1;
-}
+/* Removed old bullet styles to avoid conflict with new dashed styles above */
 
 /* Products & Portfolio Sliders (4 items desktop) */
 @media (min-width: 768px) {
@@ -276,10 +297,7 @@ html[dir="rtl"] .marquee-track {
 /* Mobile: 2 items per row for sliders */
 @media (max-width: 767px) {
 
-    #latestProductsSlider .swiper-slide,
-    #portfolioSlider .swiper-slide {
-        width: calc(50% - 8px) !important;
-    }
+    /* Removed hardcoded widths to let Swiper handle slidesPerView: 2.2 */
 
     #happyCustomersSlider .swiper-slide {
         width: calc(50% - 8px) !important;
@@ -316,4 +334,16 @@ html[dir="rtl"] .marquee-track {
     .hero-dot {
         transition: none;
     }
+}
+
+/* RTL Arrow Fix: Prevent rotation and force LTR layout logic */
+html[dir="rtl"] .swiper-button-next,
+html[dir="rtl"] .swiper-button-prev {
+    transform: none !important;
+    rotate: 0deg !important;
+}
+
+html[dir="rtl"] .swiper-button-next:hover,
+html[dir="rtl"] .swiper-button-prev:hover {
+    transform: scale(1.1) !important;
 }

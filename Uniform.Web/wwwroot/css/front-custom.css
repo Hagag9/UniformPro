@@ -3,6 +3,22 @@
     font-family: 'Readex Pro', 'Libre Franklin', sans-serif !important;
 }
 
+body {
+    background-color: #FFFBF2 !important;
+    color: #111827;
+    /* Gray-900 equivalent for default text */
+}
+
+.bg-cream {
+    background-color: #FFFBF2 !important;
+}
+
+.bg-cream-accent {
+    background-color: #F7F3E8 !important;
+    /* Slightly darker cream */
+}
+
+
 html {
     scroll-behavior: smooth;
 }
@@ -47,20 +63,31 @@ button {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Logo Font - Like DUTCH LINE */
+/* Logo Font - Like BLANKS */
 .dutch-logo {
-    font-family: 'Libre Franklin', sans-serif !important;
-    font-weight: 600;
-    font-size: 1.4rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 500;
+    font-size: 1.8rem;
+    /* Slightly larger for impact */
+    letter-spacing: -0.03em;
+    /* Tighter tracking like the image */
+    text-transform: none;
     color: #111;
     text-decoration: none;
+
+    /* Safety for long names on mobile */
+    max-width: 60vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    /* Required for ellipsis to work with absolute positioning */
 }
 
 @media (min-width: 768px) {
     .dutch-logo {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
+        font-weight: 500;
+        max-width: none;
     }
 }
 
@@ -112,6 +139,11 @@ html[dir="ltr"] #inquiryCartSidebar.cart-open {
     box-shadow: none !important;
 }
 
+/* 
+   DISABLED: User wants navbar items to be ALWAYS BLACK 
+   even when transparent.
+*/
+/*
 .dutch-header.is-home:not(.scrolled):not(:hover) .dutch-logo {
     color: #ffffff !important;
 }
@@ -121,9 +153,75 @@ html[dir="ltr"] #inquiryCartSidebar.cart-open {
     color: #ffffff !important;
 }
 
-/* Update Cart Badge to be White on Transparent */
 .dutch-header.is-home:not(.scrolled):not(:hover) #cartBadge {
     background-color: #ffffff !important;
     color: #111827 !important;
-    /* gray-900 */
+}
+*/
+
+/* --- NEW SIDEBAR STYLES --- */
+.sidebar-cream {
+    background-color: #FFFBF2 !important;
+    /* Cream Color */
+}
+
+/* Base Sidebar Font (English/Default) */
+.sidebar-link,
+.sidebar-sublink,
+.sidebar-header-font {
+    font-family: 'Libre Franklin', sans-serif !important;
+}
+
+/* Arabic Override */
+html[lang="ar"] .sidebar-link,
+html[lang="ar"] .sidebar-sublink,
+html[lang="ar"] .sidebar-header-font {
+    font-family: 'Readex Pro', sans-serif !important;
+}
+
+.sidebar-link {
+    /* Or Inter, based on preference */
+    font-weight: 600 !important;
+    /* Reduced from 700 */
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em;
+    font-size: 1.25rem;
+    /* 20px */
+    color: #000000 !important;
+    padding: 1rem 1.5rem !important;
+    /* Added horizontal padding for background to look good */
+    display: block;
+    line-height: 1.2;
+    border-radius: 0.5rem;
+    /* Soft rounded corners for active state */
+    margin-bottom: 0.25rem;
+}
+
+.sidebar-link:hover {
+    color: #333 !important;
+    background-color: rgba(0, 0, 0, 0.03) !important;
+    opacity: 1;
+}
+
+.sidebar-link.active {
+    background-color: rgba(0, 0, 0, 0.06) !important;
+    /* Light background for active state */
+    color: #000000 !important;
+}
+
+.sidebar-sublink {
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    font-size: 0.9rem;
+    color: #333 !important;
+    letter-spacing: 0.05em;
+}
+
+/* Rotate caret for products */
+.caret-rotate {
+    transition: transform 0.3s ease;
+}
+
+.caret-rotate.open {
+    transform: rotate(180deg);
 }

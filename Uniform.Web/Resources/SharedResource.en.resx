@@ -492,4 +492,13 @@
   <data name="Feedback" xml:space="preserve">
     <value>Feedback</value>
   </data>
+  <data name="StartShopping" xml:space="preserve">
+    <value>Start Shopping</value>
+  </data>
+  <data name="VisitUs" xml:space="preserve">
+    <value>Visit Us</value>
+  </data>
+  <data name="GetDirections" xml:space="preserve">
+    <value>Get Directions</value>
+  </data>
 </root>

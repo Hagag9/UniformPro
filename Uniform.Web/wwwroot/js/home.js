@@ -118,7 +118,10 @@ function initHeroCarousel() {
             pauseOnMouseEnter: true,
         },
         speed: 600,
-        effect: 'slide',
+        effect: 'fade',
+        fadeEffect: {
+            crossFade: true
+        },
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
@@ -155,8 +158,8 @@ function initProductsSlider() {
     const isRTL = document.documentElement.dir === 'rtl';
 
     new Swiper('#latestProductsSlider', {
-        slidesPerView: 2,
-        spaceBetween: 8,
+        slidesPerView: 2.2,
+        spaceBetween: 10,
         grabCursor: true,
         breakpoints: {
             768: {
@@ -167,6 +170,10 @@ function initProductsSlider() {
         navigation: {
             nextEl: '.products-button-next',
             prevEl: '.products-button-prev',
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
         },
         keyboard: {
             enabled: true,
@@ -191,8 +198,8 @@ function initPortfolioSlider() {
     const isRTL = document.documentElement.dir === 'rtl';
 
     new Swiper('#portfolioSlider', {
-        slidesPerView: 2,
-        spaceBetween: 8,
+        slidesPerView: 2.2,
+        spaceBetween: 10,
         grabCursor: true,
         breakpoints: {
             768: {
@@ -203,6 +210,10 @@ function initPortfolioSlider() {
         navigation: {
             nextEl: '.portfolio-button-next',
             prevEl: '.portfolio-button-prev',
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
         },
         keyboard: {
             enabled: true,

@@ -136,19 +136,32 @@ const InquiryCart = {
 
     renderCart: function () {
         const container = document.getElementById('cartItems');
+        const emptyState = document.getElementById('cartEmptyState');
+        const actionsFooter = document.getElementById('cartActionsFooter');
         const items = this.getItems();
-        const emptyMsg = document.body.getAttribute('data-i18n-cart-empty') || 'Cart is Empty';
+        // const emptyMsg = document.body.getAttribute('data-i18n-cart-empty') || 'Cart is Empty'; // No longer needed for logic
 
         if (items.length === 0) {
-            container.innerHTML = `<div class="text-center py-8 text-gray-400"><i class="ph ph-shopping-cart-simple text-4xl mb-2 block"></i>${emptyMsg}</div>`;
+            // Empty State
+            container.innerHTML = ''; // Clear items
+            if (container) container.classList.add('hidden');
+            if (emptyState) emptyState.classList.remove('hidden');
+            if (actionsFooter) actionsFooter.classList.add('hidden');
             return;
         }
 
+        // Filled State
+        if (container) container.classList.remove('hidden');
+        if (emptyState) emptyState.classList.add('hidden');
+        if (actionsFooter) actionsFooter.classList.remove('hidden');
+
         container.innerHTML = items.map(item => `
-            <div class="flex items-center gap-3 p-3 mb-2 bg-gray-50 rounded-lg">
-                <img src="/uploads/products/${item.image}" class="w-14 h-14 object-cover rounded-md" onerror="this.src='/images/placeholder.png'" />
-                <div class="flex-1 text-sm font-medium text-gray-800">${item.name}</div>
-                <button onclick="InquiryCart.remove(${item.id})" class="text-gray-400 hover:text-gray-900 p-2 transition-colors">
+            <div class="flex items-center gap-3 p-3 mb-2 bg-white rounded-lg shadow-sm border border-gray-100">
+                <img src="/uploads/products/${item.image}" class="w-16 h-16 object-cover rounded-md" onerror="this.src='/images/placeholder.png'" />
+                <div class="flex-1">
+                    <div class="sidebar-header-font text-sm font-bold text-gray-900 uppercase tracking-wide">${item.name}</div>
+                </div>
+                <button onclick="InquiryCart.remove(${item.id})" class="text-gray-400 hover:text-red-500 p-2 transition-colors">
                     <i class="ph ph-trash text-lg"></i>
                 </button>
             </div>
@@ -228,3 +241,19 @@ document.addEventListener('DOMContentLoaded', function () {
     InquiryCart.updateBadge();
     initScrollToTop();
 });
+
+// Footer Accordion
+function toggleFooterLinks(listId, iconId) {
+    if (window.innerWidth >= 768) return; // Disable on desktop
+
+    const list = document.getElementById(listId);
+    const icon = document.getElementById(iconId);
+
+    if (list.classList.contains('hidden')) {
+        list.classList.remove('hidden');
+        if (icon) icon.style.transform = 'rotate(45deg)';
+    } else {
+        list.classList.add('hidden');
+        if (icon) icon.style.transform = 'rotate(0deg)';
+    }
+}

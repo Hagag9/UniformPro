@@ -8,11 +8,11 @@
     var isArabic = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("ar");
 }
 
-<a href="/Products" class="block py-1.5 text-xs @(currentPath == "/products" ? "text-gray-900 font-bold" : "text-gray-500 hover:text-gray-900") transition-colors">@L["AllProducts"]</a>
+<a href="/Products" class="sidebar-sublink block py-2 @(currentPath == "/products" ? "opacity-100" : "opacity-70 hover:opacity-100") transition-opacity">@L["AllProducts"]</a>
 @foreach (var cat in Model)
 {
     var isActiveCat = currentPath.Contains(cat.Id.ToString());
-    <a href="/Products?category=@cat.Id" class="block py-1.5 text-xs @(isActiveCat ? "text-gray-900 font-bold" : "text-gray-500 hover:text-gray-900") transition-colors">
+    <a href="/Products?category=@cat.Id" class="sidebar-sublink block py-2 @(isActiveCat ? "opacity-100" : "opacity-70 hover:opacity-100") transition-opacity">
         @(isArabic ? cat.NameAr : cat.NameEn)
     </a>
 }

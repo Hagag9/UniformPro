@@ -22,7 +22,7 @@ namespace UniformPro.Infrastructure.Data
                 // await context.Database.MigrateAsync(); // اختياري: إذا كنت تريد تطبيق الترحيلات تلقائياً
 
                 // 1. إنشاء المستخدم الأدمن (Admin User)
-                var adminEmail = configuration["AdminSettings:Email"] ?? "admin@uniformpro.com";
+                var adminEmail = configuration["AdminSettings:Email"] ?? "admin@manouniform.com";
                 var adminPassword = configuration["AdminSettings:Password"] ?? "Admin123!";
 
                 var adminUser = await userManager.FindByEmailAsync(adminEmail);

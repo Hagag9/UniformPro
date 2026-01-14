@@ -492,4 +492,13 @@
   <data name="Feedback" xml:space="preserve">
     <value>اراء العملاء</value>
   </data>
+  <data name="StartShopping" xml:space="preserve">
+    <value>تسوّق الآن</value>
+  </data>
+  <data name="VisitUs" xml:space="preserve">
+    <value>تفضل بزيارتنا</value>
+  </data>
+  <data name="GetDirections" xml:space="preserve">
+    <value>احصل على الاتجاهات</value>
+  </data>
 </root>
