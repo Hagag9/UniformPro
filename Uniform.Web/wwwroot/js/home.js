@@ -34,7 +34,7 @@ function validateYouTubeUrl(url) {
  */
 function playCardYoutube(el, url) {
     // Prevent action if user is dragging
-    const slider = el.closest('.swiper-container');
+    const slider = el.closest('.swiper');
     if (slider && slider.classList.contains('swiper-container-dragging')) {
         return;
     }
@@ -56,6 +56,11 @@ function playCardYoutube(el, url) {
     // Replace content with iframe
     el.innerHTML = '';
     el.appendChild(iframe);
+
+    // Stop slider autoplay if it exists
+    if (slider && slider.swiper && slider.swiper.autoplay) {
+        slider.swiper.autoplay.stop();
+    }
 }
 
 /**
@@ -64,7 +69,7 @@ function playCardYoutube(el, url) {
  */
 function playLocalVideo(container) {
     // Prevent action if user is dragging slider
-    const slider = container.closest('.swiper-container');
+    const slider = container.closest('.swiper');
     if (slider && slider.dataset.isDragging === 'true') {
         return;
     }
@@ -80,6 +85,11 @@ function playLocalVideo(container) {
         }
         if (overlay) {
             overlay.classList.add('opacity-0', 'hidden');
+        }
+
+        // Stop slider autoplay if it exists
+        if (slider && slider.swiper && slider.swiper.autoplay) {
+            slider.swiper.autoplay.stop();
         }
 
         // Show controls and play
