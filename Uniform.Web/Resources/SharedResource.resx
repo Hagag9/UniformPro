@@ -253,7 +253,7 @@
     <value>Premium Cotton Materials</value>
   </data>
   <data name="FastShipping" xml:space="preserve">
-    <value>Fast &amp; Safe Shipping</value>
+    <value>شحن سريع وآمن</value>
   </data>
   <data name="AdminLogin" xml:space="preserve">
     <value>دخول المشرفين</value>
@@ -488,5 +488,17 @@
   </data>
   <data name="OurClientsSubtitle" xml:space="preserve">
     <value>عملاؤنا</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>اراء العملاء</value>
+  </data>
+  <data name="StartShopping" xml:space="preserve">
+    <value>تسوّق الآن</value>
+  </data>
+  <data name="VisitUs" xml:space="preserve">
+    <value>تفضل بزيارتنا</value>
+  </data>
+  <data name="GetDirections" xml:space="preserve">
+    <value>Get Directions</value>
   </data>
 </root>
